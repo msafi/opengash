@@ -38,6 +38,6 @@ if ('development' == app.get('env')) {
 app.get('/', routes.home);
 app.post('/authenticate', routes.authenticate);
 
-http.createServer(app).listen(app.get('port'), 'opengash.com', function () {
+http.createServer(app).listen(app.get('port'), config.hostName, function () {
 	console.log('Express server listening on port ' + app.get('port'));
 });
