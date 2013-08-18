@@ -8,6 +8,12 @@
 	"dependencies": {
 		"express": "*",
 		"jade": "*",
-		"mongoose": "*"
+		"mongodb": "*",
+		"request": "*",
+		"ejs": "*"
+	},
+	"devDependencies": {
+		"mocha": "*",
+		"should": "*"
 	}
 }

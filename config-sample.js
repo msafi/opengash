@@ -2,11 +2,12 @@
 var config = {}
 
 // Google API configurations
-config.clientID = 'y0urcl13nt1d';
-config.clientSecret = 'y0urcl13n53cr3t';
-config.redirectURL = 'y0urr3d1r3cturl';
+config.clientID = 'Your client ID';
+config.clientSecret = 'Your client secret';
+config.redirectURL = 'Your redirect URL';
 
 // App configurations
-config.hostName = 'y0urh05tn4m3';
+config.hostName = 'Your domain name';
+config.cookieSignature = 'Your unique cookies signature';
 
 module.exports = config;
