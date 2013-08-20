@@ -4,17 +4,44 @@
 var express = require('express'),
 	http = require('http'),
 	path = require('path'),
-	config = require('./config');
+	config = require('./config'),
+	i = require('util').inspect,
+	fs = require('fs');
 
 
-var app = express();
+require('./lib/ogUtil');
+
+// Not using "var" keyword makes app global and accessible across files.
+app = express();
 
 // Database
 var MongoClient = require('mongodb').MongoClient;
 
 // First and foremost: connect to the database.
-MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogdb) {
+MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogDb) {
 	if (err) throw err;
+
+	/*
+		The intended schema for the collection below is as follows
+		{
+			user: {
+				firstName: String,
+				lastName: String,
+				email: String,
+				image: String
+			},
+
+			gaAccounts: [{
+				id: String,
+				properties: [{
+					name: String,
+					views: []
+				}]
+			}]
+		}
+	*/
+	ogDb.collection = ogDb.collection('ogAccounts');
+	app.ogDb = ogDb;
 
 	// all environments
 	app.set('port', process.env.PORT || 80);
@@ -27,7 +54,7 @@ MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogdb) {
 	app.use(express.cookieParser(config.cookieSignature));
 	app.use(express.cookieSession({secret: config.cookieSignature}));
 //	app.use(express.csrf());
-	app.use("/public", express.static(__dirname + '/public'));
+	app.use("/views", express.static(__dirname + '/views'));
 	app.use(app.router);
 
 	// development only

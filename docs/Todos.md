@@ -1,0 +1,1 @@
+* ~~Use CORS in AngularJS to communicate with Google Analytics API rather than completely relying on own web server.~~

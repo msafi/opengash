@@ -2,38 +2,59 @@ var OgConnect = require('../lib/ogConnect'),
 	config = require('../config'),
 	i = require('util').inspect;
 
-/*
-	The Views
-	==========
-	Stranger: when an unknown user requests /, simply show a "Connect to Google" button.
-	That button will redirect to a special URL. The URL is provided by the OgConnect class.
+var ogConnect = new OgConnect(config.clientId, config.clientSecret, config.redirectUrl);
+var ogDb = app.ogDb;
 
-	Dashboard: when a known user requests /.
- */
-exports.home = function (req, res, ogdb) {
+exports.home = function (req, res) {
+	if (req.signedCookies.loggedIn && req.signedCookies.accessToken) {
 
-	ogConnect = new OgConnect(config.clientId, config.clientSecret, config.redirectUrl);
+		// Check if properties are saved.
+		if (true) {
+			// Show properties.
+		}
+		if (false) {
+			// Prompt to select properties
+			var url = 'https://www.googleapis.com/analytics/v3/management/accounts';
+			ogConnect.callApi(accessToken, url, function (err, res, body) {
+				var url = JSON.parse(body).items[0].selfLink + '/webproperties';
+				ogConnect.callApi(accessToken, url, function (err, res, body) {
+//				console.log(i(JSON.parse(body), {colors:true}));
+				});
+			});
+		}
 
-	res.render('home');
+		res.ogRender('gaViews', {msg:'Should render Google Analytics views...'})
+	}
+	else if (req.signedCookies.loggedIn && !req.signedCookies.accessToken) {
+		res.redirect(ogConnect.url());
+	}
+	else {
+		var data = {url: ogConnect.url()};
+		res.ogRender('home', data);
+	}
 };
 
-exports.authenticate = function (req, res, ogdb) {
-
-	ogConnect = new OgConnect(config.clientId, config.clientSecret, config.redirectUrl);
-
+exports.authenticate = function (req, res) {
 	ogConnect.requestAccessToken(req.query.code, function(err, res, body) {
 		// Get user basic information.
 		var accessToken = JSON.parse(body).access_token;
+		accessToken.expiry = (parseInt(JSON.parse(body).expires_in) * 1000); // Convert Google's response to milliseconds.
 		var url = 'https://www.googleapis.com/oauth2/v1/userinfo';
 		ogConnect.callApi(accessToken, url, function(err, res, body) {
-			console.log(body);
-		});
 
-		var url = 'https://www.googleapis.com/analytics/v3/management/accounts';
-		ogConnect.callApi(accessToken, url, function(err, res, body) {
-			var url = JSON.parse(body).items[0].selfLink + '/webproperties';
-			ogConnect.callApi(accessToken, url, function(err, res, body) {
-				console.log(i(JSON.parse(body), {colors:true}));
+			var user = JSON.parse(body);
+			user.id = parseInt(user.id);
+			user.verified_email = (user.verified_email) ? 1 : 0;
+
+			// Find a user in the database by their ID and upsert.
+			ogDb.collection.update({"user.id": user.id}, {user: user}, {upsert:true}, function(err, results) {
+				if (err)
+					return false;
+
+				res.cookie('loggedIn', true, {signed:true, maxAge: 631138519494}); // 20 years in milliseconds.
+				res.cookie('accessToken', accessToken, {signed:true, maxAge:accessToken.expiry});
+
+				res.redirect('/');
 			});
 		});
 	});

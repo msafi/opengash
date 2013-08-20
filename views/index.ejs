@@ -1,0 +1,29 @@
+<!DOCTYPE html ng-app='opengash'>
+<html>
+<head>
+	<title>opengash - Google Analytics alternative dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="public/css/bootstrap.css" media="screen">
+	<script src="public/js/angular.js"></script>
+	<script src="public/js/controllers.js"></script>
+	<style>
+		body {
+			padding-top: 70px;
+		}
+	</style>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top"'>
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">opengash - An alternative Google Analytics dashboard</a>
+		</div>
+	</div>
+</div>
+
+<div class="container" ng-view></div>
+
+</body>
+</html>

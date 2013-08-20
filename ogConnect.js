@@ -18,7 +18,7 @@ function OgConnect(clientId, clientSecret, redirectUrl) {
 }
 
 /*
-	Accepts a CSRF token and returns a string that contains the URL
+	Accepts an optional CSRF token and returns a string that contains the URL
 	that the user should follow in order to authenticate with Google.
  */
 OgConnect.prototype.url = function(csrf) {
