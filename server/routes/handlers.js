@@ -1,4 +1,4 @@
-var OgConnect = require('../lib/ogConnect'),
+var OgConnect = require('../ogConnect'),
 	config = require('../config'),
 	i = require('util').inspect;
 
@@ -23,25 +23,25 @@ exports.home = function (req, res) {
 			});
 		}
 
-		res.ogRender('gaViews', {msg:'Should render Google Analytics views...'})
+		res.ogRender('index', {url:'You-are-logged-in-and-authenticated.'})
 	}
 	else if (req.signedCookies.loggedIn && !req.signedCookies.accessToken) {
 		res.redirect(ogConnect.url());
 	}
 	else {
 		var data = {url: ogConnect.url()};
-		res.ogRender('home', data);
+		res.ogRender('index', data);
 	}
 };
 
 exports.authenticate = function (req, res) {
-	ogConnect.requestAccessToken(req.query.code, function(err, res, body) {
-		// Get user basic information.
-		var accessToken = JSON.parse(body).access_token;
-		accessToken.expiry = (parseInt(JSON.parse(body).expires_in) * 1000); // Convert Google's response to milliseconds.
-		var url = 'https://www.googleapis.com/oauth2/v1/userinfo';
-		ogConnect.callApi(accessToken, url, function(err, res, body) {
 
+	ogConnect.requestAccessToken(req.query.code, function(err, _res, body) {
+		// Get user basic information.
+		var accessToken = JSON.parse(body);
+
+		var url = 'https://www.googleapis.com/oauth2/v1/userinfo';
+		ogConnect.callApi(accessToken.access_token, url, function(err, _res, body) {
 			var user = JSON.parse(body);
 			user.id = parseInt(user.id);
 			user.verified_email = (user.verified_email) ? 1 : 0;
@@ -49,11 +49,10 @@ exports.authenticate = function (req, res) {
 			// Find a user in the database by their ID and upsert.
 			ogDb.collection.update({"user.id": user.id}, {user: user}, {upsert:true}, function(err, results) {
 				if (err)
-					return false;
+					res.end(i(err));
 
-				res.cookie('loggedIn', true, {signed:true, maxAge: 631138519494}); // 20 years in milliseconds.
-				res.cookie('accessToken', accessToken, {signed:true, maxAge:accessToken.expiry});
-
+				res.cookie('loggedIn', '1', {maxAge: 631138519494}); // 20 years in milliseconds.
+				res.cookie('accessToken', accessToken.access_token, {maxAge:accessToken.expires_in * 1000});
 				res.redirect('/');
 			});
 		});

@@ -9,9 +9,9 @@ var express = require('express'),
 	fs = require('fs');
 
 
-require('./lib/ogUtil');
+require('./ogUtil');
 
-// Not using "var" keyword makes app global and accessible across files.
+// Global 'app'. Accessible across files.
 app = express();
 
 // Database
@@ -21,31 +21,12 @@ var MongoClient = require('mongodb').MongoClient;
 MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogDb) {
 	if (err) throw err;
 
-	/*
-		The intended schema for the collection below is as follows
-		{
-			user: {
-				firstName: String,
-				lastName: String,
-				email: String,
-				image: String
-			},
-
-			gaAccounts: [{
-				id: String,
-				properties: [{
-					name: String,
-					views: []
-				}]
-			}]
-		}
-	*/
 	ogDb.collection = ogDb.collection('ogAccounts');
 	app.ogDb = ogDb;
 
 	// all environments
 	app.set('port', process.env.PORT || 80);
-	app.set('views', __dirname + '/views');
+	app.set('views', '../client');
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
@@ -54,7 +35,7 @@ MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogDb) {
 	app.use(express.cookieParser(config.cookieSignature));
 	app.use(express.cookieSession({secret: config.cookieSignature}));
 //	app.use(express.csrf());
-	app.use("/views", express.static(__dirname + '/views'));
+	app.use(express.static('../client'));
 	app.use(app.router);
 
 	// development only

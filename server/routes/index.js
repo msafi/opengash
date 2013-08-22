@@ -6,5 +6,4 @@ module.exports = function(app) {
 	app.get('/api/json', routes.home);
 
 	app.get('/authenticate', routes.authenticate);
-	app.get('/api/authenticate/json', routes.authenticate)
 };

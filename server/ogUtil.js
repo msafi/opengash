@@ -2,7 +2,7 @@ var express = require('express');
 
 // Extend express.response object with a method called ogRender
 module.exports = express.response.ogRender = function (template, data) {
-//	fs.writeFileSync('stuff.txt', i(this.req.res.render));
+
 	if (this.req.url.substr(1, 3) == 'api' && this.req.url.substr(-4, 4) == 'json') {
 		// API request
 		this.req.res.json(data);
