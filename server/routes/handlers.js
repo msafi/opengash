@@ -6,32 +6,7 @@ var ogConnect = new OgConnect(config.clientId, config.clientSecret, config.redir
 var ogDb = app.ogDb;
 
 exports.home = function (req, res) {
-	if (req.signedCookies.loggedIn && req.signedCookies.accessToken) {
-
-		// Check if properties are saved.
-		if (true) {
-			// Show properties.
-		}
-		if (false) {
-			// Prompt to select properties
-			var url = 'https://www.googleapis.com/analytics/v3/management/accounts';
-			ogConnect.callApi(accessToken, url, function (err, res, body) {
-				var url = JSON.parse(body).items[0].selfLink + '/webproperties';
-				ogConnect.callApi(accessToken, url, function (err, res, body) {
-//				console.log(i(JSON.parse(body), {colors:true}));
-				});
-			});
-		}
-
-		res.ogRender('index', {url:'You-are-logged-in-and-authenticated.'})
-	}
-	else if (req.signedCookies.loggedIn && !req.signedCookies.accessToken) {
-		res.redirect(ogConnect.url());
-	}
-	else {
-		var data = {url: ogConnect.url()};
-		res.ogRender('index', data);
-	}
+	res.ogRender('index');
 };
 
 exports.authenticate = function (req, res) {

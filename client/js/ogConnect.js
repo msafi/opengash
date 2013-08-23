@@ -1,0 +1,62 @@
+/*
+	Limited version of ogConnect on the server-side.
+	Which you can find at ../../server
+
+	TODOs:
+	======
+	* Validate ID Tokens using Google's public certificates
+
+ */
+function OgConnect(clientId, redirectUrl) {
+	this.clientId = clientId;
+	this.redirectUrl = redirectUrl;
+}
+
+/*
+	Accepts an optional CSRF token and returns a string that contains the URL
+	that the user should follow in order to authenticate with Google.
+ */
+OgConnect.prototype.url = function(csrf) {
+	var params = {
+		client_id: this.clientId,
+		response_type: "code",
+		scope: "email https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/userinfo.profile",
+		redirect_uri: this.redirectUrl
+	}
+	if (csrf) params.state = "security_token" + csrf;
+	if (process.env.NODE_ENV !== 'production') params.prompt = 'consent';
+
+	return "https://accounts.google.com/o/oauth2/auth?" + qs.stringify(params);
+}
+
+/*
+	POST an access token request to Google.
+	Allow the caller to execute a callback function.
+ */
+OgConnect.prototype.requestAccessToken = function(code, callback) {
+	var params = {
+		code: code,
+		client_id: this.clientId,
+		client_secret: this.clientSecret,
+		redirect_uri: this.redirectUrl,
+		grant_type: 'authorization_code'
+	}
+	var url = "https://accounts.google.com/o/oauth2/token";
+
+	request.post({url:url, form:params}, function(err, res, body) {
+		callback(err, res, body);
+	});
+}
+
+/*
+	Sends a GET request to specified API.
+	Executes callback.
+ */
+OgConnect.prototype.callApi = function(accessToken, apiUrl, callback) {
+	var qs = {access_token: accessToken};
+	request.get({url:apiUrl, qs:qs}, function(err, res, body) {
+		callback(err,res,body);
+	});
+}
+
+module.exports = OgConnect;
