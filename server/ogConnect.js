@@ -28,7 +28,7 @@ OgConnect.prototype.url = function(csrf) {
 		scope: "email https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/userinfo.profile",
 		redirect_uri: this.redirectUrl
 	}
-	if (csrf) params.state = "security_token" + csrf;
+	if (csrf) params.state = "csrf=" + csrf;
 	if (process.env.NODE_ENV !== 'production') params.prompt = 'consent';
 
 	return "https://accounts.google.com/o/oauth2/auth?" + qs.stringify(params);

@@ -6,10 +6,8 @@ var express = require('express'),
 	path = require('path'),
 	config = require('./config'),
 	i = require('util').inspect,
-	fs = require('fs');
-
-
-require('./ogUtil');
+	fs = require('fs'),
+	ogUtil = require('./ogUtil');
 
 // Global 'app'. Accessible across files.
 app = express();
@@ -34,7 +32,7 @@ MongoClient.connect('mongodb://localhost:27017/opengash', function(err, ogDb) {
 	app.use(express.methodOverride());
 	app.use(express.cookieParser(config.cookieSignature));
 	app.use(express.cookieSession({secret: config.cookieSignature}));
-//	app.use(express.csrf());
+	app.use(ogUtil.csrf);
 	app.use(express.static('../client'));
 	app.use(app.router);
 
