@@ -1,20 +1,18 @@
 var express = require('express'),
 		qs = require('querystring');
 
-// Extend express.response object with a method called ogRender
-module.exports = express.response.ogRender = function (template, data) {
+// Extend express.response object with a method called ogRender.
+// It inspects the URL. If it's an API call, sends JSON.
+// Otherwise, it uses the default express res.render()
+module.exports = express.response.ogRender = function (arg1, arg2) {
 
-	if (this.req.url.substr(1, 3) == 'api' && this.req.url.substr(-4, 4) == 'json') {
-		// API request
-		if (arguments.length === 1) {
-			this.req.res.json(template); // "template" is actually "data" if only one parameter is passed.
-		}
-		else {
-			this.req.res.json(data);
-		}
-	} else {
+	if (this.req.path.substr(1, 3) == 'api' && this.req.path.substr(-4, 4) == 'json') {
+		// API call. Send JSON.
+		this.req.res.json(arg1);
+	}
+	else {
 		// Human request
-		this.req.res.render(template, data);
+		this.req.res.render(arg1, arg2); // arg1 = template. arg2 = JSON data.
 	}
 };
 

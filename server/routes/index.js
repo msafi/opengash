@@ -8,5 +8,6 @@ module.exports = function(app) {
 
 	app.get('/api/authurl/json', routes.authUrl);
 
-	app.get('/api/gaviews/json', routes.gaViews);
+	app.get('/api/ga-views/json', routes.gaViews);
+	app.post('/api/ga-views/json', routes.gaSaveViews);
 };

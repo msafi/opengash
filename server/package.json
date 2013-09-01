@@ -1,19 +1,21 @@
 {
-	"name": "opengash",
-	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-		"start": "node app.js"
-	},
-	"dependencies": {
-		"express": "*",
-		"jade": "*",
-		"mongodb": "*",
-		"request": "*",
-		"ejs": "*"
-	},
-	"devDependencies": {
-		"mocha": "*",
-		"should": "*"
-	}
+  "name": "opengash",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "*",
+    "request": "*",
+    "ejs": "*",
+    "nedb": "*",
+    "tingodb": "~0.1.15",
+    "level": "~0.15.0",
+    "dirty": "~0.9.7"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  }
 }

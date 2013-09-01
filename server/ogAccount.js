@@ -22,7 +22,7 @@ module.exports.saveUser = function(user, callback) {
 			callback(err);
 		}
 		else {
-			ogDb.collection('ogAccount').update({"user.id": user.id}, {user: user}, {upsert: true}, function (err, results) {
+			ogDb.collection('ogAccount').update({"user.id": user.id}, {$set: {user: user}}, {upsert: true}, function (err, results) {
 				callback(err, results);
 			});
 		}

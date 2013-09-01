@@ -1,8 +1,52 @@
 body {
-	padding: 50px;
+	padding: 30px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+	max-width: 100%;
 }
 
 a {
 	color: #00B7FF;
+}
+
+.aTable {
+	float: left;
+	margin: 10px;
+}
+
+.aTable table td:first-child {
+	font-weight: bold;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.results {
+	float: left;
+}
+
+.comparison {
+	font-size: 13px;
+}
+
+.movement {
+	float: left;
+	line-height: 3em;
+	padding-left: 10px;
+	font-size: 13px;
+}
+
+.aTable table tr {
+	height: 25px;
+}
+
+.aTable table td {
+	min-width: 60px;
+	text-align: center;
+	vertical-align: middle !important;
+}
+
+.aTable table th {
+	text-align: center;
 }
