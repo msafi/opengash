@@ -92,60 +92,6 @@ opengash.factory('ogAccount', [
 	}
 ]);
 
-opengash.factory('tableBuilder', [
-	'$q',
-	function ($q) {
-		var tableBuilder = {};
-		var builtTables = $q.defer();
-		var period;
-
-		tableBuilder.start = function (content) {
-			for (var i = 0; i < content.query.metrics.length; i++) {
-//				console.log(content.query.metrics[i]);
-			}
-//			console.log(content);
-			// builtTables.resolve(content);
-		};
-
-		tableBuilder.tables = function (strMetrics, arrIds, periods) {
-			strMetrics = strMetrics.replace(/ga:/g, '');
-			var arrMetrics = strMetrics.split(',');
-			var tableHtml = '';
-
-			// For each metric, a separate table.
-			for (var metricsI = 0; metricsI < arrMetrics.length; metricsI++) {
-				tableHtml += '<table id="' + arrMetrics[metricsI] + '">';
-
-				// For each period, a separate column
-				tableHtml += '<tr>';
-				tableHtml += '<td></td>'; // Cell 0,0 is empty.
-				for (period in periods) {
-					tableHtml += '<td>' + period + '</td>';
-				}
-				tableHtml += '</tr>';
-
-				// For each web property, create a new row.
-				for (var IdsI = 0; IdsI < arrIds.length; IdsI++) {
-					tableHtml += '<tr>';
-					tableHtml += '<td>{{' + arrIds[IdsI] + '.profileInfo.profileName}}</td>';
-					// Then again for every period, a new column.
-					for (period in periods) {
-						tableHtml += '<td>{{' + arrIds[IdsI] + '.' + arrMetrics[metricsI] + '.' + period + '}}</td>';
-					}
-					tableHtml += '</tr>';
-				}
-
-				// Close the table for this metric.
-				tableHtml += '</table>';
-			}
-			return tableHtml;
-		}
-
-		return tableBuilder;
-	}
-])
-
-
 opengash.factory('periods', [
 	'dateFilter',
 	function periods(dateFilter) {
