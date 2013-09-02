@@ -5,5 +5,5 @@
 			email: String,
 			image: String
 		},
-		gaViews: {}
+		gaViews: [{}]
      }

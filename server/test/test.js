@@ -1,18 +1,18 @@
 var should = require('should'),
-	http = require('http'),
-	config = require('../config');
+  http = require('http'),
+  config = require('../config');
 
-describe('Loading', function() {
-	describe('application', function(){
-		it('should be successful', function(done){
-			http.request('http://' + config.hostName, function(res) {
-				res.on('data', function() {
-					res.statusCode.should.equal(200);
-					done();
-				});
-			}).end();
-		});
-	});
+describe('Loading', function () {
+  describe('application', function () {
+    it('should be successful', function (done) {
+      http.request('http://' + config.hostName,function (res) {
+        res.on('data', function () {
+          res.statusCode.should.equal(200);
+          done();
+        });
+      }).end();
+    });
+  });
 });
 
 // Yay I do testing!!

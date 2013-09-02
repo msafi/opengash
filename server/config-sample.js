@@ -7,7 +7,7 @@ config.clientSecret = 'Your client secret';
 config.redirectURL = 'Your redirect URL';
 
 // App configurations
-config.hostName = 'Your domain name';
+config.hostName = 'Your domain name, eg: opengash.com';
 config.cookieSignature = 'Your unique cookies signature';
 
 module.exports = config;

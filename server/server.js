@@ -2,12 +2,9 @@
  * Module dependencies.
  */
 var express = require('express'),
-	http = require('http'),
-	path = require('path'),
-	config = require('./config'),
-	i = require('util').inspect,
-	fs = require('fs'),
-	ogUtil = require('./ogUtil');
+  http = require('http'),
+  config = require('./config'),
+  ogUtil = require('./ogUtil');
 
 // Global 'app'. Accessible across files.
 app = express();
@@ -27,11 +24,11 @@ app.use(app.router);
 
 // development only
 if ('development' == app.get('env')) {
-	app.use(express.errorHandler());
+  app.use(express.errorHandler());
 }
 
-var routes = require('./routes')(app);
+require('./routes')(app);
 
 http.createServer(app).listen(app.get('port'), config.hostName, function () {
-	console.log('Express server listening on port ' + app.get('port'));
+  console.log('Express server listening on port ' + app.get('port'));
 });

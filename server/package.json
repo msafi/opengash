@@ -8,11 +8,7 @@
   "dependencies": {
     "express": "*",
     "request": "*",
-    "ejs": "*",
-    "nedb": "*",
-    "tingodb": "~0.1.15",
-    "level": "~0.15.0",
-    "dirty": "~0.9.7"
+    "ejs": "*"
   },
   "devDependencies": {
     "mocha": "*",
