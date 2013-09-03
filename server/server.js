@@ -1,6 +1,3 @@
-/**
- * Module dependencies.
- */
 var express = require('express'),
   http = require('http'),
   config = require('./config'),

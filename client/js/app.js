@@ -3,8 +3,7 @@
 var opengash = angular.module('opengash', ['ngCookies', 'ui.router']);
 
 opengash.config([
-  '$stateProvider',
-  '$locationProvider',
+  '$stateProvider', '$locationProvider',
   function ($stateProvider, $locationProvider) {
     $stateProvider.
       state('login', {
