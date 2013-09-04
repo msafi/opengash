@@ -21,7 +21,9 @@ opengash is still a very immature project. I'm developing it mainly to learn sof
 ---
 
 ## Try it
-opengash is built with the MEAN stack (MongoDB, Express, AngularJS, Node.js). If you know how to run MEAN apps and wanna try this one:
+You can try the live, barely working, service on [opengash.com](http://opengash.com).
+
+Or you can try it on your own machine. opengash is built with the MEAN stack (MongoDB, Express, AngularJS, Node.js). If you know how to run MEAN apps and wanna try this one:
 
 1. download it
 2. `cd` into `server`
@@ -30,8 +32,3 @@ opengash is built with the MEAN stack (MongoDB, Express, AngularJS, Node.js). If
 5. `node server` while in `server`
 6. Make sure a MongoDB server is running
 7. Load the app in your browser.
-
-I plan to soon make the app available as a SaaS on [opengash.com](http://opengash.com).
-
-
-

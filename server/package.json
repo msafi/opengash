@@ -9,7 +9,8 @@
     "express": "*",
     "request": "*",
     "ejs": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "async": "*"
   },
   "devDependencies": {
     "mocha": "*",
