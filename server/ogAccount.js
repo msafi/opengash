@@ -5,9 +5,10 @@
  */
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
+var config = require('./config');
 
 var connect = function (callback) {
-  MongoClient.connect('mongodb://localhost:27017/opengash', function (err, ogDb) {
+  MongoClient.connect(config.dbUri, function (err, ogDb) {
     // I guess this ensures I only close the DB after all callbacks are done? I hope!
     async.series([
       function () {

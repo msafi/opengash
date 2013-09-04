@@ -9,5 +9,6 @@ config.redirectURL = 'Your redirect URL';
 // App configurations
 config.hostName = 'Your domain name, eg: opengash.com';
 config.cookieSignature = 'Your unique cookies signature';
+config.dbUri = 'URI to your MongoDB, something like mongodb://localhost:27017/opengash';
 
 module.exports = config;
