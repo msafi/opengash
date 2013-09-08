@@ -1,15 +1,36 @@
-/*
- Provides the database functions to CRUD with opengash accounts.
- To get an idea of what the schema might look like, see SCHEMA.md
- in the docs folder.
+/**
+ * Provides the database functions to CRUD opengash accounts.
+ *
+ * To get an idea of what the schema might look like, see SCHEMA.md in the `docs/static` folder.
+ *
+ * @namespace ogAccount
  */
+
+
+
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 var config = require('./config');
 
+
+
+/**
+ * A helper function that:
+ *
+ * 1. Opens a database connection
+ * 2. Executes the callback function
+ * 3. Closes the database connection.
+ *
+ * To ensure flow-control, it uses Node.js async module.
+ *
+ * See other functions in this module for how it is used.
+ *
+ * @param callback {function} The function to be executed upon connecting to the database.
+ *
+ * @function ogAccount.connect
+ */
 var connect = function (callback) {
   MongoClient.connect(config.dbUri, function (err, ogDb) {
-    // I guess this ensures I only close the DB after all callbacks are done? I hope!
     async.series([
       function () {
         callback(err, ogDb);
@@ -21,6 +42,19 @@ var connect = function (callback) {
   });
 }
 
+
+
+/**
+ * Saves a parsed JSON object, `user`, to the database. Then, executes a callback function.
+ *
+ * It uses `user.id` to find out if the record already exists in the database. If so, it updates it.
+ * If the record isn't found, a new record is created.
+ *
+ * @param user {object} a parsed JSON object.
+ * @param callback {function} a function to be executed upon success or failure.
+ *
+ * @function ogAccount.saveUser
+ */
 module.exports.saveUser = function (user, callback) {
   connect(function (err, ogDb) {
     if (err) {
@@ -34,6 +68,21 @@ module.exports.saveUser = function (user, callback) {
   });
 }
 
+
+/**
+ * Retrieves the Google Analytics profiles, aka views, of a user and passes the results array to a callback function.
+ *
+ * The results array looks like:
+ *
+ * ```
+ * [{"Property Name", "id:12345678"}]
+ * ```
+ *
+ * @param email {string} the user email string to query the database
+ * @param callback {function} a callback function to do something with the returned results.
+ *
+ * @function ogAccount.getGaViews
+ */
 module.exports.getGaViews = function (email, callback) {
   connect(function (err, ogDb) {
     ogDb.collection('ogAccount').findOne({"user.email": email}, function (err, ogAccount) {
@@ -48,9 +97,21 @@ module.exports.getGaViews = function (email, callback) {
   });
 }
 
+
+
+/**
+ * Saves a user's selected views to the database. It finds the user by the provided email.
+ *
+ * The views are saved as an array of parsed JSON objects under the field `gaViews`.
+ *
+ * @param email {string} search query
+ * @param views {object} parsed JSON object
+ * @param callback {function} function to let you do something with the results.
+ *
+ * @function ogAccount.saveViews
+ */
 module.exports.saveViews = function (email, views, callback) {
   connect(function (err, ogDb) {
-    console.log('icu');
     ogDb.collection('ogAccount').update({"user.email": email}, {$set: {gaViews: views}}, function (err, results) {
       callback(err, results);
     });

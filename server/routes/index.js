@@ -1,10 +1,21 @@
-// Load the route handlers
-var routes = require('./handlers');
+/**
+ * Contains a list of URL paths and the functions that handle them.
+ *
+ * Those functions are in {@link request.handlers}
+ *
+ * @namespace url.index
+ */
 
+var routes = require('./handlers');
+    config = require('../config');
+
+/**
+ * This is a list of routes/URLs to be intercepted and handled by {@link request.handlers}
+ */
 module.exports = function (app) {
   app.get('/', routes.home);
 
-  app.get('/authenticate', routes.authenticate);
+  app.get(config.relativeRedirectUrl, routes.authenticate);
 
   app.get('/api/authurl/json', routes.authUrl);
 

@@ -1,5 +1,16 @@
 'use strict';
 
+/**
+ * This is the main controller for all pages. Its job is to determine the status of the user:
+ * logged in, has saved properties, has access token, etc. Then, load the appropriate template
+ * accordingly.
+ *
+ * @requires $state
+ * @requires $cookies
+ * @requires ogAccount
+ *
+ * @namespace ng.controller.mainCtrl
+ */
 opengash.controller('mainCtrl', [
   '$state', '$cookies', 'ogAccount',
   function ($state, $cookies, ogAccount) {
@@ -23,6 +34,16 @@ opengash.controller('mainCtrl', [
   }
 ]);
 
+
+
+/**
+ * Controls the `connect.html` template. That template only needs a
+ * Google OAuth 2.0 URL, and that's what this controller gives it.
+ *
+ * @requires authUrl
+ *
+ * @namespace ng.controller.connectCtrl
+ */
 opengash.controller('connectCtrl', [
   '$scope', 'authUrl',
   function ($scope, authUrl) {
@@ -30,8 +51,23 @@ opengash.controller('connectCtrl', [
   }
 ]);
 
-// This is a good question and answer on how to handle checkboxes in AngularJS
-// http://stackoverflow.com/a/14864244/604296
+
+
+/**
+ * This is the controller for `add-views.html` template.
+ *
+ * It uses {@link ng.service.ogAccount} to retrieve a all the profiles/views that a user
+ * has in Google Analytics in JSON format. The template then displays this information.
+ * The controller listens for user interactions with checkboxes.
+ *
+ * Once the user clicks submit, checked checkboxes are saved to the database and
+ * the `dashboard.html` template is loaded using the `$state` service.
+ *
+ * @requires ogAccount
+ * @requires $state
+ *
+ * @namespace ng.controller.addViewsCtrl
+ */
 opengash.controller('addViewsCtrl', [
   '$scope', 'ogAccount', '$state',
   function ($scope, ogAccount, $state) {
@@ -58,6 +94,15 @@ opengash.controller('addViewsCtrl', [
 /**
  * This is the monster that displays the main dashboard.
  * It needs a lot of clean up.
+ *
+ * @requires $scope
+ * @requires gaApi
+ * @requires ogAccount
+ * @requires $timeout
+ * @requires periods
+ * @requires $sce
+ *
+ * @namespace ng.controller.dashboardCtrl
  */
 opengash.controller('dashboardCtrl', [
   '$scope', 'gaApi', 'ogAccount', '$timeout', 'periods', '$sce',
@@ -66,18 +111,20 @@ opengash.controller('dashboardCtrl', [
     ogAccount.getSavedViews().then(function (arrViews) {
 
       // Initialize stuff.
-      var arrIds = arrViews.map(function (view) { return 'ga:' + view.id; }),
-          strMetrics = 'ga:visitors,ga:pageviews,ga:pageviewsPerVisit,ga:avgTimeOnSite,ga:visitBounceRate,ga:percentNewVisits,ga:avgPageLoadTime',
-          numApiCallsNeeded = periods.totalPeriods * arrIds.length,
-          executionDelay = 0,
-          tableContentConstructor,
-          apiCallsCounter = 0;
+      var arrIds = arrViews.map(function (view) {
+          return 'ga:' + view.id;
+        }),
+        strMetrics = 'ga:visitors,ga:pageviews,ga:pageviewsPerVisit,ga:avgTimeOnSite,ga:visitBounceRate,ga:percentNewVisits,ga:avgPageLoadTime',
+        numApiCallsNeeded = periods.totalPeriods * arrIds.length,
+        executionDelay = 0,
+        tableContentConstructor,
+        apiCallsCounter = 0;
 
       $scope.tableStructure = { metrics: strMetrics.replace(/ga:/g, '').split(','), views: arrIds, periods: periods.ordered };
       $scope.tableContent = {};
       $scope.tableComparisonContent = {};
 
-      tableContentConstructor = function (id, startDate, endDate, comparison) {
+      tableContentConstructor = function (id, period, startDate, endDate, comparison) {
         return function () {
 
           gaApi.getReport(id, startDate, endDate, strMetrics).then(function (results) {
@@ -86,13 +133,13 @@ opengash.controller('dashboardCtrl', [
               if (typeof $scope.tableContent[results.profileInfo.tableId] == 'undefined')
                 $scope.tableContent[results.profileInfo.tableId] = {};
 
-              $scope.tableContent[results.profileInfo.tableId][periods.determineResultsPeriod(results)] = results;
+              $scope.tableContent[results.profileInfo.tableId][period] = results;
             }
             else {
               if (typeof $scope.tableComparisonContent[results.profileInfo.tableId] == 'undefined')
                 $scope.tableComparisonContent[results.profileInfo.tableId] = {};
 
-              $scope.tableComparisonContent[results.profileInfo.tableId][periods.determineComparisonResultsPeriod(results)] = results;
+              $scope.tableComparisonContent[results.profileInfo.tableId][period] = results;
             }
 
             // TODO: Use promises for control-flow instead
@@ -130,7 +177,7 @@ opengash.controller('dashboardCtrl', [
       periods.forEach(arrIds, function (id, period) {
         // Get original content
         $timeout(
-          tableContentConstructor(id, periods.dates[period].start, periods.dates[period].end, false),
+          tableContentConstructor(id, period, periods.dates[period].start, periods.dates[period].end, false),
           executionDelay
         );
         executionDelay += 150;
@@ -138,7 +185,7 @@ opengash.controller('dashboardCtrl', [
         // Get comparison content
         if (period != 'today') {
           $timeout(
-            tableContentConstructor(id, periods.comparisonDates[period].start, periods.comparisonDates[period].end, true),
+            tableContentConstructor(id, period, periods.comparisonDates[period].start, periods.comparisonDates[period].end, true),
             executionDelay
           );
           executionDelay += 150;

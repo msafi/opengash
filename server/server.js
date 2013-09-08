@@ -1,22 +1,31 @@
+/**
+ * This is the entry point of the app.
+ *
+ * This file sets up the server and configures it.
+ *
+ * @namespace server
+ */
 var express = require('express'),
-  http = require('http'),
-  config = require('./config'),
-  ogUtil = require('./ogUtil');
+    http = require('http'),
+    config = require('./config'),
+    ogUtil = require('./ogUtil');
 
 // Global 'app'. Accessible across files.
-app = express();
+var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 80);
-app.set('views', '../client');
+app.set('views', __dirname + '/../client');
 app.set('view engine', 'ejs');
+
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(config.cookieSignature));
 app.use(express.cookieSession({secret: config.cookieSignature}));
 app.use(ogUtil.csrf);
-app.use(express.static('../client'));
+app.use('/', express.static(__dirname + '/../client'));
+app.use('/docs', express.static(__dirname + '/../docs'));
 app.use(app.router);
 
 // development only

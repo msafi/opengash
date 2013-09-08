@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * The authUrl service talks to the server to obtain a Google OAuth 2.0 compatible
+ * login URL. See {@link ng.controller.connectCtrl} for how this service is used.
+ *
+ * @requires $http
+ * @requires $q
+ *
+ * @returns {string} the URL
+ * @namespace ng.service.authUrl
+ */
 opengash.factory('authUrl', [
   '$http', '$q',
   function ($http, $q) {
@@ -10,11 +20,32 @@ opengash.factory('authUrl', [
   }
 ]);
 
+
+/**
+ * gaApi is similar to {@link ogGaApi} in that its primary purpose is to interact with Google API,
+ * but this one is for the front-end.
+ *
+ * @requires $http
+ * @requires $cookies
+ * @requires $q
+ *
+ * @returns gaApi service
+ * @namespace ng.service.gaApi
+ */
 opengash.factory('gaApi', [
   '$http', '$cookies', '$q',
   function ($http, $cookies, $q) {
     var gaApi = {};
 
+    /**
+     * Given a Google API end-point and a callback function, this method lets you do things with the results
+     * of the API call.
+     *
+     * @param apiUrl {string} Google API end point.
+     * @param callback {function} To be executed on the returned results
+     *
+     * @function ng.service.gaApi.call
+     */
     gaApi.call = function (apiUrl, callback) {
       var qs = { access_token: $cookies.accessToken };
       $http({method: 'GET', url: apiUrl, params: qs })
@@ -23,6 +54,15 @@ opengash.factory('gaApi', [
         });
     }
 
+
+    /**
+     * Retrieves the Google Analytics profiles/views of the user and passes the results
+     * to the callback function.
+     *
+     * @param callback {function} To be executed on the returned profiles/views.
+     *
+     * @function ng.service.gaApi.fetchViews
+     */
     gaApi.fetchViews = function (callback) {
       var url = 'https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles';
       gaApi.call(url,
@@ -36,6 +76,18 @@ opengash.factory('gaApi', [
       );
     }
 
+
+    /**
+     * Retrieves a specific Google Analytics report
+     *
+     * @param ids {string} The ID of the profile to be queried, `id:12345678`
+     * @param startDate {string} The start date of the report period, `yyyy-mm-dd`
+     * @param endDate {string} The end date of the report period, `yyyy-mm-dd`
+     * @param metrics {string} A comma separated list of Google Analytics metrics
+     *
+     * @returns {object} A promise of a parsed JSON object
+     * @function ng.service.gaApi.getReport
+     */
     gaApi.getReport = function (ids, startDate, endDate, metrics) {
       var qs = {
         access_token: $cookies.accessToken,
@@ -56,12 +108,33 @@ opengash.factory('gaApi', [
   }
 ]);
 
+
+/**
+ * This is a service for CRUDing opengash accounts. It's similar to
+ * {@link ogAccount} on the server side.
+ *
+ * @requires $http
+ * @requires $cookies
+ * @requires gaApi
+ * @requires $q
+ *
+ * @namespace ng.service.ogAccount
+ */
 opengash.factory('ogAccount', [
   '$http', '$cookies', 'gaApi', '$q',
   function ($http, $cookies, gaApi, $q) {
     var qs = {csrf: $cookies.csrf}
     var ogAccount = {};
 
+
+    /**
+     * Query the server for a user's saved Google Analytics profiles. If the server finds previously saved
+     * user profiles/views, they are returned in a parsed JSON object. Otherwise, the server returns an
+     * empty string, which this function interprets as a failure.
+     *
+     * @returns {object} A promise of parsed JSON or failure
+     * @function ng.service.ogAccount.getSavedViews
+     */
     ogAccount.getSavedViews = function () {
       var gaViews = $q.defer();
       $http({method: 'GET', url: 'api/ga-views/json', params: qs})
@@ -72,37 +145,79 @@ opengash.factory('ogAccount', [
             gaViews.reject(false);
         });
       return gaViews.promise;
-    }
+    };
 
+
+
+    /**
+     * This function maps directly to {@link ng.service.gaApi.fetchViews}
+     *
+     * @returns {object} parsed JSON object of the user's profiles/views.
+     * @function ng.service.ogAccount.getAllViews
+     */
     ogAccount.getAllViews = function () {
       var gaViews = $q.defer();
       gaApi.fetchViews(function (results) {
         gaViews.resolve(results);
       });
       return gaViews.promise;
-    }
+    };
 
+
+
+    /**
+     * POSTs a serialized array to the server to be saved as the user's Google Analytics
+     * profiles/views.
+     *
+     * @param arrViews {array} containing the profile IDs to be saved for the user.
+     *
+     * @function ng.service.ogAccount.saveViews
+     */
     ogAccount.saveViews = function (arrViews) {
       // TODO: maybe return success & faliure.
       // TODO: Do server side checking of the data being submitted.
       $http({method: 'POST', url: 'api/ga-views/json', params: qs, data: arrViews});
-    }
+    };
 
     return ogAccount;
   }
 ]);
 
+
+
+/**
+ * Helper functions for dealing with Google Analytics reports date periods
+ *
+ * @requires dateFilter
+ *
+ * @namespace ng.service.periods
+ */
 opengash.factory('periods', [
   'dateFilter',
-  function periods(dateFilter) {
+  function (dateFilter) {
 
-    // You can ask this for a nicely formatted date by giving it the number of days it should go back.
+    var periods = {};
+
+    /**
+     * Returns a Google Analytics API compatible date string, provided the days it should go back.*
+     *
+     * @param days {number} The number of days of how far back the date is.
+     * @returns {string} in the format of `yyyy-MM-dd`
+     *
+     * @function ng.service.periods._getNiceDate
+     */
     var _getNiceDate = function (days) {
       var currentTime;
       currentTime = new Date().getTime();
       return dateFilter(currentTime - (days * 86400000), 'yyyy-MM-dd');
-    }
+    };
 
+
+    /**
+     * The fixed date periods that opengash currently supports.
+     *
+     * @member ng.service.periods.dates
+     */
     periods.dates = {
       today: { start: _getNiceDate(0), end: _getNiceDate(0) },
       yesterday: {start: _getNiceDate(1), end: _getNiceDate(1) },
@@ -111,56 +226,61 @@ opengash.factory('periods', [
       year: {start: _getNiceDate(366), end: _getNiceDate(1) }
     };
 
+
+    /**
+     * The date periods that the original dates will be compared to in order to gauge a metric's movement
+     *
+     * @member ng.service.periods.comparisonDates
+     */
     periods.comparisonDates = {
       yesterday: {start: _getNiceDate(8), end: _getNiceDate(8) }, // Compare yesterday to the same day the previous week.
       week: {start: _getNiceDate(16), end: _getNiceDate(9) }, // Compare to the previous 7 days.
       month: {start: _getNiceDate(62), end: _getNiceDate(32) }, // Compare to the previous 30 days
       year: {start: _getNiceDate(732), end: _getNiceDate(367) } // Compare to the previous 365 days
-    }
+    };
 
+
+    /**
+     * An array of the date periods, ordered chronologically because the ordering in JavaScript object properties
+     * isn't guaranteed.
+     *
+     * @member ng.service.periods.ordered
+     */
     periods.ordered = ['Today', 'Yesterday', 'Week', 'Month', 'Year'];
 
-    periods.determineResultsPeriod = function (results) {
-      var periodName;
-      var returnVal = function (periodName) {
-        return periodName;
-      }
 
-      for (periodName in periods.dates) {
-        if (results.query['start-date'] == periods.dates[periodName].start) {
-          return returnVal(periodName);
-        }
-      }
-    }
 
-    periods.determineComparisonResultsPeriod = function (results) {
-      var periodName;
-      var returnVal = function (periodName) {
-        return periodName;
-      }
-
-      for (periodName in periods.comparisonDates) {
-        if (results.query['start-date'] == periods.comparisonDates[periodName].start) {
-          return returnVal(periodName);
-        }
-      }
-    }
-
+    /**
+     * Returns the total number of periods (original + comparison).
+     *
+     * @member ng.service.periods.totalPeriods
+     */
     periods.totalPeriods = (function () {
       return Object.keys(periods.dates).length + Object.keys(periods.comparisonDates).length;
     })();
 
-    periods.forEach = function (items, callback) {
-      var i = 0,
-        eachPeriod;
+
+
+    /**
+     * Iterates over a given array of Google Analytics profiles/views IDs and executes
+     * a callback function for each period for each ID.
+     *
+     * @param arrProfileIds {array} Array of Google Analytics profiles/views IDs
+     * @param callback {function} To be executed on the profile ID and period.
+     *
+     * @function ng.service.periods.forEach
+     */
+    periods.forEach = function (arrProfileIds, callback) {
+      var eachPeriod;
+
       // iterate over each web property
-      for (i = 0; i < items.length; i++) {
+      arrProfileIds.forEach(function(profileId) {
         // iterate over each period
         for (eachPeriod in periods.dates) {
-          callback(items[i], eachPeriod);
+          callback(profileId, eachPeriod);
         }
-      }
-    }
+      });
+    };
 
     return periods;
   }
