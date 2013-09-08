@@ -32,3 +32,5 @@ Or you can try it on your own machine. opengash is built with the MEAN stack (Mo
 5. `node server` while in `server`
 6. Make sure a MongoDB server is running
 7. Load the app in your browser.
+
+**Full source code documentation is available at [http://opengash.com/docs/](http://opengash.com/docs/)**
