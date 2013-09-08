@@ -3,7 +3,7 @@ If you have multiple websites using Google Analytics, you might wish to have a s
 
 That's what opengash is for. See this clickable screenshot:
 
-![opengash screenshot](docs/screenshot.png?raw=true)
+![opengash screenshot](docs/static/screenshot.png?raw=true)
 
 This image shows the main screen of the app, which is a bunch of tables that have the websites on the vertical axis and the periods of time on the horizontal axis. Each period (except "Today") is compared to the past.
 
