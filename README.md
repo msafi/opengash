@@ -33,4 +33,4 @@ Or you can try it on your own machine. opengash is built with the MEAN stack (Mo
 6. Make sure a MongoDB server is running
 7. Load the app in your browser.
 
-**Full source code documentation is available at [http://opengash.com/docs/](http://opengash.com/docs/)**
+The source code is fully documented. The documentation is extracted and published at [http://opengash.com/docs/](http://opengash.com/docs/).
