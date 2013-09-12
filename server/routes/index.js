@@ -6,19 +6,31 @@
  * @namespace url.index
  */
 
-var routes = require('./handlers');
-    config = require('../config');
+var handlers = require('./handlers');
+var config = require('../config');
 
-/**
- * This is a list of routes/URLs to be intercepted and handled by {@link request.handlers}
- */
-module.exports = function (app) {
-  app.get('/', routes.home);
+var definedRoutes = {
+  home: {
+    path: '/', handler: 'home', method: 'get'
+  },
+  googleRedirectUrl: {
+    path: config.relativeRedirectUrl, handler: 'authenticate', method: 'get'
+  },
+  authUrl: {
+    path: '/api/authurl/json', handler: 'authUrl', method: 'get'
+  },
+  getGaViews: {
+    path: '/api/ga-views/json', handler: 'gaViews', method: 'get'
+  },
+  postGaViews: {
+    path: '/api/ga-views/json', handler: 'gaSaveViews', method: 'post'
+  }
+}
 
-  app.get(config.relativeRedirectUrl, routes.authenticate);
+exports.definedRoutes = definedRoutes;
 
-  app.get('/api/authurl/json', routes.authUrl);
-
-  app.get('/api/ga-views/json', routes.gaViews);
-  app.post('/api/ga-views/json', routes.gaSaveViews);
+exports.routes = function (app) {
+  for (var route in definedRoutes) {
+    app[definedRoutes[route].method](definedRoutes[route].path, handlers[definedRoutes[route].handler]);
+  }
 };

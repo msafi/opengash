@@ -117,3 +117,25 @@ module.exports.saveViews = function (email, views, callback) {
     });
   });
 }
+
+
+/**
+ * Takes an email of user and deletes it from the database.
+ *
+ * @param email {string} Of the user to be deleted.
+ * @param callback {function} do something after deleting the user
+ *
+ * @function ogAccount.deleteUser
+ */
+module.exports.deleteAccount = function(email, callback) {
+  if (typeof email != 'string') {
+    var err = new TypeError('First argument should be a string')
+    callback(err)
+  }
+
+  connect(function(err, ogDb) {
+    ogDb.collection('ogAccount').remove({"user.email": email}, 0, function(err, results) {
+      callback(err, results)
+    })
+  })
+}

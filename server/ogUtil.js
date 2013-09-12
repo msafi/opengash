@@ -76,7 +76,7 @@ module.exports.csrf = function (req, res, next) {
 module.exports.verifyCsrf = function (req, res) {
   var sourcesOfCsrf = [qs.parse(req.query.state).csrf, req.query.csrf];
 
-  if (sourcesOfCsrf.indexOf(req.cookies.csrf) == -1) {
+  if (sourcesOfCsrf.indexOf(req.cookies.csrf) == -1 || typeof req.cookies.csrf == 'undefined') {
     res.send(401, 'Unable to authorize. Make sure you accept cookies.');
   }
 };

@@ -10,7 +10,6 @@ var express = require('express'),
     config = require('./config'),
     ogUtil = require('./ogUtil');
 
-// Global 'app'. Accessible across files.
 var app = express();
 
 // all environments
@@ -33,8 +32,10 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-require('./routes')(app);
+require('./routes').routes(app);
 
 http.createServer(app).listen(app.get('port'), config.hostName, function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+module.exports = app;

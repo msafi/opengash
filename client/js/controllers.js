@@ -142,7 +142,7 @@ opengash.controller('dashboardCtrl', [
               $scope.tableComparisonContent[results.profileInfo.tableId][period] = results;
             }
 
-            // TODO: Use promises for control-flow instead
+            // todo: Use promises for control-flow instead
             apiCallsCounter++;
             if (apiCallsCounter == numApiCallsNeeded) {
               // All needed API results have been received. Do stuff with it here.

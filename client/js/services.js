@@ -174,8 +174,8 @@ opengash.factory('ogAccount', [
      * @function ng.service.ogAccount.saveViews
      */
     ogAccount.saveViews = function (arrViews) {
-      // TODO: maybe return success & faliure.
-      // TODO: Do server side checking of the data being submitted.
+      // todo: maybe return success & faliure.
+      // todo: Do server side checking of the data being submitted.
       $http({method: 'POST', url: 'api/ga-views/json', params: qs, data: arrViews});
     };
 

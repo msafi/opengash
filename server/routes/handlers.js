@@ -1,19 +1,19 @@
 /**
  * The functions that handle incoming requests.
  *
- * Each function is assigned to a URL by {@link urls.index}
+ * Each function is assigned to a URL by {@link url.index}
  *
  * @namespace request.handlers
  */
 
-var OgGaApi = require('../ogGaApi'),
-    config = require('../config'),
-    verifyCsrf = require('../ogUtil').verifyCsrf,
-    OgAccount = require('../ogAccount');
+var OgGaApi = require('../ogGaApi');
+var config = require('../config');
+var verifyCsrf = require('../ogUtil').verifyCsrf;
+var OgAccount = require('../ogAccount');
 
 var ogGaApi = new OgGaApi(config.clientId, config.clientSecret, config.redirectUrl);
 
-
+var should = require('should')
 
 /**
  * Handles requests to root URL '/'
@@ -79,7 +79,7 @@ exports.authenticate = function (req, res) {
       user.verified_email = (user.verified_email) ? 1 : 0;
 
       // Find a user in the database by their ID and upsert.
-      OgAccount.saveUser(user, function (err, _results) {
+      OgAccount.saveUser(user, function (err) {
         if (err)
           res.end(i(err));
 
@@ -116,7 +116,7 @@ exports.authUrl = function (req, res) {
  * the email of the logged in user. Then it uses that email to see if the user had
  * previously saved his Google Analytics profiles (aka views). If found,
  * the views are returned. Otherwise, an empty response is returned. The empty response
- * evaluates to false on the front-end, at {@link services.ogAccount} for example.
+ * evaluates to false on the front-end, at {@link service.ogAccount} for example.
  *
  * @param req {object} Node.js/express request object
  * @param res {object} Node.js/express response object
@@ -127,12 +127,15 @@ exports.gaViews = function (req, res) {
   verifyCsrf(req, res);
   var userEmail = req.signedCookies.loggedIn;
   OgAccount.getGaViews(userEmail, function (gaViews) {
+    var response
 
     if (gaViews) {
-      res.ogRender(gaViews);
+      response = gaViews
+      res.ogRender(response);
     }
     else {
-      res.end('');
+      response = ''
+      res.end(response);
     }
   });
 }

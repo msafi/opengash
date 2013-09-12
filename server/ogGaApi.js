@@ -7,7 +7,7 @@
  *
  * @namespace ogGaApi
  */
-// Todo: Validate ID Tokens using Google's public certificates
+// todo: Validate ID Tokens using Google's public certificates
 
 var request = require('request');
 var qs = require('querystring');
@@ -63,7 +63,6 @@ OgGaApi.prototype.url = function (csrf) {
  *
  * @param code {string} the code which will be returned as a GET parameter to the redirect
  * URL specified in your {@link server.config}
- *
  * @param callback {function} A callback function that is given:
  *
  * * `err`: is a JavaScript error object
@@ -71,9 +70,8 @@ OgGaApi.prototype.url = function (csrf) {
  * * `body`: JSON string that needs to be parsed
  *
  * @function ogGaApi#requestAccessToken
- *
- * @todo Maybe use a Promise instead of a callback?
  */
+// todo: Maybe use a Promise instead of a callback?
 OgGaApi.prototype.requestAccessToken = function (code, callback) {
   var params = {
     code: code,
@@ -105,8 +103,8 @@ OgGaApi.prototype.requestAccessToken = function (code, callback) {
  *
  * @function ogGaApi#call
  *
- * @todo: Use a Promise instead of a callback?
  */
+// todo: use a Promise instead of a callback?
 OgGaApi.prototype.call = function (accessToken, apiUrl, callback) {
   var qs = {access_token: accessToken};
   request.get({url: apiUrl, qs: qs}, function (err, res, body) {
