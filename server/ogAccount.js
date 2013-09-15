@@ -1,3 +1,5 @@
+"use strict"
+
 /**
  * Provides the database functions to CRUD opengash accounts.
  *
@@ -5,14 +7,9 @@
  *
  * @namespace ogAccount
  */
-
-
-
-var MongoClient = require('mongodb').MongoClient;
-var async = require('async');
-var config = require('./config');
-
-
+var MongoClient = require('mongodb').MongoClient
+  , async = require('async')
+  , config = require('./config')
 
 /**
  * A helper function that:
@@ -29,14 +26,15 @@ var config = require('./config');
  *
  * @function ogAccount.connect
  */
+// todo: the use of `async` here is probably faulty. Fix it.
 var connect = function (callback) {
   MongoClient.connect(config.dbUri, function (err, ogDb) {
     async.series([
       function () {
-        callback(err, ogDb);
+        callback(err, ogDb)
       },
       function () {
-        ogDb.close();
+        ogDb.close()
       }
     ]);
   });
@@ -61,7 +59,7 @@ module.exports.saveUser = function (user, callback) {
       callback(err);
     }
     else {
-      ogDb.collection('ogAccount').update({"user.id": user.id}, {$set: {user: user}}, {upsert: true}, function (err, results) {
+      ogDb.collection('ogAccount').update({"user.email": user.email}, {$set: {user: user}}, {upsert: true}, function (err, results) {
         callback(err, results);
       });
     }
@@ -110,6 +108,7 @@ module.exports.getGaViews = function (email, callback) {
  *
  * @function ogAccount.saveViews
  */
+// todo: make it type-check array for 'views'
 module.exports.saveViews = function (email, views, callback) {
   connect(function (err, ogDb) {
     ogDb.collection('ogAccount').update({"user.email": email}, {$set: {gaViews: views}}, function (err, results) {
@@ -129,13 +128,33 @@ module.exports.saveViews = function (email, views, callback) {
  */
 module.exports.deleteAccount = function(email, callback) {
   if (typeof email != 'string') {
-    var err = new TypeError('First argument should be a string')
+    var err = TypeError('First argument should be a string')
+
     callback(err)
+
+    return
   }
 
   connect(function(err, ogDb) {
     ogDb.collection('ogAccount').remove({"user.email": email}, 0, function(err, results) {
       callback(err, results)
+    })
+  })
+}
+
+/**
+ * Takes an email and passes either ogAccount or null to callback
+ *
+ * @param email {string} to be searched for
+ * @param callback {function} to be called back
+ *
+ * @function ogAccount.findAccount
+ */
+module.exports.findAccount = function(email, callback) {
+  connect(function(err, ogDb) {
+    ogDb.collection('ogAccount').findOne({"user.email": email}, function(err, results) {
+      if (err) throw err
+      callback(results)
     })
   })
 }

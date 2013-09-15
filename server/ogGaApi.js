@@ -9,9 +9,8 @@
  */
 // todo: Validate ID Tokens using Google's public certificates
 
-var request = require('request');
+var request = require('superagent');
 var qs = require('querystring');
-
 
 
 /**
@@ -82,9 +81,13 @@ OgGaApi.prototype.requestAccessToken = function (code, callback) {
   }
   var url = "https://accounts.google.com/o/oauth2/token";
 
-  request.post({url: url, form: params}, function (err, res, body) {
-    callback(err, res, body);
-  });
+  request
+    .post(url)
+    .type('form')
+    .send(params)
+    .end(function (res) {
+      callback(res.body);
+    });
 }
 
 
@@ -107,9 +110,12 @@ OgGaApi.prototype.requestAccessToken = function (code, callback) {
 // todo: use a Promise instead of a callback?
 OgGaApi.prototype.call = function (accessToken, apiUrl, callback) {
   var qs = {access_token: accessToken};
-  request.get({url: apiUrl, qs: qs}, function (err, res, body) {
-    callback(err, res, body);
-  });
+  request
+    .get(apiUrl)
+    .query(qs)
+    .end(function(res) {
+      callback(res.body)
+    })
 }
 
 module.exports = OgGaApi;

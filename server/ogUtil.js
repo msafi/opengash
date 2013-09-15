@@ -3,8 +3,8 @@
  * @namespace ogUtil
  */
 
-var express = require('express'),
-    qs = require('querystring');
+var express = require('express')
+  , qs = require('querystring')
 
 /**
  * Augments express.response (aka Node.js response) object. This function automatically
@@ -19,7 +19,7 @@ var express = require('express'),
  * @param [arg2] {object} This is used to provide data in a JSON format
  * when `arg1` is a template name.
  */
-module.exports = express.response.ogRender = function (arg1, arg2) {
+module.exports.ogRender = express.response.ogRender = function (arg1, arg2) {
 
   if (this.req.path.substr(1, 3) == 'api' && this.req.path.substr(-4, 4) == 'json') {
     // API call. Send JSON.
@@ -78,5 +78,8 @@ module.exports.verifyCsrf = function (req, res) {
 
   if (sourcesOfCsrf.indexOf(req.cookies.csrf) == -1 || typeof req.cookies.csrf == 'undefined') {
     res.send(401, 'Unable to authorize. Make sure you accept cookies.');
+    return false;
   }
+
+  return true;
 };

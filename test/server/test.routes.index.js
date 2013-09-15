@@ -1,11 +1,12 @@
-var expect = require('expect.js')
+var reqBase = require('./reqBase')
+  , expect = require('expect.js')
 
 describe('route handling:', function() {
   var routes, handlers;
 
   before(function() {
-    routes = require('../routes').definedRoutes;
-    handlers = require('../routes/handlers');
+    routes = require(reqBase + '../routes').definedRoutes;
+    handlers = require(reqBase + '../routes/handlers');
   });
 
   it('should handle all defined routes by handlers.js functions', function(done) {

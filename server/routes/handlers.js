@@ -13,14 +13,12 @@ var OgAccount = require('../ogAccount');
 
 var ogGaApi = new OgGaApi(config.clientId, config.clientSecret, config.redirectUrl);
 
-var should = require('should')
-
 /**
  * Handles requests to root URL '/'
  *
  * If the user has a loggedIn cookie **but** an expired Google API access token, he is
  * automatically forwarded to Google to grant permission to opengash. In all other cases,
- * `index.ejs` is served. From there, AngularJS {@link controllers.mainCtrl} on the
+ * `index.ejs` is served. From there, AngularJS {@link controller.mainCtrl} on the
  * front-end determines what to display on the homepage.
  *
  * @param req {object} Node.js/express request object
@@ -29,7 +27,8 @@ var should = require('should')
  * @function request.handlers.home
  */
 exports.home = function (req, res) {
-  if (typeof req.signedCookies.loggedIn !== 'undefined' && typeof req.cookies.accessToken === 'undefined') {
+  if (typeof req.signedCookies.loggedIn !== 'undefined' &&
+  typeof req.cookies.accessToken === 'undefined') {
     // User is logged in, but has an expired token. Redirect to authentication URL silently.
     res.redirect(307, ogGaApi.url(req.cookies.csrf));
   }
@@ -66,22 +65,17 @@ exports.home = function (req, res) {
  */
 exports.authenticate = function (req, res) {
 
-  verifyCsrf(req, res);
+  if (!verifyCsrf(req, res))
+    return;
 
-  ogGaApi.requestAccessToken(req.query.code, function (err, _res, body) {
+  ogGaApi.requestAccessToken(req.query.code, function (accessToken) {
     // Get user basic information.
-    var accessToken = JSON.parse(body);
-
     var url = 'https://www.googleapis.com/oauth2/v1/userinfo';
-    ogGaApi.call(accessToken.access_token, url, function (err, _res, body) {
-      var user = JSON.parse(body);
-      user.id = parseInt(user.id);
-      user.verified_email = (user.verified_email) ? 1 : 0;
+    ogGaApi.call(accessToken.access_token, url, function (user) {
 
       // Find a user in the database by their ID and upsert.
       OgAccount.saveUser(user, function (err) {
-        if (err)
-          res.end(i(err));
+        if (err) throw err;
 
         res.cookie('loggedIn', user.email, {maxAge: 631138519494, signed: true}); // 20 years in milliseconds.
         res.cookie('accessToken', accessToken.access_token, {maxAge: accessToken.expires_in * 1000});
@@ -124,7 +118,9 @@ exports.authUrl = function (req, res) {
  * @function request.handlers.gaViews
  */
 exports.gaViews = function (req, res) {
-  verifyCsrf(req, res);
+  if (!verifyCsrf(req, res))
+    return;
+
   var userEmail = req.signedCookies.loggedIn;
   OgAccount.getGaViews(userEmail, function (gaViews) {
     var response
@@ -154,7 +150,17 @@ exports.gaViews = function (req, res) {
  * @function request.handlers.gaSaveViews
  */
 exports.gaSaveViews = function (req, res) {
-  verifyCsrf(req, res);
+
+  if (!verifyCsrf(req, res))
+    return;
+
   var userEmail = req.signedCookies.loggedIn;
-  OgAccount.saveViews(userEmail, req.body);
+  OgAccount.saveViews(userEmail, req.body, function(err, results) {
+    if (err) {
+      res.send(500)
+      throw err
+    }
+
+    res.json(200, {results: results})
+  });
 }
