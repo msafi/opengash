@@ -17,6 +17,9 @@
     "mocha": "*",
     "expect.js": "*",
     "supertest": "*",
-    "mockery": "*"
+    "mockery": "*",
+    "karma": "*",
+    "karma-ie-launcher": "*",
+    "karma-mocha": "*"
   }
 }

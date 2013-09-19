@@ -1,10 +1,9 @@
-<div ng-controller='dashboardCtrl'>
+<div ng-controller='dashboardCtrl' class='dashboard'>
   <div ng-repeat='metric in tableStructure.metrics' class='aTable'>
-    <h2>{{metric}}</h2>
-    <table id="{{metric}}" class='table table-striped table-responsive table-condensed'>
+    <table id="{{metric}}" class='og-table'>
       <thead>
       <tr>
-        <th></th>
+        <th class='metric'>{{metric}}</th>
         <th ng-repeat="period in tableStructure.periods" class="{{period}}">{{period}}</th>
       </tr>
       </thead>
@@ -13,11 +12,10 @@
         <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
         <td ng-repeat="period in tableStructure.periods">
           <div class='results'>
-            {{tableContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number }}<br/>
-            <span class="comparison">{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number}}</span>
+            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number }}</p>
+            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number}}</p>
           </div>
-          <span class='movement'
-                ng-bind-html="movement[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric]"></span>
+          <p class='movement' ng-bind-html="movement[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric]"></p>
         </td>
       </tr>
       </tbody>

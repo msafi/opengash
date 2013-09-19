@@ -157,7 +157,7 @@ opengash.controller('dashboardCtrl', [
                     contentResult = $scope.tableContent[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]],
                       comparisonContentResult = $scope.tableComparisonContent[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]];
                     movementPercentage = parseFloat((((contentResult - comparisonContentResult) / contentResult) * 100).toFixed(1));
-                    movementContent = movementPercentage + '%';
+                    movementContent = movementPercentage + '%'
                     if (movementPercentage > 0) {
                       movementContent = '<span class="text-success">' + movementContent + '</span>';
                     }
@@ -168,7 +168,7 @@ opengash.controller('dashboardCtrl', [
                     $scope.movement[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]] = $sce.trustAsHtml(movementContent);
                   }
                 }
-              });
+              })
             }
           });
         }
@@ -180,7 +180,7 @@ opengash.controller('dashboardCtrl', [
           tableContentConstructor(id, period, periods.dates[period].start, periods.dates[period].end, false),
           executionDelay
         );
-        executionDelay += 150;
+        executionDelay += 300;
 
         // Get comparison content
         if (period != 'today') {
@@ -188,7 +188,7 @@ opengash.controller('dashboardCtrl', [
             tableContentConstructor(id, period, periods.comparisonDates[period].start, periods.comparisonDates[period].end, true),
             executionDelay
           );
-          executionDelay += 150;
+          executionDelay += 300;
         }
       });
     });

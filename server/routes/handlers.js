@@ -131,7 +131,7 @@ exports.gaViews = function (req, res) {
     }
     else {
       response = ''
-      res.end(response);
+      res.send(response);
     }
   });
 }
