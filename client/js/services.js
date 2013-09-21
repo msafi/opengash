@@ -1,5 +1,5 @@
 'use strict';
-
+angular.module('ogServices', [])
 /**
  * The authUrl service talks to the server to obtain a Google OAuth 2.0 compatible
  * login URL. See {@link ng.controller.connectCtrl} for how this service is used.
@@ -10,7 +10,7 @@
  * @returns {string} the URL
  * @namespace ng.service.authUrl
  */
-opengash.factory('authUrl', [
+.factory('authUrl', [
   '$http', '$q',
   function ($http, $q) {
     var authUrl = $q.defer();
@@ -18,7 +18,7 @@ opengash.factory('authUrl', [
       return body.data.url;
     });
   }
-]);
+])
 
 
 /**
@@ -32,10 +32,12 @@ opengash.factory('authUrl', [
  * @returns gaApi service
  * @namespace ng.service.gaApi
  */
-opengash.factory('gaApi', [
-  '$http', '$cookies', '$q',
-  function ($http, $cookies, $q) {
-    var gaApi = {};
+.factory('gaApi', [
+  '$http', '$cookies', '$q', '$timeout',
+  function ($http, $cookies, $q, $timeout) {
+    var gaApi = {}
+      , REPORT_CALL_THROTTLE_BY = 300
+      , reportCallSleep = 0
 
     /**
      * Given a Google API end-point and a callback function, this method lets you do things with the results
@@ -89,6 +91,7 @@ opengash.factory('gaApi', [
      * @function ng.service.gaApi.getReport
      */
     gaApi.getReport = function (ids, startDate, endDate, metrics) {
+
       var qs = {
         access_token: $cookies.accessToken,
         ids: ids,
@@ -97,16 +100,20 @@ opengash.factory('gaApi', [
         metrics: metrics
       }
       var report = $q.defer();
-      $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
-        .success(function (body) {
-          report.resolve(body);
-        });
+
+      $timeout(function() {
+        $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
+          .success(function (body) {
+            report.resolve(body);
+          });
+      }, reportCallSleep)
+      reportCallSleep = reportCallSleep + REPORT_CALL_THROTTLE_BY
 
       return report.promise;
     }
     return gaApi;
   }
-]);
+])
 
 
 /**
@@ -120,7 +127,7 @@ opengash.factory('gaApi', [
  *
  * @namespace ng.service.ogAccount
  */
-opengash.factory('ogAccount', [
+.factory('ogAccount', [
   '$http', '$cookies', 'gaApi', '$q',
   function ($http, $cookies, gaApi, $q) {
     var qs = {csrf: $cookies.csrf}
@@ -181,7 +188,7 @@ opengash.factory('ogAccount', [
 
     return ogAccount;
   }
-]);
+])
 
 
 
@@ -192,7 +199,7 @@ opengash.factory('ogAccount', [
  *
  * @namespace ng.service.periods
  */
-opengash.factory('periods', [
+.factory('periods', [
   'dateFilter',
   function (dateFilter) {
 
@@ -284,4 +291,4 @@ opengash.factory('periods', [
 
     return periods;
   }
-]);
+])

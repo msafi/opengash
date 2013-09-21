@@ -5,14 +5,14 @@
  *
  * @namespace ng.opengash
  */
-var opengash = angular.module('opengash', ['ngCookies', 'ui.router']);
+angular.module('opengash', ['ngCookies', 'ui.router', 'ogControllers', 'ogServices'])
 
 /**
  * Sets up the initial configurations of opengash app.
  *
  * @member ng.opengash.config
  */
-opengash.config([
+.config([
   '$stateProvider', '$locationProvider',
   function ($stateProvider, $locationProvider) {
     $stateProvider.
