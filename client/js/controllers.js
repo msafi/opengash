@@ -91,7 +91,7 @@ angular.module('ogControllers', [])
 ])
 
 /**
- * This is the monster that displays the main dashboard. It needs a lot of clean up.
+ * Dashboard controller
  *
  * @requires $scope
  * @requires gaApi
@@ -103,22 +103,17 @@ angular.module('ogControllers', [])
  * @namespace ng.controller.dashboardCtrl
  */
 .controller('dashboardCtrl', [
-  '$scope', 'gaApi', 'ogAccount', '$timeout', 'periods', '$sce',
-  function ($scope, gaApi, ogAccount, $timeout, periods, $sce) {
+           '$scope', 'gaApi', 'ogAccount', '$timeout', 'periods', 'metricsData',
+  function ($scope,   gaApi,   ogAccount,   $timeout,   periods,   metricsData) {
 
     ogAccount.getSavedViews().then(function (arrViews) {
 
-      // Initialize stuff.
-      var arrIds = arrViews.map(function (view) {
-            return 'ga:' + view.id;
-          })
-        , strMetrics = 'ga:visitors,ga:pageviews,ga:pageviewsPerVisit,ga:avgTimeOnSite,ga:visitBounceRate,ga:percentNewVisits,ga:avgPageLoadTime'
-        , numApiCallsNeeded = periods.totalPeriods * arrIds.length
-        , apiCallsCounter = 0
+      var arrIds = arrViews.map(function (view) { return 'ga:' + view.id })
 
-      $scope.tableStructure = { metrics: strMetrics.replace(/ga:/g, '').split(','), views: arrIds, periods: periods.ordered };
-      $scope.tableContent = {};
-      $scope.tableComparisonContent = {};
+      $scope.tableStructure = { metrics: metricsData.raw, views: arrIds, periods: periods.ordered }
+      $scope.tableContent = {}
+      $scope.tableComparisonContent = {}
+      $scope.metricPrettyNameFinder = metricsData.names
 
       periods.forEach(arrIds, function (id, period) {
 
@@ -126,70 +121,29 @@ angular.module('ogControllers', [])
           , endDate = periods.dates[period].end
           , comparison = (period != 'today')
           , content = $scope.tableContent
-        
-        var numberOfLoops = 1
-        do {
+
+        var numberOfLoops = 2
+        while(numberOfLoops--) {
           (function (content) {
-            gaApi.getReport(id, startDate, endDate, strMetrics).then(function (results) {
+            gaApi.getReport(id, startDate, endDate, metricsData.raw.toString()).then(function (results) {
               if (typeof content[results.profileInfo.tableId] == 'undefined')
-                content[results.profileInfo.tableId] = {};
+                content[results.profileInfo.tableId] = {}
 
-              content[results.profileInfo.tableId][period] = results;
-
-              // This block of code is used to calculate metric movements once all API calls have returned.
-              //
-              // I'm thinking I will move this to a directive to make the app more resposive and organized.
-              apiCallsCounter++;
-              if (apiCallsCounter == numApiCallsNeeded) {
-                $scope.movement = angular.copy($scope.tableComparisonContent);
-
-                periods.forEach(arrIds, function (id, period) {
-
-                  var arrMetrics = strMetrics.split(',')
-                    , contentResult
-                    , comparisonContentResult
-                    , movementContent
-                    , movementPercentage
-
-                  for (var metricsIndex = 0; metricsIndex < arrMetrics.length; metricsIndex++) {
-                    if (period != 'today') {
-
-                      contentResult = $scope.tableContent[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]]
-                      comparisonContentResult = $scope.tableComparisonContent[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]]
-                      movementPercentage = parseFloat((((contentResult - comparisonContentResult) / contentResult) * 100).toFixed(1));
-                      movementContent = movementPercentage + '%'
-
-                      if (movementPercentage > 0) {
-                        movementContent = '<span class="text-success">' + movementContent + '</span>';
-                      }
-                      else {
-                        movementContent = '<span class="text-danger">' + movementContent + '</span>';
-                      }
-
-                      $scope.movement[id][period]['totalsForAllResults'][arrMetrics[metricsIndex]] = $sce.trustAsHtml(movementContent);
-                    }
-                  }
-                })
-              }
+              content[results.profileInfo.tableId][period] = results
             })
           })(content)
 
           if (comparison) {
-            // Setup comparison data
+            // Setup for comparison data iteration
             startDate = periods.comparisonDates[period].start
             endDate = periods.comparisonDates[period].end
             content = $scope.tableComparisonContent
 
-            // No need for another comparison
+            // No need to enter this block in the 2nd iteration
             comparison = false
           }
-          else {
-            break
-          }
-
-          numberOfLoops++
-        } while (numberOfLoops < 3)
+        }
       })
-    });
+    })
   }
 ])

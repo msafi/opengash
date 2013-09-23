@@ -228,9 +228,9 @@ angular.module('ogServices', [])
     periods.dates = {
       today: { start: _getNiceDate(0), end: _getNiceDate(0) },
       yesterday: {start: _getNiceDate(1), end: _getNiceDate(1) },
-      week: {start: _getNiceDate(8), end: _getNiceDate(1) },
-      month: {start: _getNiceDate(31), end: _getNiceDate(1) },
-      year: {start: _getNiceDate(366), end: _getNiceDate(1) }
+      week: {start: _getNiceDate(7), end: _getNiceDate(1) },
+      month: {start: _getNiceDate(30), end: _getNiceDate(1) },
+      year: {start: _getNiceDate(365), end: _getNiceDate(1) }
     };
 
 
@@ -241,9 +241,9 @@ angular.module('ogServices', [])
      */
     periods.comparisonDates = {
       yesterday: {start: _getNiceDate(8), end: _getNiceDate(8) }, // Compare yesterday to the same day the previous week.
-      week: {start: _getNiceDate(16), end: _getNiceDate(9) }, // Compare to the previous 7 days.
-      month: {start: _getNiceDate(62), end: _getNiceDate(32) }, // Compare to the previous 30 days
-      year: {start: _getNiceDate(732), end: _getNiceDate(367) } // Compare to the previous 365 days
+      week: {start: _getNiceDate(14), end: _getNiceDate(8) }, // Compare to the previous 7 days.
+      month: {start: _getNiceDate(60), end: _getNiceDate(31) }, // Compare to the previous 30 days
+      year: {start: _getNiceDate(730), end: _getNiceDate(366) } // Compare to the previous 365 days
     };
 
 

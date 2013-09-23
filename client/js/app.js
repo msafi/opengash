@@ -5,7 +5,15 @@
  *
  * @namespace ng.opengash
  */
-angular.module('opengash', ['ngCookies', 'ui.router', 'ogControllers', 'ogServices'])
+angular.module('opengash', [
+    // Dependency modules
+    'ngCookies',
+    'ui.router',
+    'ogControllers',
+    'ogServices',
+    'ogDirectives',
+    'ogMetricsData'
+])
 
 /**
  * Sets up the initial configurations of opengash app.

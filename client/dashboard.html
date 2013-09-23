@@ -3,7 +3,7 @@
     <table id="{{metric}}" class='og-table'>
       <thead>
       <tr>
-        <th class='metric'>{{metric}}</th>
+        <th class='metric'>{{metricPrettyNameFinder[metric]}}</th>
         <th ng-repeat="period in tableStructure.periods" class="{{period}}">{{period}}</th>
       </tr>
       </thead>
@@ -12,10 +12,12 @@
         <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
         <td ng-repeat="period in tableStructure.periods">
           <div class='results'>
-            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number }}</p>
-            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric] | number}}</p>
+            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metricsFilter:metric }}</p>
+            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metricsFilter:metric }}</p>
           </div>
-          <p class='movement' ng-bind-html="movement[id][period.toLowerCase()]['totalsForAllResults']['ga:' + metric]"></p>
+          <movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
+                    comparison="{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
+                    metric="{{metric}}"></movement>
         </td>
       </tr>
       </tbody>
