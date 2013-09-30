@@ -2,10 +2,10 @@
   "source": {
     "include": ["../server", "../client"],
     "includePattern": ".+\\.js(doc)?$",
-    "excludePattern": "(^|\\/|\\\\)_|server[\\\\|//]node_modules|js[\\\\|//]lib|css[\\\\|//]lib"
+    "excludePattern": "(^|\\/|\\\\)_|server[\\\\|//]node_modules|js[\\\\|//]vendor|css[\\\\|//]vendor"
   },
   "opts": {
-    "template": "./docstrap/template",
+    "template": ".vendor/docstrap/template",
     "destination": "../docs",
     "recurse": true
   },

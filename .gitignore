@@ -6,6 +6,9 @@ test/*/coverage
 *.js.html
 client/js/index.html
 
+docs/*
+!docs/static
+
 lib-cov
 *.seed
 *.log
