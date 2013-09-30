@@ -2,6 +2,9 @@ config.js
 Thumbs.db
 data
 .idea
+test/*/coverage
+*.js.html
+client/js/index.html
 
 lib-cov
 *.seed

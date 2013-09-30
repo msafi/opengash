@@ -50,7 +50,7 @@ OgGaApi.prototype.url = function (csrf) {
     redirect_uri: this.redirectUrl
   }
   if (csrf) params.state = "csrf=" + csrf;
-  if (process.env.NODE_ENV !== 'production') params.prompt = 'consent';
+//  if (process.env.NODE_ENV !== 'production') params.prompt = 'consent';
 
   return "https://accounts.google.com/o/oauth2/auth?" + qs.stringify(params);
 }

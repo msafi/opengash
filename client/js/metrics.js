@@ -10,33 +10,33 @@ angular.module('ogMetricsData', [])
     var metricsData = {}
 
     metricsData.names = {
-      'ga:visitors': 'Unique visitors',
-      'ga:pageviews': 'Pageviews',
+               'ga:visitors': 'Unique visitors',
+              'ga:pageviews': 'Pageviews',
       'ga:pageviewsPerVisit': 'Pages per visit',
-      'ga:avgTimeOnSite': 'Average time on site',
-      'ga:visitBounceRate': 'Bounce rate',
-      'ga:percentNewVisits': 'Percentage of new visits',
-      'ga:avgPageLoadTime': 'Average page load time'
+          'ga:avgTimeOnSite': 'Average time on site',
+        'ga:visitBounceRate': 'Bounce rate',
+       'ga:percentNewVisits': 'Percentage of new visits',
+        'ga:avgPageLoadTime': 'Average page load time'
     }
 
-    metricsData.isBiggerBetter = {
-      'ga:visitors': true,
-      'ga:pageviews': true,
+    metricsData.biggerIsBetter = {
+               'ga:visitors': true,
+              'ga:pageviews': true,
       'ga:pageviewsPerVisit': true,
-      'ga:avgTimeOnSite': true,
-      'ga:visitBounceRate': false,
-      'ga:percentNewVisits': true,
-      'ga:avgPageLoadTime': false
+          'ga:avgTimeOnSite': true,
+        'ga:visitBounceRate': false,
+       'ga:percentNewVisits': true,
+        'ga:avgPageLoadTime': false
     }
 
     metricsData.type = {
-      'ga:visitors': 'quantity',
-      'ga:pageviews': 'quantity',
-      'ga:pageviewsPerVisit': 'quantity',
-      'ga:avgTimeOnSite': 'seconds',
-      'ga:visitBounceRate': 'percentage',
-      'ga:percentNewVisits': 'percentage',
-      'ga:avgPageLoadTime': 'seconds'
+               'ga:visitors': 'integer',
+              'ga:pageviews': 'integer',
+      'ga:pageviewsPerVisit': 'integer',
+          'ga:avgTimeOnSite': 'seconds',
+        'ga:visitBounceRate': 'percentage',
+       'ga:percentNewVisits': 'percentage',
+        'ga:avgPageLoadTime': 'seconds'
     }
 
     metricsData.raw = (function () {
@@ -62,9 +62,9 @@ angular.module('ogMetricsData', [])
 /**
  * This filters returned metric results according to the metric's data type
  *
- * @namespace ng.filter.metricsFilter
+ * @namespace ng.filter.metrics
  */
-.filter('metricsFilter', [
+.filter('metrics', [
   'metricsData', 'numberFilter',
   function(metricsData, numberFilter) {
     return function(input, metric) {
@@ -72,7 +72,7 @@ angular.module('ogMetricsData', [])
         return ''
 
       switch (metricsData.type[metric]) {
-        case 'quantity':
+        case 'integer':
           return numberFilter(parseFloat(parseFloat(input).toFixed(2)))
         case 'seconds':
             // http://stackoverflow.com/a/6313008/604296

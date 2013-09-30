@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+
 angular.module('ogServices', [])
 /**
  * The authUrl service talks to the server to obtain a Google OAuth 2.0 compatible
@@ -13,10 +14,13 @@ angular.module('ogServices', [])
 .factory('authUrl', [
   '$http', '$q',
   function ($http, $q) {
-    var authUrl = $q.defer();
-    return authUrl.promise = $http({method: 'GET', url: 'api/authurl/json'}).then(function (body) {
-      return body.data.url;
-    });
+    var deferred = $q.defer()
+
+    $http({method: 'GET', url: 'api/authurl/json'}).then(function(body) {
+      deferred.resolve(body.data.url)
+    })
+
+    return deferred.promise
   }
 ])
 
@@ -36,8 +40,7 @@ angular.module('ogServices', [])
   '$http', '$cookies', '$q', '$timeout',
   function ($http, $cookies, $q, $timeout) {
     var gaApi = {}
-      , REPORT_CALL_THROTTLE_BY = 300
-      , reportCallSleep = 0
+      , reportCallSleep
 
     /**
      * Given a Google API end-point and a callback function, this method lets you do things with the results
@@ -69,13 +72,13 @@ angular.module('ogServices', [])
       var url = 'https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles';
       gaApi.call(url,
         function (json) {
-          var gaViews = [];
+          var gaViews = []
           for (var i = 0; i < json.items.length; i++) {
-            gaViews.push({name: json.items[i].name, id: json.items[i].id});
+            gaViews.push({name: json.items[i].name, id: json.items[i].id})
           }
-          callback(gaViews);
+          callback(gaViews)
         }
-      );
+      )
     }
 
 
@@ -90,28 +93,30 @@ angular.module('ogServices', [])
      * @returns {object} A promise of a parsed JSON object
      * @function ng.service.gaApi.getReport
      */
+    reportCallSleep = 0
     gaApi.getReport = function (ids, startDate, endDate, metrics) {
-
-      var qs = {
-        access_token: $cookies.accessToken,
-        ids: ids,
-        'start-date': startDate,
-        'end-date': endDate,
-        metrics: metrics
-      }
-      var report = $q.defer();
+      var REPORT_CALL_THROTTLE_BY = 300
+        , qs = {
+            access_token: $cookies.accessToken,
+                     ids: ids,
+            'start-date': startDate,
+              'end-date': endDate,
+                 metrics: metrics
+          }
+        , report = $q.defer()
 
       $timeout(function() {
         $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
           .success(function (body) {
-            report.resolve(body);
-          });
+            report.resolve(body)
+          })
       }, reportCallSleep)
       reportCallSleep = reportCallSleep + REPORT_CALL_THROTTLE_BY
 
-      return report.promise;
+      return report.promise
     }
-    return gaApi;
+
+    return gaApi
   }
 ])
 
@@ -143,16 +148,16 @@ angular.module('ogServices', [])
      * @function ng.service.ogAccount.getSavedViews
      */
     ogAccount.getSavedViews = function () {
-      var gaViews = $q.defer();
+      var gaViews = $q.defer()
       $http({method: 'GET', url: 'api/ga-views/json', params: qs})
         .success(function (json) {
           if (json)
-            gaViews.resolve(json);
+            gaViews.resolve(json)
           else
-            gaViews.reject(false);
-        });
-      return gaViews.promise;
-    };
+            gaViews.reject()
+        })
+      return gaViews.promise
+    }
 
 
 
@@ -163,12 +168,14 @@ angular.module('ogServices', [])
      * @function ng.service.ogAccount.getAllViews
      */
     ogAccount.getAllViews = function () {
-      var gaViews = $q.defer();
+      var gaViews = $q.defer()
+
       gaApi.fetchViews(function (results) {
-        gaViews.resolve(results);
-      });
-      return gaViews.promise;
-    };
+        gaViews.resolve(results)
+      })
+
+      return gaViews.promise
+    }
 
 
 
@@ -263,7 +270,7 @@ angular.module('ogServices', [])
      * @member ng.service.periods.totalPeriods
      */
     periods.totalPeriods = (function () {
-      return Object.keys(periods.dates).length + Object.keys(periods.comparisonDates).length;
+      return Object.keys(periods.dates).length + Object.keys(periods.comparisonDates).length
     })();
 
 

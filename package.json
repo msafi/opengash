@@ -1,6 +1,5 @@
 {
   "name": "opengash",
-  "main": "./server/",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -20,6 +19,7 @@
     "mockery": "*",
     "karma": "*",
     "karma-ie-launcher": "*",
-    "karma-mocha": "*"
+    "karma-coverage": "*",
+    "istanbul": "*"
   }
 }

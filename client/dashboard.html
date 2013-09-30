@@ -12,8 +12,8 @@
         <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
         <td ng-repeat="period in tableStructure.periods">
           <div class='results'>
-            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metricsFilter:metric }}</p>
-            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metricsFilter:metric }}</p>
+            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
+            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
           </div>
           <movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
                     comparison="{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"

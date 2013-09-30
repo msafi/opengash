@@ -8,7 +8,7 @@ describe('server configurations:', function () {
   it('should be possible to reach stuff in /client/ through homepage root URL', function (done) {
 
     // Put a file in /client/.
-    fs.writeFile(reqBase + '../../client/dummy.txt', '', function (err) {
+    fs.writeFile(__dirname + '/../../client/dummy.txt', '', function (err) {
       if (err) throw err;
 
       // request this file through the root URL
@@ -16,7 +16,7 @@ describe('server configurations:', function () {
         if (err) return done(err);
 
         // Clean up
-        fs.unlink(reqBase + '../../client/dummy.txt', done);
+        fs.unlink(__dirname + '/../../client/dummy.txt', done);
       });
     });
   });
