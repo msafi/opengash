@@ -1,7 +1,6 @@
 'use strict';
 angular.module('ogControllers', [])
 
-
 /**
  * This is the main controller for all pages. Its job is to determine the status of the user: logged in, has saved
  * properties, has access token, etc. Then, load the appropriate template accordingly.

@@ -13,12 +13,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../../client/js/vendor/jquery-2.0.3.min.js',
-      '../../client/js/vendor/angular.js',
-      '../../client/js/vendor/angular-cookies.js',
-      '../../client/js/vendor/angular-ui-router.js',
-      '../../client/js/vendor/angular-mocks.js',
-      '../../client/js/*.js',
+      '../../build/client/js/vendor/jquery-2.0.3.min.js',
+      '../../build/client/js/vendor/angular.js',
+      '../../build/client/js/vendor/angular-cookies.js',
+      '../../build/client/js/vendor/angular-ui-router.js',
+      '../../build/client/js/vendor/angular-mocks.js',
+      '../../build/client/js/opengash.min.js',
       './mocks.js',
       './*.js'
     ],
@@ -29,7 +29,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      '../../client/js!(vendor)/*.js': 'coverage'
+      '../../build/client/js!(vendor)/*.js': 'coverage'
     },
 
     // test results reporter to use
