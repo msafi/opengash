@@ -97,11 +97,8 @@ table.og-table {
   display: inline-block;
   text-align: center;
 }
-body {
-  /* padding: 30px; */
-}
 
-.container {
+.og-container {
   max-width: 1220px;
   min-width: 595px;
   overflow: hidden;

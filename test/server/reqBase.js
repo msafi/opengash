@@ -1,1 +1,1 @@
-module.exports = '../../server/test/'
+module.exports = '../../build/server/test/'

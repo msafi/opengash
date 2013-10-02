@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./server/server.js"
+    "start": "node ./build/server/server.js",
+    "test": "grunt test"
   },
   "dependencies": {
     "express": "*",
@@ -20,6 +21,14 @@
     "karma": "*",
     "karma-ie-launcher": "*",
     "karma-coverage": "*",
-    "istanbul": "*"
+    "istanbul": "*",
+    "supervisor": "*",
+    "grunt": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-htmlmin": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-karma": "*",
+    "grunt-simple-mocha": "*"
   }
 }

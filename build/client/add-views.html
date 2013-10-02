@@ -1,0 +1,1 @@
+<div ng-controller="addViewsCtrl"><p>Choose at least one profile.</p><form novalidate=""><div ng-repeat="view in allViews"><input type="checkbox" ng-model="views" name="selectedViews" id="{{view.id}}" required="" ng-click="updateSelection($event, view)"><label for="{{view.id}}">{{view.name}}</label></div><button ng-click="saveSelectedViews()">Save</button></form></div>
