@@ -5,8 +5,8 @@ describe('route handling:', function() {
   var routes, handlers;
 
   before(function() {
-    routes = require(reqBase + '../routes').definedRoutes;
-    handlers = require(reqBase + '../routes/handlers');
+    routes = require(reqBase + '../router').definedRoutes
+    handlers = require(reqBase + '../routeHandlers')
   });
 
   it('should handle all defined routes by handlers.js functions', function(done) {

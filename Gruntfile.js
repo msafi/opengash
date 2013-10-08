@@ -1,4 +1,6 @@
-var config = require('./source/server/config.js')
+// Helps other scripts know that they were run by this Gruntfile, like reqBase.js in tests.
+process.env.GRUNTFILE = true
+
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -18,7 +20,7 @@ module.exports = function(grunt) {
           screw_ie8: true
         }
       },
-      my_target: {
+      ogprod: {
         files: {
           'build/client/js/opengash.min.js': [
             'build/client/js/services.js',
@@ -62,31 +64,25 @@ module.exports = function(grunt) {
     },
     karma: {
       unit: {
-        configFile: 'test/client/karma-config.js',
+        configFile: 'test/client/karma-config-build.js',
         singleRun: true
       }
     },
     simplemocha: {
       all: { src: ['test/server/*.js'] }
-    }
-  });
+    },
+    clean: ['build/**']
+  })
 
-  grunt.registerTask('server-test', 'run mocha', function() {
-    var done = this.async();
-    require('child_process').exec('mocha test/server/.', function(err, stdout) {
-      grunt.log.write(stdout);
-      done(err);
-    });
-  });
+  grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-htmlmin')
+  grunt.loadNpmTasks('grunt-contrib-cssmin')
+  grunt.loadNpmTasks('grunt-karma')
+  grunt.loadNpmTasks('grunt-simple-mocha')
+  grunt.loadNpmTasks('grunt-contrib-clean')
 
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-simple-mocha');
-
-  grunt.registerTask('default', ['copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma']);
-  grunt.registerTask('dev', ['uglify', 'htmlmin', 'cssmin']);
-  grunt.registerTask('test', ['simplemocha', 'karma']);
+  grunt.registerTask('default', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
+  grunt.registerTask('dev', ['uglify', 'htmlmin', 'cssmin'])
+  grunt.registerTask('test', ['simplemocha', 'karma'])
 };

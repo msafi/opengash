@@ -6,10 +6,10 @@
  * @namespace request.handlers
  */
 
-var OgGaApi = require('../ogGaApi');
-var config = require('../config');
-var verifyCsrf = require('../ogUtil').verifyCsrf;
-var OgAccount = require('../ogAccount');
+var OgGaApi = require('./ogGaApi');
+var config = require('./config');
+var verifyCsrf = require('./ogUtil').verifyCsrf;
+var OgAccount = require('./ogAccount');
 
 var ogGaApi = new OgGaApi(config.clientId, config.clientSecret, config.redirectUrl);
 

@@ -6,8 +6,8 @@
  * @namespace url.index
  */
 
-var handlers = require('./handlers');
-var config = require('../config');
+var handlers = require('./routeHandlers')
+var config = require('./config')
 
 var definedRoutes = {
   home: {
@@ -27,10 +27,10 @@ var definedRoutes = {
   }
 }
 
-exports.definedRoutes = definedRoutes;
+exports.definedRoutes = definedRoutes
 
-exports.routes = function (app) {
+module.exports = function (app) {
   for (var route in definedRoutes) {
-    app[definedRoutes[route].method](definedRoutes[route].path, handlers[definedRoutes[route].handler]);
+    app[definedRoutes[route].method](definedRoutes[route].path, handlers[definedRoutes[route].handler])
   }
-};
+}

@@ -5,37 +5,37 @@
  *
  * @namespace server
  */
-var express = require('express'),
-    http = require('http'),
-    config = require('./config'),
-    ogUtil = require('./ogUtil');
+var express = require('express')
+  , http = require('http')
+  , config = require('./config')
+  , ogUtil = require('./ogUtil')
 
-var app = express();
+var app = express()
 
 // all environments
-app.set('port', process.env.PORT || 80);
-app.set('views', __dirname + '/../client');
-app.set('view engine', 'ejs');
+app.set('port', process.env.PORT || 80)
+app.set('views', __dirname + '/../client')
+app.set('view engine', 'ejs')
 
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.cookieParser(config.cookieSignature));
-app.use(express.cookieSession({secret: config.cookieSignature}));
-app.use(ogUtil.csrf);
-app.use('/', express.static(__dirname + '/../client'));
-app.use('/docs', express.static(__dirname + '/../docs'));
-app.use(app.router);
+app.use(express.logger('dev'))
+app.use(express.bodyParser())
+app.use(express.methodOverride())
+app.use(express.cookieParser(config.cookieSignature))
+app.use(express.cookieSession({secret: config.cookieSignature}))
+app.use(ogUtil.csrf)
+app.use('/', express.static(__dirname + '/../client'))
+app.use('/docs', express.static(__dirname + '/../docs'))
+app.use(app.router)
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+  app.use(express.errorHandler())
 }
 
-require('./routes').routes(app);
+require('./router')(app)
 
 http.createServer(app).listen(app.get('port'), config.hostName, function () {
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('Express server listening on port ' + app.get('port'))
 });
 
-module.exports = app;
+module.exports = app

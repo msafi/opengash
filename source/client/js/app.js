@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * The AngularJS opengash bootstrapper.

@@ -3,8 +3,8 @@ var reqBase = require('./reqBase')
   , mockery = require('mockery')
 
 mockery.enable({ warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true })
-mockery.registerSubstitute('../ogGaApi', '../../../test/server/mocks/mock.ogGaApi')
-mockery.registerSubstitute('../ogUtil', '../../../test/server/mocks/mock.ogUtil')
+mockery.registerSubstitute('./ogGaApi', '../../test/server/mocks/mock.ogGaApi')
+mockery.registerSubstitute('./ogUtil', '../../test/server/mocks/mock.ogUtil')
 
 var ogAccount = require(reqBase + '../ogAccount')
   , app = require(reqBase + '../server.js')

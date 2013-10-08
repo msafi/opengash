@@ -4,7 +4,8 @@ data
 .idea
 test/*/coverage
 *.js.html
-build/client/js/index.html
+*/client/js/index.html
+build/*
 
 docs/*
 !docs/static
