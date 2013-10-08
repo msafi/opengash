@@ -82,7 +82,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-simple-mocha')
   grunt.loadNpmTasks('grunt-contrib-clean')
 
-  grunt.registerTask('default', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
+  grunt.registerTask('default', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
+  grunt.registerTask('buildTest', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
   grunt.registerTask('dev', ['uglify', 'htmlmin', 'cssmin'])
   grunt.registerTask('test', ['simplemocha', 'karma'])
 };
