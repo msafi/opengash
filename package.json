@@ -30,7 +30,7 @@
     "grunt-contrib-cssmin": "*",
     "grunt-karma": "*",
     "grunt-simple-mocha": "*",
-    "grunt-contrib-jshint": "~0.6.4",
-    "grunt-contrib-clean": "~0.5.0"
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-clean": "*"
   }
 }
