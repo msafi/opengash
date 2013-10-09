@@ -11,7 +11,15 @@
     "superagent": "*",
     "ejs": "*",
     "mongodb": "*",
-    "async": "*"
+    "async": "*",
+    "grunt": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-htmlmin": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-karma": "*",
+    "grunt-simple-mocha": "*",
+    "grunt-contrib-clean": "*"
   },
   "devDependencies": {
     "mocha": "*",
@@ -22,15 +30,6 @@
     "karma-ie-launcher": "*",
     "karma-coverage": "*",
     "istanbul": "*",
-    "supervisor": "*",
-    "grunt": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-htmlmin": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-karma": "*",
-    "grunt-simple-mocha": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-clean": "*"
+    "supervisor": "*"
   }
 }

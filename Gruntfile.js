@@ -12,9 +12,9 @@ module.exports = function(grunt) {
         sourceMapRoot: 'http://opengash.com/js/',
         sourceMappingURL: 'http://opengash.com/js/opengash.min.js.map',
         compress: {
-          screw_ie8:true,sequences:true,properties:true,dead_code:true,drop_debugger:true,
-          unsafe:true,conditionals:true,comparisons:true,evaluate:true,booleans:true,loops:true,
-          unused:true,if_return:true,join_vars:true,cascade:true,negate_iife:true
+          screw_ie8:true,sequences:true,properties:true,dead_code:true,drop_debugger:true,unsafe:true,conditionals:true,
+          comparisons:true,evaluate:true,booleans:true,loops:true,unused:true,if_return:true,join_vars:true,
+          cascade:true,negate_iife:true
         },
         mangle: {
           screw_ie8: true
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean')
 
   grunt.registerTask('default', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
-  grunt.registerTask('buildTest', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
-  grunt.registerTask('dev', ['uglify', 'htmlmin', 'cssmin'])
+  grunt.registerTask('withTest', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
+  grunt.registerTask('withoutCleaning', ['uglify', 'htmlmin', 'cssmin'])
   grunt.registerTask('test', ['simplemocha', 'karma'])
 };

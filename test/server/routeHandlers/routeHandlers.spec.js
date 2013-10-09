@@ -1,4 +1,5 @@
 'use strict'
+
 var reqBase = require('./reqBase')
   , mockery = require('mockery')
 
