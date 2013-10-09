@@ -1,9 +1,24 @@
-'use strict'
+var mockery = require('mockery')
 
-var reqBase = require('../reqBase')
-var config = require(reqBase + '../../config.js')
+mockery.enable({ warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true })
+mockery.registerSubstitute('../ogGaApi', '../../../test/server/mocks/ogGaApi.mock')
+mockery.registerSubstitute('../ogUtil', '../../../test/server/mocks/ogUtil.mock')
 
-describe.only('authentication route handler', function() {
+var base = require('../pathBase')
+  , ogAccount = require('../' + base + './ogAccount')
+  , app = require('../' + base + './server.js')
+  , config = require('../' + base + './config.js')
+
+  , request = require('supertest')(app)
+  , expect = require('expect.js')
+  , qs = require('querystring')
+  , async = require('async')
+
+describe('authentication', function() {
+  after(function() {
+    mockery.deregisterAll()
+    mockery.disable()
+  })
 
   it('should pass authentication through verifyCsrf first', function(done) {
     request

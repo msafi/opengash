@@ -1,5 +1,5 @@
-var reqBase = require('./reqBase')
-  , ogUtil = require(reqBase + '../ogUtil')
+var base = require('./pathBase')
+  , ogUtil = require(base + './ogUtil')
   , expect = require('expect.js')
 
 describe('ogUtil:', function() {

@@ -1,7 +1,7 @@
 'use strict'
-var reqBase = require('./reqBase')
-  , OgGaApi = require(reqBase + '../ogGaApi')
-  , config = require(reqBase + '../config')
+var base = require('./pathBase')
+  , OgGaApi = require(base + './ogGaApi')
+  , config = require(base + './config')
   , ogGaApi = new OgGaApi(config.clientId, config.clientSecret, config.redirectUrl)
   , expect = require('expect.js')
   , urlUtils = require('url')

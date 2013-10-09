@@ -1,6 +1,6 @@
 "use strict"
-var reqBase = require('./reqBase')
-var app = require(reqBase + '../server.js');
+var base = require('./pathBase')
+var app = require(base + './server.js');
 var request = require('supertest')(app);
 var fs = require('fs');
 
@@ -8,7 +8,7 @@ describe('server configurations:', function () {
   it('should be possible to reach stuff in /client/ through homepage root URL', function (done) {
 
     // Put a file in /client/.
-    fs.writeFile(__dirname + '/' + reqBase + '../../client/dummy.txt', '', function (err) {
+    fs.writeFile(__dirname + '/' + base + '../client/dummy.txt', '', function (err) {
       if (err) throw err;
 
       // request this file through the root URL
@@ -16,7 +16,7 @@ describe('server configurations:', function () {
         if (err) return done(err);
 
         // Clean up
-        fs.unlink(__dirname + '/' + reqBase + '../../client/dummy.txt', done);
+        fs.unlink(__dirname + '/' + base + '../client/dummy.txt', done);
       });
     });
   });

@@ -1,9 +1,9 @@
 'use strict'
-var reqBase = require('./reqBase')
+var base = require('./pathBase')
   , expect = require('expect.js')
 
 describe('ogAccount:', function() {
-  var ogAccount = require(reqBase + '../ogAccount')
+  var ogAccount = require(base + './ogAccount')
 
   after(function(done) {
     ogAccount.deleteAccount('example@example.com', function() {

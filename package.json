@@ -19,7 +19,9 @@
     "grunt-contrib-cssmin": "*",
     "grunt-karma": "*",
     "grunt-simple-mocha": "*",
-    "grunt-contrib-clean": "*"
+    "grunt-contrib-clean": "*",
+    "rewire": "~2.0.0",
+    "proxyquire": "~0.5.1"
   },
   "devDependencies": {
     "mocha": "*",

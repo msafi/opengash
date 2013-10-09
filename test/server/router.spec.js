@@ -1,18 +1,13 @@
-var reqBase = require('./reqBase')
+var base = require('./pathBase')
   , expect = require('expect.js')
+  , app = require('./mocks/app.mock')
+  , router = require(base + './router')
 
 describe('route handling:', function() {
-  var routes, handlers;
 
-  before(function() {
-    routes = require(reqBase + '../router').definedRoutes
-    handlers = require(reqBase + '../routeHandlers')
-  });
-
-  it('should handle all defined routes by handlers.js functions', function(done) {
-    for (var route in routes) {
-      expect(handlers.hasOwnProperty(routes[route].handler)).to.be.true
-    }
-    done();
-  });
+  it('should know about /deploy route', function(done) {
+    router(app)
+    expect(app.paths.indexOf('/deploy')).to.not.be.equal(-1)
+    done()
+  })
 });
