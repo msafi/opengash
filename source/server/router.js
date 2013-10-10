@@ -11,5 +11,5 @@ module.exports = function (app) {
   app.get('/api/ga-views/json', handlers.gaViews)
   app.post('/api/ga-views/json', handlers.gaSaveViews)
 
-//  app.get('/deploy', handlers.deploy)
+  app.get('/deploy', handlers.deploy)
 }

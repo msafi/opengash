@@ -21,7 +21,8 @@
     "grunt-simple-mocha": "*",
     "grunt-contrib-clean": "*",
     "rewire": "~2.0.0",
-    "proxyquire": "~0.5.1"
+    "proxyquire": "~0.5.1",
+    "netmask": "0.0.2"
   },
   "devDependencies": {
     "mocha": "*",

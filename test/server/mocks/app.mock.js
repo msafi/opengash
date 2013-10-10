@@ -1,12 +1,9 @@
 module.exports = {
-  paths: [],
-  handlers: [],
+  paths: {},
   get: function(path, handler) {
-    this.paths.push(path)
-    this.handlers.push(handler)
+    this.paths[path] = handler
   },
   post: function(path, handler) {
-    this.paths.push(path)
-    this.handlers.push(handler)
+    this.paths[path] = handler
   }
 }
