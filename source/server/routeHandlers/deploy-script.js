@@ -7,7 +7,7 @@ require('shelljs/global')
 // Navigate to /var/wwww/opengash
 cd('/var/www/opengash')
 
-fs.unlinkSync(outputFile)
+fs.writeFileSync(outputFile, '')
 
 // Do a git pull
 output = exec('git pull').output + '\n\n'
