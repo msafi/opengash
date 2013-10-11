@@ -1,6 +1,7 @@
 var handlers = require('./routeHandlers')
 var config = require('./config')
 
+// todo: write tests for this module
 module.exports = function (app) {
   app.get('/', handlers.home)
 
@@ -10,6 +11,4 @@ module.exports = function (app) {
 
   app.get('/api/ga-views/json', handlers.gaViews)
   app.post('/api/ga-views/json', handlers.gaSaveViews)
-
-  app.get('/deploy', handlers.deploy)
 }
