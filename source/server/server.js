@@ -9,6 +9,7 @@ var express = require('express')
   , http = require('http')
   , config = require('./config')
   , ogUtil = require('./ogUtil')
+  , oneYear = 31557600000
 
 var app = express()
 
@@ -23,8 +24,9 @@ app.use(express.methodOverride())
 app.use(express.cookieParser(config.cookieSignature))
 app.use(express.cookieSession({secret: config.cookieSignature}))
 app.use(ogUtil.csrf)
-app.use('/', express.static(__dirname + '/../client'))
-app.use('/docs', express.static(__dirname + '/../docs'))
+app.use(express.compress())
+app.use('/', express.static(__dirname + '/../client', { maxAge: oneYear }))
+app.use('/docs', express.static(__dirname + '/../docs', { maxAge: oneYear }))
 app.use(app.router)
 
 // development only

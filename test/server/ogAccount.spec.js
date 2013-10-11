@@ -4,6 +4,8 @@ var base = require('./pathBase')
 
 describe('ogAccount:', function() {
   var ogAccount = require(base + './ogAccount')
+  this.timeout(9000)
+
 
   after(function(done) {
     ogAccount.deleteAccount('example@example.com', function() {

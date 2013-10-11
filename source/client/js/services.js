@@ -94,8 +94,8 @@ angular.module('ogServices', [])
      * @function ng.service.gaApi.getReport
      */
     reportCallSleep = 0
-    gaApi.getReport = function (ids, startDate, endDate, metrics) {
-      var REPORT_CALL_THROTTLE_BY = 300
+    gaApi.getReport = function(ids, startDate, endDate, metrics) {
+      var REPORT_CALL_THROTTLE_BY = 130
         , qs = {
             access_token: $cookies.accessToken,
                      ids: ids,
@@ -105,12 +105,18 @@ angular.module('ogServices', [])
           }
         , report = $q.defer()
 
-      $timeout(function() {
-        $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
-          .success(function (body) {
-            report.resolve(body)
-          })
-      }, reportCallSleep)
+      function doTimeout() {
+        $timeout(function() {
+          $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
+            .success(function(body) {
+              report.resolve(body)
+            })
+            .error(function() {
+              doTimeout()
+            })
+        }, reportCallSleep)
+      }
+      doTimeout()
       reportCallSleep = reportCallSleep + REPORT_CALL_THROTTLE_BY
 
       return report.promise
