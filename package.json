@@ -20,15 +20,14 @@
     "grunt-karma": "*",
     "grunt-simple-mocha": "*",
     "grunt-contrib-clean": "*",
-    "rewire": "~2.0.0",
-    "proxyquire": "~0.5.1",
-    "netmask": "0.0.2"
+    "rewire": "*",
+    "netmask": "*",
+    "shelljs": "*"
   },
   "devDependencies": {
     "mocha": "*",
     "expect.js": "*",
     "supertest": "*",
-    "mockery": "*",
     "karma": "*",
     "karma-ie-launcher": "*",
     "karma-coverage": "*",

@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       }
     },
     simplemocha: {
-      all: { src: ['test/server/*.js'] }
+      all: { src: ['test/server/**/*.js'] }
     },
     clean: ['build/**']
   })

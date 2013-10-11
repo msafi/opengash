@@ -1,13 +1,13 @@
 var deps = require('./dependencies')
-  , OgAccount = deps.OgAccount
+  , ogAccount = deps.OgAccount
   , verifyCsrf = deps.verifyCsrf
 
 module.exports = function(req, res) {
   if (!verifyCsrf(req, res))
-    return;
+    return false
 
   var userEmail = req.signedCookies.loggedIn;
-  OgAccount.getGaViews(userEmail, function(gaViews) {
+  ogAccount.getGaViews(userEmail, function(gaViews) {
     var response
 
     if (gaViews) {

@@ -1,44 +1,40 @@
 describe('authentication', function() {
   var authenticate
+    , rh = require('./dependencies')
 
-  before(function() {
-    authenticate = require('../' + base + 'routeHandlers/authenticate')
+  beforeEach(function() {
+    authenticate = rh.rewire(rh.base + 'authenticate')
+
+    authenticate.__set__('verifyCsrf', rh.verifyCsrf)
+    authenticate.__set__('ogGaApi', rh.ogGaApi)
+    authenticate.__set__('ogAccount', rh.ogAccount)
   })
-  it('should pass authentication through verifyCsrf first', function(done) {
-    request
-      .get(config.relativeRedirectUrl)
-      .expect(401, done)
+
+  describe('failure', function() {
+    it('should return false if verifyCsrf fails', function(done) {
+      expect(authenticate(rh.req, rh.res)).to.be.false
+      done()
+    })
   })
 
   describe('success', function() {
+    beforeEach(function() {
+      // make verifyCsrf pass
+      rh.req.query.csrf = '123'
+      rh.req.cookies.csrf = '123'
+    })
+
     it('should save user to database', function(done) {
-      request
-        .get(config.relativeRedirectUrl)
-        .set('Cookie', 'csrf=123')
-        .query({'csrf': '123'})
-        .end(function() {
-          ogAccount.findAccount('example@example.com', function(account) {
-            var user = account.user
-            expect(user).to.have.property('email', 'example@example.com')
-            done()
-          })
-        })
+      authenticate(rh.req,rh.res)
+      expect(rh.ogAccount.saveUserCalls).to.be.greaterThan(0)
+      done()
     })
 
     it('should set access token and log-in cookies and redirect to homepage', function(done) {
-      request
-        .get(config.relativeRedirectUrl)
-        .set('Cookie', 'csrf=123') // mock verifyCsrf always sets 123 as csrf unique ID
-        .query({'csrf': '123'})
-        .expect(302)
-        .end(function(err, res) {
-          var cookies = qs.parse(res.headers['set-cookie'].toString(), ',')
-          expect(cookies).to.have.property('loggedIn')
-          expect(cookies).to.have.property('accessToken')
-          expect(res.headers['location']).to.be('/')
-
-          done()
-        })
+      authenticate(rh.req, rh.res)
+      expect(rh.res.cookieValues[0].name).to.be('loggedIn')
+      expect(rh.res.cookieValues[1].name).to.be('accessToken')
+      done()
     })
   })
 })

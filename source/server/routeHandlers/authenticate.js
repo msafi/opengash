@@ -1,12 +1,12 @@
 var deps = require('./dependencies')
   , ogGaApi = deps.ogGaApi
-  , OgAccount = deps.OgAccount
+  , ogAccount = deps.OgAccount
   , verifyCsrf = deps.verifyCsrf
 
 module.exports = function(req, res) {
 
   if (!verifyCsrf(req, res))
-    return;
+    return false;
 
   ogGaApi.requestAccessToken(req.query.code, function(accessToken) {
     // Get user basic information.
@@ -14,7 +14,7 @@ module.exports = function(req, res) {
     ogGaApi.call(accessToken.access_token, url, function(user) {
 
       // Find a user in the database by their ID and upsert.
-      OgAccount.saveUser(user, function(err) {
+      ogAccount.saveUser(user, function(err) {
         if (err) throw err
 
         res.cookie('loggedIn', user.email, {maxAge: 631138519494, signed: true}) // 20 years in milliseconds.
