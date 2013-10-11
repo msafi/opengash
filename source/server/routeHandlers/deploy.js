@@ -11,7 +11,7 @@ module.exports = function(req, res) {
         if (block.contains(req.ip)) {
           res.send(200, 'Deployment script launched')
           // run script
-          exec('shjs deploy-script.js',{cwd: __dirname})
+          exec('sudo shjs deploy-script.js',{cwd: __dirname})
           return
         }
       }
