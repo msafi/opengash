@@ -5,6 +5,7 @@ describe('gaApi', function() {
     , $provide
     , ogAccount
     , $timeout
+    , metricsData
 
   beforeEach(function() {
     module(

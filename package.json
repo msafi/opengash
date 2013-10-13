@@ -6,6 +6,10 @@
     "start": "node ./build/server/server.js",
     "test": "grunt test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/msafi/opengash.git"
+  },
   "dependencies": {
     "express": "*",
     "superagent": "*",
@@ -33,6 +37,7 @@
     "karma-ie-launcher": "*",
     "karma-coverage": "*",
     "istanbul": "*",
-    "supervisor": "*"
+    "supervisor": "*",
+    "grunt-contrib-watch": "*"
   }
 }

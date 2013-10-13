@@ -1,4 +1,4 @@
-// Helps other scripts know that they were run by this Gruntfile, like reqBase.js in tests.
+// Helps other scripts know that they were run by this Gruntfile, like pathBase.js in tests.
 process.env.GRUNTFILE = true
 
 module.exports = function(grunt) {
@@ -63,15 +63,28 @@ module.exports = function(grunt) {
       }
     },
     karma: {
-      unit: {
+      build: {
         configFile: 'test/client/karma-config-build.js',
+        singleRun: true
+      },
+      source: {
+        configFile: 'test/client/karma-config-source.js',
         singleRun: true
       }
     },
     simplemocha: {
       all: { src: ['test/server/**/*.js'] }
     },
-    clean: ['build/**']
+    clean: ['build/**'],
+    watch: {
+      scripts: {
+        files: ['source/**/*'],
+        tasks: ['minimal'],
+        options: {
+          spawn: false
+        }
+      }
+    }
   })
 
   grunt.loadNpmTasks('grunt-contrib-copy')
@@ -82,9 +95,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-simple-mocha')
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-install-dependencies')
+  grunt.loadNpmTasks('grunt-contrib-watch')
 
   grunt.registerTask('default', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
-  grunt.registerTask('withTests', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma'])
-  grunt.registerTask('minimal', ['clean', 'uglify', 'htmlmin', 'cssmin'])
-  grunt.registerTask('test', ['simplemocha', 'karma'])
+  grunt.registerTask('withTests', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma:build'])
+  grunt.registerTask('minimal', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
+  grunt.registerTask('test', ['simplemocha', 'karma:source'])
+  grunt.registerTask('testClient', ['karma:source'])
+  grunt.registerTask('testServer', ['simplemocha'])
 };

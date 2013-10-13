@@ -1,7 +1,7 @@
 angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
 
 .factory("mock_$httpBackend",
-  function($httpBackend, mock_$cookies, mock_ogAccount, metricsData) {
+  function($httpBackend, mock_$cookies, mock_ogAccount) {
     var $cookies = mock_$cookies
       , ogAccount = mock_ogAccount
       , id = 'ga:' + ogAccount.savedViews[0].id
@@ -59,9 +59,16 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
   }
 ])
 
-.factory('mock_ogAccount', [
-  function() {
+.factory('mock_ogAccount',
+  function(mock_gaApi) {
     var ogAccount = {}
+    var $q
+    var $timeout
+
+    inject(function(_$q_, _$timeout_) {
+      $q = _$q_
+      $timeout = _$timeout_
+    })
 
     ogAccount.succeed = true
 
@@ -69,23 +76,19 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
 
     ogAccount.getSavedViews = function() {
       var deferred
-        , $timeout
         , that = this
 
-      inject(function($q, _$timeout_) {
-        $timeout = _$timeout_
-        deferred = $q.defer()
+      deferred = $q.defer()
 
-        if (ogAccount.succeed) {
-          $timeout(function() {
-            deferred.resolve(ogAccount.savedViews)
-          }, 200)
-        } else {
-          $timeout(function() {
-            deferred.reject()
-          }, 200)
-        }
-      })
+      if (ogAccount.succeed) {
+        $timeout(function() {
+          deferred.resolve(ogAccount.savedViews)
+        }, 200)
+      } else {
+        $timeout(function() {
+          deferred.reject()
+        }, 200)
+      }
 
       setTimeout(function() {try {$timeout.flush.apply(that)} catch (err) {}}, 0)
 
@@ -101,9 +104,37 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
       ogAccount.savedViews = views
     }
 
+    ogAccount.shouldServeCache = function() {
+      var deferred = $q.defer()
+        , that = this
+
+      $timeout(function() {
+        deferred.resolve(false)
+      }, 200)
+
+      setTimeout(function() { try { $timeout.flush.apply(that) } catch (err) {}}, 0)
+
+      return deferred.promise
+    }
+
+    ogAccount.getReport = function(ids, startDate, endDate, metrics) {
+      var deferred = $q.defer()
+        , that = this
+
+      $timeout(function() {
+        mock_gaApi.getReport(ids, startDate, endDate, metrics).then(function(results) {
+          deferred.resolve(results)
+        })
+      }, 200)
+
+      setTimeout(function() { try { $timeout.flush.apply(that) } catch (err) {}}, 0)
+
+      return deferred.promise
+    }
+
     return ogAccount
   }
-])
+)
 
 .factory('mock_authUrl', [
   function() {
@@ -247,7 +278,7 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
       arrProfileIds.forEach(function(profileId) {
         // iterate over each period
         for (eachPeriod in dates) {
-          callback(profileId, eachPeriod);
+          callback(profileId, eachPeriod)
         }
       })
     }

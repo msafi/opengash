@@ -8,6 +8,6 @@ module.exports = function(req, res) {
     res.redirect(307, ogGaApi.url(req.cookies.csrf))
   }
   else {
-    res.ogRender('index')
+    res.ogRender('index', {env: process.env.NODE_ENV})
   }
 }

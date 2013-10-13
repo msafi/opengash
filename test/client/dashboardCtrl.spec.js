@@ -4,10 +4,12 @@ describe('dashboardCtrl', function() {
     , ogAccount
     , periods
     , metricsData
+    , $rootScope
 
   beforeEach(module('ogControllers', 'ogMetricsData', 'ogMocks'))
 
-  beforeEach(inject(function($controller, $rootScope, _metricsData_, mock_gaApi, mock_ogAccount, mock_periods) {
+  beforeEach(inject(function($controller, _$rootScope_, _metricsData_, mock_gaApi, mock_ogAccount, mock_periods) {
+    $rootScope = _$rootScope_
     scope = $rootScope.$new()
     gaApi = mock_gaApi
     ogAccount = mock_ogAccount

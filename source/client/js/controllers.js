@@ -1,16 +1,6 @@
 'use strict';
 angular.module('ogControllers', [])
 
-/**
- * This is the main controller for all pages. Its job is to determine the status of the user: logged in, has saved
- * properties, has access token, etc. Then, load the appropriate template accordingly.
- *
- * @requires $state
- * @requires $cookies
- * @requires ogAccount
- *
- * @namespace ng.controller.mainCtrl
- */
 .controller('mainCtrl', [
   '$state', '$cookies', 'ogAccount',
   function($state, $cookies, ogAccount) {
@@ -34,39 +24,14 @@ angular.module('ogControllers', [])
   }
 ])
 
-
-/**
- * Controls the `connect.html` template. That template only needs a Google OAuth 2.0 URL, and that's what this
- * controller gives it.
- *
- * @requires authUrl
- *
- * @namespace ng.controller.connectCtrl
- */
 .controller('connectCtrl', [
   '$scope', 'authUrl',
   function($scope, authUrl) {
-    $scope.authUrl = authUrl;
+    $scope.authUrl = authUrl
   }
 ])
 
 
-/**
- * This is the controller for `add-views.html` template.
- *
- * It uses {@link ng.service.ogAccount} to retrieve a all the profiles/views that a user has in Google Analytics in
- * JSON format. The template then displays this information. The controller listens for user interactions with
- * checkboxes.
- *
- * Once the user clicks submit, checked checkboxes are saved to the database and the `dashboard.html` template is
- * loaded using the `$state` service.
- *
- * @requires ogAccount
- * @requires $state
- *
- * @namespace ng.controller.addViewsCtrl
- */
-// todo: validate views and make sure they are saved to the DB before $state.go('dashboard')?
 .controller('addViewsCtrl', [
   '$scope', 'ogAccount', '$state',
   function($scope, ogAccount, $state) {
@@ -92,15 +57,11 @@ angular.module('ogControllers', [])
   }
 ])
 
-/**
- * Dashboard controller for `dashboard.html`
- *
- * @namespace ng.controller.dashboardCtrl
- */
+// todo: cache profile names, so that they don't flash like some crappy software
+// todo: inform the user when the latest update happened
 .controller('dashboardCtrl', [
   '$scope', 'gaApi', 'ogAccount', 'periods', 'metricsData',
   function($scope, gaApi, ogAccount, periods, metricsData) {
-
     ogAccount.getSavedViews().then(function(arrViews) {
 
       var arrIds = arrViews.map(function(view) {
@@ -112,31 +73,33 @@ angular.module('ogControllers', [])
       $scope.tableComparisonContent = {}
       $scope.metricPrettyNameFinder = metricsData.names
 
-      periods.forEach(arrIds, function(id, period) {
+      ogAccount.shouldServeCache().then(function(shouldServeCache) {
+        periods.forEach(arrIds, function(id, period) {
 
-        var startDate = periods.dates[period].start
-          , endDate = periods.dates[period].end
-          , comparison = (period != 'today')
+          var startDate = periods.dates[period].start
+            , endDate = periods.dates[period].end
+            , comparison = (period != 'today')
 
-        gaApi.getReport(id, startDate, endDate, metricsData.raw.toString()).then(function(results) {
-          if (typeof $scope.tableContent[results.profileInfo.tableId] == 'undefined')
-            $scope.tableContent[results.profileInfo.tableId] = {}
+          ogAccount.getReport(id, startDate, endDate, metricsData.raw.toString(), shouldServeCache).then(function(results) {
+            if (typeof $scope.tableContent[results.profileInfo.tableId] == 'undefined')
+              $scope.tableContent[results.profileInfo.tableId] = {}
 
-          $scope.tableContent[results.profileInfo.tableId][period] = results
-        })
-
-        if (comparison) {
-          // Setup for comparison data iteration
-          startDate = periods.comparisonDates[period].start
-          endDate = periods.comparisonDates[period].end
-
-          gaApi.getReport(id, startDate, endDate, metricsData.raw.toString()).then(function(results) {
-            if (typeof $scope.tableComparisonContent[results.profileInfo.tableId] == 'undefined')
-              $scope.tableComparisonContent[results.profileInfo.tableId] = {}
-
-            $scope.tableComparisonContent[results.profileInfo.tableId][period] = results
+            $scope.tableContent[results.profileInfo.tableId][period] = results
           })
-        }
+
+          if (comparison) {
+            // Setup for comparison data iteration
+            startDate = periods.comparisonDates[period].start
+            endDate = periods.comparisonDates[period].end
+
+            ogAccount.getReport(id, startDate, endDate, metricsData.raw.toString(), shouldServeCache).then(function(results) {
+              if (typeof $scope.tableComparisonContent[results.profileInfo.tableId] == 'undefined')
+                $scope.tableComparisonContent[results.profileInfo.tableId] = {}
+
+              $scope.tableComparisonContent[results.profileInfo.tableId][period] = results
+            })
+          }
+        })
       })
     })
   }
