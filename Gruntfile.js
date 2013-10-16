@@ -124,7 +124,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-install-dependencies')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-rev')
-  grunt.loadNpmTasks('forcemin')
+  grunt.loadNpmTasks('grunt-forcemin')
 
   grunt.registerTask('default', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin', 'rev', 'forcemin'])
   grunt.registerTask('withTests', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin', 'rev', 'forcemin', 'simplemocha', 'karma:build'])

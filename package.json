@@ -29,7 +29,8 @@
     "shelljs": "*",
     "grunt-install-dependencies": "*",
     "grunt-contrib-watch": "*",
-    "grunt-rev": "*"
+    "grunt-rev": "*",
+    "grunt-forcemin": "*"
   },
   "devDependencies": {
     "mocha": "*",
