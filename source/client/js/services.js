@@ -137,6 +137,7 @@ angular.module('ogServices', [])
       shouldUseCache = shouldUseCache || false
 
       if (shouldUseCache && (currentTime !== endDate)) {
+        // todo: it should still call gaApi.getReport if localStorage doesn't have a good value
         report.resolve(JSON.parse(localStorage[key]))
       } else {
         gaApi.getReport(ids, startDate, endDate, metrics).then(function(results) {

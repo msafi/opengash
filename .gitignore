@@ -8,6 +8,7 @@ test/*/coverage
 */client/js/index.html
 build/*
 deploy-script.js
+karma-config-build.js
 
 docs/*
 !docs/static

@@ -9,7 +9,10 @@ var express = require('express')
   , http = require('http')
   , config = require('./config')
   , ogUtil = require('./ogUtil')
-  , oneYear = 31557600000
+  , cachePeriod = 31557600000 // one year
+
+if (process.env.NODE_ENV == 'development')
+  cachePeriod = 0
 
 var app = express()
 
@@ -25,8 +28,8 @@ app.use(express.cookieParser(config.cookieSignature))
 app.use(express.cookieSession({secret: config.cookieSignature}))
 app.use(ogUtil.csrf)
 app.use(express.compress())
-app.use('/', express.static(__dirname + '/../client', { maxAge: oneYear }))
-app.use('/docs', express.static(__dirname + '/../docs', { maxAge: oneYear }))
+app.use('/', express.static(__dirname + '/../client', { maxAge: cachePeriod }))
+app.use('/docs', express.static(__dirname + '/../docs', { maxAge: cachePeriod }))
 app.use(app.router)
 
 // development only

@@ -27,7 +27,9 @@
     "rewire": "*",
     "netmask": "*",
     "shelljs": "*",
-    "grunt-install-dependencies": "*"
+    "grunt-install-dependencies": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-rev": "*"
   },
   "devDependencies": {
     "mocha": "*",

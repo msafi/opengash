@@ -38,6 +38,10 @@ module.exports = function(grunt) {
         cwd: 'source/',
         src: ['**'],
         dest: 'build/'
+      },
+      test: {
+        src: 'test/client/karma-config-build-intact.js',
+        dest: 'test/client/karma-config-build.js'
       }
     },
     htmlmin: {
@@ -84,6 +88,29 @@ module.exports = function(grunt) {
           spawn: false
         }
       }
+    },
+    rev: {
+      options: {
+        algorithm: 'md5',
+        length: 8
+      },
+      assets: {
+        files: [
+          {
+            src: [
+              'build/client/**/*.{js,css,html,map}',
+              '!build/client/**/vendor/**'
+            ]
+          }
+        ]
+      }
+    },
+    forcemin: {
+      src: [
+        'build/client/**/*.{js,css,html,ejs,map}',
+        '!build/client/**/vendor/**',
+        'test/client/karma-config-build.js'
+      ]
     }
   })
 
@@ -96,11 +123,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-install-dependencies')
   grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-rev')
+  grunt.loadNpmTasks('forcemin')
 
-  grunt.registerTask('default', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
-  grunt.registerTask('withTests', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin','simplemocha', 'karma:build'])
-  grunt.registerTask('minimal', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin'])
+  grunt.registerTask('default', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin', 'rev', 'forcemin'])
+  grunt.registerTask('withTests', ['install-dependencies', 'clean', 'copy', 'uglify', 'htmlmin', 'cssmin', 'rev', 'forcemin', 'simplemocha', 'karma:build'])
+  grunt.registerTask('minimal', ['clean', 'copy', 'uglify', 'htmlmin', 'cssmin', 'rev', 'forcemin'])
   grunt.registerTask('test', ['simplemocha', 'karma:source'])
   grunt.registerTask('testClient', ['karma:source'])
   grunt.registerTask('testServer', ['simplemocha'])
-};
+}

@@ -24,7 +24,7 @@ angular.module('ogDirectives', [])
           // scope.current and scope.comparison are sometimes strings, "0.0"
           if (parseFloat(scope.current) && parseFloat(scope.comparison)) {
 
-            movementPercentage = ((scope.current - scope.comparison) / scope.current) * 100
+            movementPercentage = ((scope.current - scope.comparison) / scope.comparison) * 100
             movementPercentage = parseFloat(movementPercentage.toFixed(1))
 
             if (movementPercentage > 0) {

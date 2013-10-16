@@ -1,25 +1,15 @@
 'use strict'
 
-/**
- * The AngularJS opengash bootstrapper.
- *
- * @namespace ng.opengash
- */
 angular.module('opengash', [
-    // Dependency modules
-    'ngCookies',
-    'ui.router',
-    'ogControllers',
-    'ogServices',
-    'ogDirectives',
-    'ogMetricsData'
+  // Dependency modules
+  'ngCookies',
+  'ui.router',
+  'ogControllers',
+  'ogServices',
+  'ogDirectives',
+  'ogMetricsData'
 ])
 
-/**
- * Sets up the initial configurations of opengash app.
- *
- * @member ng.opengash.config
- */
 .config([
   '$stateProvider', '$locationProvider',
   function ($stateProvider, $locationProvider) {
@@ -33,6 +23,6 @@ angular.module('opengash', [
       });
     $locationProvider.
       html5Mode(true).
-      hashPrefix('!');
+      hashPrefix('!')
   }
-]);
+])

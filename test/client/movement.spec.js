@@ -41,6 +41,6 @@ describe('movement directive', function() {
     })
 
     var span = elm.find("p span")
-    expect(span[0].innerText).toBe('-10%')
+    expect(span[0].innerText).toBe('-9.1%')
   })
 })
