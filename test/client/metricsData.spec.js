@@ -11,19 +11,19 @@ describe('metricsData', function() {
 
   describe('names', function() {
     it('should contain the pretty names of Google Analytics metrics', function() {
-      expect(metricsData.names['ga:visitors']).toBe('Unique visitors')
+      expect(metricsData['ga:visitors'].name).toBe('Unique visitors')
     })
   })
 
   describe('biggerIsBetter', function() {
     it('should tell us if a larger figure for a metric is better than a smaller one', function() {
-      expect(metricsData.biggerIsBetter['ga:visitBounceRate']).toBe(false)
+      expect(metricsData['ga:visitBounceRate'].biggerIsBetter).toBe(false)
     })
   })
 
   describe('type', function() {
     it('should give us the data type of the metric, like integer, percent, time, etc', function() {
-      expect(metricsData.type['ga:visitBounceRate']).toBe('percentage')
+      expect(metricsData['ga:visitBounceRate'].type).toBe('percentage')
     })
   })
 

@@ -28,13 +28,13 @@ angular.module('ogDirectives', [])
             movementPercentage = parseFloat(movementPercentage.toFixed(1))
 
             if (movementPercentage > 0) {
-              if (metricsData.biggerIsBetter[scope.metric] && movementPercentage != 0)
+              if (metricsData[scope.metric].biggerIsBetter && movementPercentage != 0)
                 movementPercentage = "<span class='text-success'>" + movementPercentage + "%</span>"
               else
                 movementPercentage = "<span class='text-danger'>" + movementPercentage + "%</span>"
             }
             else {
-              if (metricsData.biggerIsBetter[scope.metric] || movementPercentage == 0)
+              if (metricsData[scope.metric].biggerIsBetter || movementPercentage == 0)
                 movementPercentage = "<span class='text-danger'>" + movementPercentage + "%</span>"
               else
                 movementPercentage = "<span class='text-success'>" + movementPercentage + "%</span>"

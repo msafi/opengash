@@ -17,8 +17,8 @@ angular.module('ogServices', [])
 
 
 .factory('gaApi', [
-  '$http', '$cookies', '$q', '$timeout',
-  function ($http, $cookies, $q, $timeout) {
+  '$http', '$cookies', '$q', '$timeout', 'metricsData', 'periods',
+  function ($http, $cookies, $q, $timeout, metricsData, periods) {
     var gaApi = {}
       , reportCallSleep
 
@@ -70,6 +70,33 @@ angular.module('ogServices', [])
       reportCallSleep = reportCallSleep + REPORT_CALL_THROTTLE_BY
 
       return report.promise
+    }
+
+    gaApi.linkToReport = function(period, metric, profileInfo) {
+      var link = ''
+
+      link += 'https://www.google.com/analytics/web/?#report/'
+      link += metricsData[metric].urlFragment + '/'
+      link += 'a' + profileInfo.accountId + 'w' + profileInfo.internalWebPropertyId + 'p' + profileInfo.profileId + '/'
+      link += '%3F' + // ?
+              '_u.date00' +
+              '%3D' +  // =
+              periods.dates[period].start +
+              '%26' + // &
+              '_u.date01' +
+              '%3D' + // =
+              periods.dates[period].end +
+              '%26' + // &
+              '_u.date10' +
+              '%3D' + // =
+              periods.comparisonDates[period].start +
+              '%26' + // &
+              '_u.date11' +
+              '%3D' + // =
+              periods.comparisonDates[period].end +
+              '/'
+
+      return link
     }
 
     return gaApi

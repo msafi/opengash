@@ -54,9 +54,9 @@ describe('dashboardCtrl', function() {
     })
   })
 
-  describe('metricPrettyNameFinder', function() {
-    it("should work like metricsData.names", function() {
-      expect(scope.metricPrettyNameFinder['ga:visitors']).toBe(metricsData.names['ga:visitors'])
+  describe('metricsData', function() {
+    it("should work like the metricsData service", function() {
+      expect(scope.metricsData['ga:visitors'].name).toBe(metricsData['ga:visitors'].name)
     })
   })
 })

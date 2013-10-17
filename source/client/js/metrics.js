@@ -7,50 +7,58 @@ angular.module('ogMetricsData', [])
  */
 .factory('metricsData', [
   function () {
-    var metricsData = {}
 
-    metricsData.names = {
-               'ga:visitors': 'Unique visitors',
-              'ga:pageviews': 'Pageviews',
-      'ga:pageviewsPerVisit': 'Pages per visit',
-          'ga:avgTimeOnSite': 'Average time on site',
-        'ga:visitBounceRate': 'Bounce rate',
-       'ga:percentNewVisits': 'Percentage of new visits',
-        'ga:avgPageLoadTime': 'Average page load time'
-    }
-
-    metricsData.biggerIsBetter = {
-               'ga:visitors': true,
-              'ga:pageviews': true,
-      'ga:pageviewsPerVisit': true,
-          'ga:avgTimeOnSite': true,
-        'ga:visitBounceRate': false,
-       'ga:percentNewVisits': true,
-        'ga:avgPageLoadTime': false
-    }
-
-    metricsData.type = {
-               'ga:visitors': 'integer',
-              'ga:pageviews': 'integer',
-      'ga:pageviewsPerVisit': 'integer',
-          'ga:avgTimeOnSite': 'seconds',
-        'ga:visitBounceRate': 'percentage',
-       'ga:percentNewVisits': 'percentage',
-        'ga:avgPageLoadTime': 'seconds'
-    }
-
-    metricsData.raw = (function () {
-      var results = []
-      for (var key in metricsData.names) {
-        results.push(key)
+    var metricsData = {
+      'ga:visitors': {
+        name: 'Unique visitors',
+        biggerIsBetter: true,
+        type: 'integer',
+        urlFragment: 'visitors-overview'
+      },
+      'ga:pageviews': {
+        name: 'Pageviews',
+        biggerIsBetter: true,
+        type: 'integer',
+        urlFragment: 'content-pages'
+      },
+      'ga:pageviewsPerVisit': {
+        name: 'Pages per visit',
+        biggerIsBetter: true,
+        type: 'integer',
+        urlFragment: 'visitors-overview',
+      },
+      'ga:avgTimeOnSite': {
+        name: 'Average time on site',
+        biggerIsBetter: true,
+        type: 'seconds',
+        urlFragment: 'visitors-engagement'
+      },
+      'ga:visitBounceRate': {
+        name: 'Bounce rate',
+        biggerIsBetter: false,
+        type: 'percentage',
+        urlFragment: 'trafficsources-overview',
+      },
+      'ga:percentNewVisits': {
+        name: 'Percentage of new visits',
+        biggerIsBetter: true,
+        type: 'percentage',
+        urlFragment: 'trafficsources-overview',
+      },
+      'ga:avgPageLoadTime': {
+        name: 'Average page load time',
+        biggerIsBetter: false,
+        type: 'seconds',
+        urlFragment: 'content-site-speed-overview'
       }
-      return results
-    })()
+    }
+
+    metricsData.raw = Object.keys(metricsData)
 
     metricsData.pretty = (function () {
       var results = []
-      for (var key in metricsData.names) {
-        results.push(metricsData.names[key])
+      for (var key in metricsData) {
+        results.push(metricsData[key].name)
       }
       return results
     })()
@@ -71,7 +79,7 @@ angular.module('ogMetricsData', [])
       if (!input)
         return ''
 
-      switch (metricsData.type[metric]) {
+      switch (metricsData[metric].type) {
         case 'integer':
           return numberFilter(parseFloat(parseFloat(input).toFixed(2)))
         case 'seconds':

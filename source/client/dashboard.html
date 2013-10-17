@@ -3,23 +3,24 @@
     <table id="{{metric}}" class='og-table'>
       <thead>
       <tr>
-        <th class='metric'>{{metricPrettyNameFinder[metric]}}</th>
+        <th class='metric'>{{metricsData[metric].name}}</th>
         <th ng-repeat="period in tableStructure.periods" class="{{period}}">{{period}}</th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="id in tableStructure.views" class="{{id}}">
-        <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
-        <td ng-repeat="period in tableStructure.periods">
-          <div class='results'>
-            <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
-            <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
-          </div>
-          <movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
-                    comparison="{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
-                    metric="{{metric}}"></movement>
-        </td>
-      </tr>
+        <tr ng-repeat="id in tableStructure.views" class="{{id}}">
+          <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
+          <td ng-repeat="period in tableStructure.periods">
+            <a target='_blank' href="{{'https://www.google.com/analytics/web/?#report/' + metricsData[metric].urlFragment + '/' + 'a' + tableContent[id][period.toLowerCase()].profileInfo.accountId + 'w' + tableContent[id][period.toLowerCase()].profileInfo.internalWebPropertyId + 'p' + tableContent[id][period.toLowerCase()].profileInfo.profileId + '/' + '%3F_u.date00%3D' + periods.dates[period.toLowerCase()].start.split('-').join('') + '%26_u.date01%3D' + periods.dates[period.toLowerCase()].end.split('-').join('') + '%26_u.date10%3D' + periods.comparisonDates[period.toLowerCase()].start.split('-').join('') + '%26_u.date11%3D' + periods.comparisonDates[period.toLowerCase()].end.split('-').join('') + '/'}}"></a>
+            <div class='results'>
+              <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
+              <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
+            </div>
+            <movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
+                      comparison="{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
+                      metric="{{metric}}"></movement>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

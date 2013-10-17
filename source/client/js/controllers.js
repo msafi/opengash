@@ -71,11 +71,11 @@ angular.module('ogControllers', [])
       $scope.tableStructure = { metrics: metricsData.raw, views: arrIds, periods: periods.ordered }
       $scope.tableContent = {}
       $scope.tableComparisonContent = {}
-      $scope.metricPrettyNameFinder = metricsData.names
+      $scope.metricsData = metricsData
+      $scope.periods = periods
 
       ogAccount.shouldServeCache().then(function(shouldServeCache) {
         periods.forEach(arrIds, function(id, period) {
-
           var startDate = periods.dates[period].start
             , endDate = periods.dates[period].end
             , comparison = (period != 'today')
@@ -88,7 +88,6 @@ angular.module('ogControllers', [])
           })
 
           if (comparison) {
-            // Setup for comparison data iteration
             startDate = periods.comparisonDates[period].start
             endDate = periods.comparisonDates[period].end
 
