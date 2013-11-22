@@ -1,5 +1,5 @@
 describe('connectCtrl', function() {
-  beforeEach(module('ogControllers', 'ogMocks'))
+  beforeEach(module('welcome', 'mocks'))
 
   it('should simply return a Google OAuth 2.0 compatible URL', function() {
     inject(function($rootScope, $controller, mock_authUrl) {

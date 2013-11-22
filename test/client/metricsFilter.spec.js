@@ -1,7 +1,7 @@
 describe('metricsFilter', function() {
   var metricsFilter
   beforeEach(function() {
-    module('ogMetricsData')
+    module('dashboard', 'commonServices')
 
     inject(function(_metricsFilter_) {
       metricsFilter = _metricsFilter_

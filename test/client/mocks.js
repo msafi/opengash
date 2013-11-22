@@ -1,17 +1,17 @@
-angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
+angular.module('mocks', ['ngMock', 'metricsData'])
 
 .factory("mock_$httpBackend",
-  function($httpBackend, mock_$cookies, mock_ogAccount) {
+  function($httpBackend, mock_$cookies, mock_userAccount) {
     var $cookies = mock_$cookies
-      , ogAccount = mock_ogAccount
-      , id = 'ga:' + ogAccount.savedViews[0].id
+      , userAccount = mock_userAccount
+      , id = 'ga:' + userAccount.savedViews[0].id
 
     $httpBackend
       .when('GET', /http:\/\/www\.example\.com\/?\?access_token=.*/)
       .respond(200, 'OK!')
 
     $httpBackend
-      .when('GET', 'api/authurl/json')
+      .when('GET', 'api/authurl')
       .respond({ url: 'https://accounts.google.com/o/oauth2/auth' })
 
     $httpBackend
@@ -23,11 +23,11 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
       .respond('{"kind": "analytics#gaData", "id": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:11537011&metrics=ga:…centNewVisits,ga:avgPageLoadTime&start-date=2013-09-25&end-date=2013-09-25", "query": {"start-date": "2013-09-25", "end-date": "2013-09-25", "ids": "ga:11537011", "metrics": ["ga:visitors", "ga:pageviews", "ga:pageviewsPerVisit", "ga:avgTimeOnSite", "ga:visitBounceRate", "ga:percentNewVisits", "ga:avgPageLoadTime"], "start-index": 1, "max-results": 1000}, "itemsPerPage": 1000, "totalResults": 1, "selfLink": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:11537011&metrics=ga:…centNewVisits,ga:avgPageLoadTime&start-date=2013-09-25&end-date=2013-09-25", "profileInfo": {"profileId": "11537011", "accountId": "5715214", "webPropertyId": "UA-5715214-1", "internalWebPropertyId": "11036598", "profileName": "DET", "tableId": "ga:11537011"}, "containsSampledData": false, "columnHeaders": [{"name": "ga:visitors", "columnType": "METRIC", "dataType": "INTEGER"},{"name": "ga:pageviews", "columnType": "METRIC", "dataType": "INTEGER"},{"name": "ga:pageviewsPerVisit", "columnType": "METRIC", "dataType": "FLOAT"},{"name": "ga:avgTimeOnSite", "columnType": "METRIC", "dataType": "TIME"},{"name": "ga:visitBounceRate", "columnType": "METRIC", "dataType": "PERCENT"},{"name": "ga:percentNewVisits", "columnType": "METRIC", "dataType": "PERCENT"},{"name": "ga:avgPageLoadTime", "columnType": "METRIC", "dataType": "FLOAT"}], "totalsForAllResults": {"ga:visitors": "2440", "ga:pageviews": "5016", "ga:pageviewsPerVisit": "1.8420859346309217", "ga:avgTimeOnSite": "618.4950422328315", "ga:visitBounceRate": "51.009915534337125", "ga:percentNewVisits": "67.79287550495778", "ga:avgPageLoadTime": "10.687555555555555"}, "rows": [["2440", "5016", "1.8420859346309217", "618.4950422328315", "51.009915534337125", "67.79287550495778", "10.687555555555555"]]}')
 
     $httpBackend
-      .when('GET', /api\/ga-views\/json.*/)
+      .when('GET', /api\/ga-views.*/)
       .respond('[{"name" : "DET","id" : "11537011"},{"name" : "msafi.com","id" : "13623581"},{"name" : "WinkPress","id" : "37307543"},{"name" : "ksafi.com","id" : "55604500"},{"name" : "The Hollowverse","id" : "56394045"}]')
 
     $httpBackend
-      .when('POST', /api\/ga-views\/json.*/)
+      .when('POST', /api\/ga-views.*/)
       .respond(200)
 
     return $httpBackend
@@ -59,8 +59,8 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
   }
 ])
 
-.factory('mock_ogAccount',
-  function(mock_gaApi) {
+.factory('mock_userAccount',
+  function(mock_googleAnalytics) {
     var ogAccount = {}
     var $q
     var $timeout
@@ -122,7 +122,7 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
         , that = this
 
       $timeout(function() {
-        mock_gaApi.getReport(ids, startDate, endDate, metrics).then(function(results) {
+        mock_googleAnalytics.getReport(ids, startDate, endDate, metrics).then(function(results) {
           deferred.resolve(results)
         })
       }, 200)
@@ -142,11 +142,12 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
   }
 ])
 
-.factory('mock_gaApi', [
-  function() {
-    var gaApi = {}
+.factory('mock_googleAnalytics', [
+  '$q',
+  function($q) {
+    var googleAnalytics = {}
 
-    gaApi.getReport = function(id, startDate, endDate, metrics) {
+    googleAnalytics.getReport = function(id, startDate, endDate, metrics) {
       var deferred
         , $timeout
         , that = this
@@ -245,11 +246,19 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
       return deferred.promise
     }
 
-    gaApi.fetchViews = function() {
-      return [{"name" : "DET","id" : "11537011"},{"name" : "msafi.com","id" : "13623581"},{"name" : "WinkPress","id" : "37307543"},{"name" : "ksafi.com","id" : "55604500"},{"name" : "The Hollowverse","id" : "56394045"}]
+    googleAnalytics.fetchViews = function() {
+      var views = $q.defer()
+      views.resolve([
+        {"name": "DET", "id": "11537011"},
+        {"name": "msafi.com", "id": "13623581"},
+        {"name": "WinkPress", "id": "37307543"},
+        {"name": "ksafi.com", "id": "55604500"},
+        {"name": "The Hollowverse", "id": "56394045"}
+      ])
+      return views.promise
     }
 
-    return gaApi
+    return googleAnalytics
   }
 ])
 
@@ -272,7 +281,7 @@ angular.module('ogMocks', ['ngMock', 'ogMetricsData'])
 
     periods.forEach = function(arrProfileIds, callback) {
       var eachPeriod
-        , dates = this.dates
+      var dates = this.dates
 
       // iterate over each web property
       arrProfileIds.forEach(function(profileId) {

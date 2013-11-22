@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html ng-app='opengash'>
 <head>
-  <title>opengash - Google Analytics dashboard</title>
+  <title>opengash: all your Google Analytics!</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" media="screen">
-  <link rel='stylesheet' href='css/style.css' media='screen'>
+  <link rel='stylesheet' href='style.css' media='screen'>
 </head>
-<body ng-controller='mainCtrl'>
+<body ng-controller="mainCtrl">
 
-<div class="navbar navbar-default navbar-fixed-top">
-  <div class='container'>
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">opengash - Google Analytics from 10,000 feet</a>
-    </div>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="/" title="belong to you!">opengash: all your Google Analytics</a>
+  </div>
+  <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right"><li ui-view="navLink"></li></ul>
   </div>
 </div>
 
-<div class="og-container" ui-view></div>
+<div ui-view="main"></div>
 
 <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular.min.js'></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.0/angular-ui-router.min.js'></script>
 <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.2/angular-cookies.min.js'></script>
 
 <% if (env == 'production') { %>
-<script src="js/opengash.min.js"></script>
+<script src="opengash.min.js"></script>
 <% } else { %>
-<script src="js/services.js"></script>
-<script src="js/controllers.js"></script>
-<script src="js/directives.js"></script>
-<script src="js/metrics.js"></script>
-<script src="js/app.js"></script>
+<script src="common/periods.js"></script>
+<script src="common/metricsData.js"></script>
+<script src="common/googleAnalytics.js"></script>
+<script src="common/userAccount.js"></script>
+<script src="common/commonServices.js"></script>
+<script src="welcome/welcome.js"></script>
+<script src="userProfile/userProfile.js"></script>
+<script src="dashboard/dashboard.js"></script>
+<script src="app.js"></script>
 <% } %>
 </body>
 </html>

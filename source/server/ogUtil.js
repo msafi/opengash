@@ -21,7 +21,7 @@ var express = require('express')
  */
 module.exports.ogRender = express.response.ogRender = function (arg1, arg2) {
 
-  if (this.req.path.substr(1, 3) == 'api' && this.req.path.substr(-4, 4) == 'json') {
+  if (this.req.path.substr(1, 3) == 'api') {
     // API call. Send JSON.
     this.req.res.json(arg1);
   }

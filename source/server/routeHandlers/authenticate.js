@@ -5,8 +5,10 @@ var deps = require('./dependencies')
 
 module.exports = function(req, res) {
 
-  if (!verifyCsrf(req, res))
-    return false;
+  if (!verifyCsrf(req, res) || (req.query.error !== undefined)) {
+    res.redirect(302, '/signup-error')
+    return false
+  }
 
   ogGaApi.requestAccessToken(req.query.code, function(accessToken) {
     // Get user basic information.

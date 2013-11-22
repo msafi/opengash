@@ -1,4 +1,4 @@
-angular.module('ogMetricsData', [])
+angular.module('metricsData', [])
 
 /**
  * This has Google Analytics metrics configurations
@@ -64,43 +64,5 @@ angular.module('ogMetricsData', [])
     })()
 
     return metricsData
-  }
-])
-
-/**
- * This filters returned metric results according to the metric's data type
- *
- * @namespace ng.filter.metrics
- */
-.filter('metrics', [
-  'metricsData', 'numberFilter',
-  function(metricsData, numberFilter) {
-    return function(input, metric) {
-      if (!input)
-        return ''
-
-      switch (metricsData[metric].type) {
-        case 'integer':
-          return numberFilter(parseFloat(parseFloat(input).toFixed(2)))
-        case 'seconds':
-            // http://stackoverflow.com/a/6313008/604296
-            var sec_num = parseInt(input, 10);
-            var hours = Math.floor(sec_num / 3600);
-            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-            var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-            if (hours < 10) { hours = "0" + hours; }
-            if (minutes < 10) { minutes = "0" + minutes; }
-            if (seconds < 10) { seconds = "0" + seconds; }
-
-            var time = hours + ':' + minutes + ':' + seconds;
-
-            return time;
-        case 'percentage':
-          return parseFloat(parseFloat(input).toFixed(1)) + '%'
-        default:
-          return input
-      }
-    }
   }
 ])

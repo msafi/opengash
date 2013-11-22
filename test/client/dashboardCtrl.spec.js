@@ -1,33 +1,33 @@
 describe('dashboardCtrl', function() {
   var scope
-    , gaApi
-    , ogAccount
+    , googleAnalytics
+    , userAccount
     , periods
     , metricsData
     , $rootScope
 
-  beforeEach(module('ogControllers', 'ogMetricsData', 'ogMocks'))
+  beforeEach(module('dashboard', 'metricsData', 'mocks'))
 
-  beforeEach(inject(function($controller, _$rootScope_, _metricsData_, mock_gaApi, mock_ogAccount, mock_periods) {
+  beforeEach(inject(function($controller, _$rootScope_, _metricsData_, mock_googleAnalytics, mock_userAccount, mock_periods) {
     $rootScope = _$rootScope_
     scope = $rootScope.$new()
-    gaApi = mock_gaApi
-    ogAccount = mock_ogAccount
+    googleAnalytics = mock_googleAnalytics
+    userAccount = mock_userAccount
     periods = mock_periods
     metricsData = _metricsData_
 
     runs(function() {
       $controller('dashboardCtrl', {
         $scope: scope,
-        gaApi: gaApi,
-        ogAccount: ogAccount,
+        googleAnalytics: googleAnalytics,
+        userAccount: userAccount,
         periods: periods,
         metricsData: metricsData
       })
     })
 
     waitsFor(function() {
-      return scope.tableContent && Object.keys(scope.tableContent).length == ogAccount.savedViews.length
+      return scope.tableContent && Object.keys(scope.tableContent).length == userAccount.savedViews.length
     }, 'tableContent to be filled', 1000)
   }))
 
@@ -42,15 +42,15 @@ describe('dashboardCtrl', function() {
   describe('tableContent', function() {
     it('should contain Google Analytics reports data for 2013-09-25 and 2013-09-24', function() {
       expect(Object.keys(scope.tableContent).length).toBe(5) // Five websites in mock data
-      expect(scope.tableContent['ga:' + ogAccount.savedViews[0].id].today.query['start-date']).toBe('2013-09-25')
-      expect(scope.tableContent['ga:' + ogAccount.savedViews[0].id].yesterday.query['start-date']).toBe('2013-09-24')
+      expect(scope.tableContent['ga:' + userAccount.savedViews[0].id].today.query['start-date']).toBe('2013-09-25')
+      expect(scope.tableContent['ga:' + userAccount.savedViews[0].id].yesterday.query['start-date']).toBe('2013-09-24')
     })
   })
 
   describe('tableComparisonContent', function() {
     it('should contain Google Analytics reports data for 2013-09-17', function() {
       expect(Object.keys(scope.tableComparisonContent).length).toBe(5) // Five websites in mock data
-      expect(scope.tableComparisonContent['ga:' + ogAccount.savedViews[0].id].yesterday.query['start-date']).toBe('2013-09-17')
+      expect(scope.tableComparisonContent['ga:' + userAccount.savedViews[0].id].yesterday.query['start-date']).toBe('2013-09-17')
     })
   })
 

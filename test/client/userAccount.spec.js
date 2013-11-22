@@ -1,19 +1,19 @@
-describe('ogAccount', function() {
+describe('userAccount', function() {
   var $provide
     , $cookies
-    , ogAccount
+    , userAccount
     , $httpBackend
     , metricsData
     , $timeout
     , key
     , dateFilter
     , $rootScope
+    , $q
 
   beforeEach(function() {
     module(
-      'ogServices',
-      'ogMocks',
-      'ogMetricsData',
+      'commonServices',
+      'mocks',
       function(_$provide_) {
         $provide = _$provide_
       }
@@ -26,10 +26,11 @@ describe('ogAccount', function() {
       $timeout = $injector.get('$timeout')
       dateFilter = $injector.get('dateFilter')
       $rootScope = $injector.get('$rootScope')
+      $q = $injector.get('$q')
 
       $provide.value('$cookies', $cookies)
 
-      ogAccount = $injector.get('ogAccount')
+      userAccount = $injector.get('userAccount')
     })
 
     key = 'ga:115370112013-25-092013-25-09' + metricsData.raw.toString()
@@ -37,7 +38,7 @@ describe('ogAccount', function() {
 
   describe('getSavedViews', function() {
     it('should send a request to the server and return saved Google Analytics views', function() {
-      ogAccount.getSavedViews().then(function(results) {
+      userAccount.getSavedViews().then(function(results) {
         expect(results.length > 3).toBe(true)
       })
 
@@ -45,23 +46,23 @@ describe('ogAccount', function() {
     })
   })
 
-  describe('getAllViews', function() {
-    it('should return an array of all saved Google Analytics profiles directly from Google', function() {
-      ogAccount.getAllViews().then(function(results) {
-        expect(results.length > 3).toBe(true)
-      })
-
-      $httpBackend.expectGET(/https:\/\/www.googleapis.com\/analytics\/v3\/management\/accounts\/~all\/webproperties\/~all\/profiles.*/)
-      $httpBackend.flush()
-    })
-  })
+//  describe('getAllViews', function() {
+//    it('should return an array of all saved Google Analytics profiles directly from Google', function() {
+//      userAccount.getAllViews().then(function(results) {
+//        expect(results.length > 3).toBe(true)
+//      })
+//
+//      $httpBackend.expectGET(/https:\/\/www.googleapis.com\/analytics\/v3\/management\/accounts\/~all\/webproperties\/~all\/profiles.*/)
+//      $httpBackend.flush()
+//    })
+//  })
 
   describe('saveViews', function() {
-    it('should POST a given array of views to `api/ga-views/json`', function() {
+    it('should POST a given array of views to `api/ga-views`', function() {
       var arrViews = ['array', 'of', 'views']
-      ogAccount.saveViews(arrViews)
+      userAccount.saveViews(arrViews)
       $httpBackend.flush()
-      $httpBackend.expectPOST(/api\/ga-views\/json.*/, arrViews).respond(200)
+      $httpBackend.expectPOST(/api\/ga-views.*/, arrViews).respond(200)
     })
   })
 
@@ -69,7 +70,7 @@ describe('ogAccount', function() {
     it('should return false if `latestCall` is != today', function() {
       localStorage['latestCall'] = '1999-01-01'
 
-      ogAccount.shouldServeCache().then(function(shouldServeCache) {
+      userAccount.shouldServeCache().then(function(shouldServeCache) {
         expect(shouldServeCache).toBe(false)
       })
 
@@ -80,7 +81,7 @@ describe('ogAccount', function() {
       var today = new Date().getTime()
       localStorage['latestCall'] = dateFilter(today, 'yyyy-MM-dd')
 
-      ogAccount.shouldServeCache().then(function(shouldServeCache) {
+      userAccount.shouldServeCache().then(function(shouldServeCache) {
         expect(shouldServeCache).toBe(true)
       })
 
@@ -90,7 +91,7 @@ describe('ogAccount', function() {
     it('should clear the cache when `latestCall` is != today', function() {
       localStorage['latestCall'] = '1999-01-01'
 
-      ogAccount.shouldServeCache().then(function() {
+      userAccount.shouldServeCache().then(function() {
         expect(localStorage['latestCall']).toBeFalsy()
       })
 
@@ -100,7 +101,7 @@ describe('ogAccount', function() {
 
   describe('getReport', function() {
     it('should make an actual request to Google if instructed not to use cache', function() {
-      ogAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function(body) {
+      userAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function(body) {
         expect(body.kind).toBe('analytics#gaData')
       })
 
@@ -111,7 +112,7 @@ describe('ogAccount', function() {
     })
 
     it('should save the results to localStorage when it makes an HTTP request', function() {
-      ogAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function() {
+      userAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function() {
         expect(localStorage[key]).toBeTruthy()
       })
 
@@ -124,7 +125,7 @@ describe('ogAccount', function() {
       localStorage[key] = JSON.stringify({ say: 'ohhaii!' })
 
       // Now instruct ogAccount to use cache and give it the parameters that will produce the same key used above
-      ogAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), true)
+      userAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), true)
         .then(function(results) {
           expect(results.say).toBe('ohhaii!')
         })
@@ -134,7 +135,7 @@ describe('ogAccount', function() {
 
     it('should record the date of its latest HTTP request in `latestCall` localStorage', function() {
       localStorage.clear()
-      ogAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function() {
+      userAccount.getReport('ga:11537011', '2013-25-09', '2013-25-09', metricsData.raw.toString(), false).then(function() {
         var currentTime = new Date().getTime()
         var latestCall = dateFilter(currentTime, 'yyyy-MM-dd')
         expect(localStorage['latestCall']).toBe(latestCall)
@@ -152,7 +153,7 @@ describe('ogAccount', function() {
       localStorage[key] = JSON.stringify({ say: 'ohhaii!' })
 
       // Now instruct ogAccount to use cache and give it the parameters that will produce the same key used above
-      ogAccount.getReport('ga:11537011', currentTime, currentTime, metricsData.raw.toString(), true)
+      userAccount.getReport('ga:11537011', currentTime, currentTime, metricsData.raw.toString(), true)
         .then(function(results) {
           expect(results.say).not.toBe('ohhaii!')
         })
@@ -162,6 +163,44 @@ describe('ogAccount', function() {
       $timeout.flush()
       $httpBackend.flush()
     })
+
+
+  })
+
+  describe('status', function() {
+    it("should resolve to 'dashboard' if user is logged in, has a fresh access token, and saved views", function() {
+      userAccount.status().then(function(status) {
+        expect(status).toBe('dashboard')
+      })
+
+      $httpBackend.flush()
+    })
+
+    it("should resolve to 'addViews' if user is logged in, has a fresh token, but doesn't have saved views", function() {
+      // Fake out getSavedViews
+      var getSavedViews = $q.defer()
+      userAccount.getSavedViews = function() {
+        return getSavedViews.promise
+      }
+      getSavedViews.reject()
+
+      userAccount.status().then(function(status) {
+        expect(status).toBe('addViews')
+      })
+
+      $rootScope.$apply()
+    })
+
+    it("should resolve to 'login' if any of the conditions above isn't met", function() {
+      $cookies.loggedIn = undefined
+      userAccount.status().then(function(status) {
+        expect(status).toBe('login')
+      })
+
+      $rootScope.$apply()
+    })
+
+
 
 
   })

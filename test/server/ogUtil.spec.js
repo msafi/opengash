@@ -28,7 +28,7 @@ describe('ogUtil:', function() {
     })
 
     it('should return JSON when path begins with /api/ and ands with /json', function(done) {
-      fakeExpress.req.path = '/api/path/json'
+      fakeExpress.req.path = '/api/path'
       ogUtil.ogRender.apply(fakeExpress)
       expect(response).to.be('json')
       done()

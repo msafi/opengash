@@ -3,14 +3,14 @@ describe('movement directive', function() {
     , scope
 
   beforeEach(function() {
-    module('ogDirectives',
-           'ogMetricsData')
+    module('dashboard',
+           'metricsData')
 
     inject(function($injector) {
       var $rootScope = $injector.get('$rootScope')
         , $compile = $injector.get('$compile')
 
-      elm = angular.element('<movement current="{{current}}" comparison="{{comparison}}" metric="{{metric}}"></movement>')
+      elm = angular.element('<og-movement current="{{current}}" comparison="{{comparison}}" metric="{{metric}}"></og-movement>')
 
       scope = $rootScope
       $compile(elm)(scope)

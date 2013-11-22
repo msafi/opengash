@@ -1,21 +1,29 @@
 describe('addViewsCtrl', function() {
   var scope
-    , $state
-    , ogAccount
+  var $state
+  var userAccount
 
-  beforeEach(module('ogControllers', 'ogMocks'))
+  beforeEach(function() {
+    module('userProfile', 'mocks')
 
-  beforeEach(inject(function($rootScope, $controller, mock_ogAccount, mock_$state) {
-    $state = mock_$state
-    ogAccount = mock_ogAccount
-    scope = $rootScope.$new()
+    inject(function($injector) {
+      $state = $injector.get('mock_$state')
+      userAccount = $injector.get('mock_userAccount')
+      googleAnalytics = $injector.get('mock_googleAnalytics')
 
-    $controller('addViewsCtrl', {$scope: scope, ogAccount: ogAccount, $state: $state})
-  }))
+      var $rootScope = $injector.get('$rootScope')
+      var $controller = $injector.get('$controller')
+      var googleAnalytics
+
+      scope = $rootScope.$new()
+      $controller('addViewsCtrl', {$scope: scope, userAccount: userAccount, $state: $state, googleAnalytics: googleAnalytics})
+    })
+  })
 
   describe('allViews', function() {
     it('should have views back from Google API', function() {
-      expect(scope.allViews.kind).toBe('analytics#profiles')
+      scope.$apply()
+      expect(scope.allViews.length).toBe(5)
     })
   })
 
@@ -39,7 +47,7 @@ describe('addViewsCtrl', function() {
     it('should save selected views to ogAccount and load the dashboard state', function() {
       scope.selectedViews = [{name:'foo', id:1}, {name:'bar', id:2}]
       scope.saveSelectedViews()
-      expect(ogAccount.savedViews[0].name).toBe('foo')
+      expect(userAccount.savedViews[0].name).toBe('foo')
       expect($state.name).toBe('dashboard')
     })
   })

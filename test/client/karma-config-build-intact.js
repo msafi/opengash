@@ -13,12 +13,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../../build/client/js/vendor/jquery-2.0.3.min.js',
-      '../../build/client/js/vendor/angular.js',
-      '../../build/client/js/vendor/angular-cookies.js',
-      '../../build/client/js/vendor/angular-ui-router.js',
-      '../../build/client/js/vendor/angular-mocks.js',
-      '../../build/client/js/opengash.min.js',
+      '../../build/client/vendor/js/jquery-2.0.3.min.js',
+      '../../build/client/vendor/js/angular.js',
+      '../../build/client/vendor/js/angular-cookies.js',
+      '../../build/client/vendor/js/angular-ui-router.js',
+      '../../build/client/vendor/js/angular-mocks.js',
+      '../../build/client/opengash.min.js',
       './mocks.js',
       './*.js'
     ],

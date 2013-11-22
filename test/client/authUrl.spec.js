@@ -2,7 +2,7 @@ describe('authUrl', function() {
   var inject_authUrl
     , scope
 
-  beforeEach(module('ogServices', 'ogMocks'))
+  beforeEach(module('welcome', 'mocks'))
 
   beforeEach(inject(function($injector) {
     $httpBackend = $injector.get('mock_$httpBackend')
@@ -20,7 +20,7 @@ describe('authUrl', function() {
   })
 
   it('should fetch data from server', function() {
-    $httpBackend.expectGET('api/authurl/json')
+    $httpBackend.expectGET('api/authurl')
     inject_authUrl()
     $httpBackend.flush()
   })

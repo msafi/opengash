@@ -2,7 +2,7 @@ describe('periods', function() {
   var periods
 
   beforeEach(function() {
-    module('ogServices')
+    module('periods')
 
     inject(function($injector) {
       periods = $injector.get('periods')

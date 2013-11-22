@@ -1,8 +1,8 @@
 module.exports = {
   error: null,
-  saveUserCalls: undefined,
+  saveUserCalls: 0,
   saveUser: function(user, callback) {
-    this.saveUserCalls = (this.saveUserCalls) ? this.saveUserCalls++ : 1
+    this.saveUserCalls++
     callback(this.error)
   },
   getGaViewsCalls: undefined,

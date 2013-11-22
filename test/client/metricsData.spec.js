@@ -2,7 +2,7 @@ describe('metricsData', function() {
   var metricsData
 
   beforeEach(function() {
-    module('ogMetricsData')
+    module('metricsData')
 
     inject(function($injector) {
       metricsData = $injector.get('metricsData')

@@ -12,16 +12,25 @@ describe('authentication', function() {
 
   describe('failure', function() {
     it('should return false if verifyCsrf fails', function(done) {
-      expect(authenticate(rh.req, rh.res)).to.be.false
+      expect(authenticate(rh.req, rh.res)).to.be(false)
+      done()
+    })
+
+    it('should return false if query contains error', function(done) {
+      rh.req.query.csrf = '123'
+      rh.req.cookies.csrf = '123'
+      rh.req.query.error = true
+
+      expect(authenticate(rh.req, rh.res)).to.be(false)
       done()
     })
   })
 
   describe('success', function() {
     beforeEach(function() {
-      // make verifyCsrf pass
       rh.req.query.csrf = '123'
       rh.req.cookies.csrf = '123'
+      delete rh.req.query.error
     })
 
     it('should save user to database', function(done) {

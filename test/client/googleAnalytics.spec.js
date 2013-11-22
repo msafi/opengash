@@ -1,17 +1,16 @@
-describe('gaApi', function() {
-  var gaApi
+describe('googleAnalytics', function() {
+  var googleAnalytics
     , $httpBackend
     , $cookies
     , $provide
-    , ogAccount
+    , userAccount
     , $timeout
     , metricsData
 
   beforeEach(function() {
     module(
-      'ogServices',
-      'ogMocks',
-      'ogMetricsData',
+      'mocks',
+      'commonServices',
       function(_$provide_) {
         $provide = _$provide_
       }
@@ -22,8 +21,8 @@ describe('gaApi', function() {
       $provide.value('$cookies', $cookies)
 
       $httpBackend = $injector.get('mock_$httpBackend')
-      gaApi = $injector.get('gaApi')
-      ogAccount = $injector.get('mock_ogAccount')
+      googleAnalytics = $injector.get('googleAnalytics')
+      userAccount = $injector.get('mock_userAccount')
       metricsData = $injector.get('metricsData')
       $timeout = $injector.get('$timeout')
     })
@@ -38,7 +37,7 @@ describe('gaApi', function() {
     it('should include accessToken from $cookies to a given API call', function() {
       $httpBackend.expectGET("http://www.example.com/?access_token=" + $cookies.accessToken)
 
-      gaApi.call('http://www.example.com/', function(results) {
+      googleAnalytics.call('http://www.example.com/', function(results) {
         expect(results).toBe('OK!')
       })
 
@@ -47,8 +46,8 @@ describe('gaApi', function() {
   })
 
   describe('fetchViews', function() {
-    it("should call back with an array of the user's Google Analytics views", function() {
-      gaApi.fetchViews(function(views) {
+    it("should return an array of the user's Google Analytics views", function() {
+      googleAnalytics.fetchViews().then(function(views) {
         expect(views.length > 5).toBe(true)
       })
 
@@ -58,9 +57,9 @@ describe('gaApi', function() {
 
   describe('getReport', function() {
     it('should return report data from Google Analytics', function() {
-      var id = 'ga:' + ogAccount.savedViews[0].id
+      var id = 'ga:' + userAccount.savedViews[0].id
 
-      gaApi.getReport(id, '2013-25-09', '2013-25-09', metricsData.raw.toString()).then(function(body) {
+      googleAnalytics.getReport(id, '2013-25-09', '2013-25-09', metricsData.raw.toString()).then(function(body) {
         expect(body.kind).toBe('analytics#gaData')
       })
 

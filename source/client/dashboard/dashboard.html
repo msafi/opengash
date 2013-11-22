@@ -1,9 +1,10 @@
-<div ng-controller='dashboardCtrl' class='dashboard'>
-  <div ng-repeat='metric in tableStructure.metrics' class='aTable'>
+<div ng-controller='dashboardCtrl' class='dashboard-container'>
+  <div ng-repeat='metric in tableStructure.metrics' class='aTable panel panel-default'>
+    <div class="panel-heading text-left">{{metricsData[metric].name}}</div>
     <table id="{{metric}}" class='og-table'>
       <thead>
       <tr>
-        <th class='metric'>{{metricsData[metric].name}}</th>
+        <th></th>
         <th ng-repeat="period in tableStructure.periods" class="{{period}}">{{period}}</th>
       </tr>
       </thead>
@@ -16,9 +17,9 @@
               <p class='current'>{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
               <p class='comparison'>{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric] | metrics:metric }}</p>
             </div>
-            <movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
+            <og-movement current="{{tableContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
                       comparison="{{tableComparisonContent[id][period.toLowerCase()]['totalsForAllResults'][metric]}}"
-                      metric="{{metric}}"></movement>
+                      metric="{{metric}}"></og-movement>
           </td>
         </tr>
       </tbody>
