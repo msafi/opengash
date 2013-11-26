@@ -2,7 +2,7 @@ describe('authUrl', function() {
   var inject_authUrl
     , scope
 
-  beforeEach(module('welcome', 'mocks'))
+  beforeEach(module('authUrl', 'mocks'))
 
   beforeEach(inject(function($injector) {
     $httpBackend = $injector.get('mock_$httpBackend')

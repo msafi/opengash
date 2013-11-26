@@ -40,5 +40,8 @@ module.exports = {
         callback(null, response)
         break
     }
-  }
+  },
+  getUser: function(userEmail, cb) {
+    cb()
+  },
 }

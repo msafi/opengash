@@ -61,7 +61,7 @@ angular.module('mocks', ['ngMock', 'metricsData'])
 
 .factory('mock_userAccount',
   function(mock_googleAnalytics) {
-    var ogAccount = {}
+    var userAccount = {}
     var $q
     var $timeout
 
@@ -70,19 +70,19 @@ angular.module('mocks', ['ngMock', 'metricsData'])
       $timeout = _$timeout_
     })
 
-    ogAccount.succeed = true
+    userAccount.succeed = true
 
-    ogAccount.savedViews = [{"name": "DET", "id": "11537011"}, {"name": "msafi.com", "id": "13623581"},{"name": "WinkPress", "id": "37307543"}, {"name": "ksafi.com", "id": "55604500"},{"name": "The Hollowverse", "id": "56394045"}]
+    userAccount.savedViews = [{"name": "DET", "id": "11537011"}, {"name": "msafi.com", "id": "13623581"},{"name": "WinkPress", "id": "37307543"}, {"name": "ksafi.com", "id": "55604500"},{"name": "The Hollowverse", "id": "56394045"}]
 
-    ogAccount.getSavedViews = function() {
+    userAccount.getSavedViews = function() {
       var deferred
         , that = this
 
       deferred = $q.defer()
 
-      if (ogAccount.succeed) {
+      if (userAccount.succeed) {
         $timeout(function() {
-          deferred.resolve(ogAccount.savedViews)
+          deferred.resolve(userAccount.savedViews)
         }, 200)
       } else {
         $timeout(function() {
@@ -95,16 +95,16 @@ angular.module('mocks', ['ngMock', 'metricsData'])
       return deferred.promise
     }
 
-    ogAccount.getAllViews = function() {
+    userAccount.getAllViews = function() {
       // This is what the actual service returns from Google for MK Safi
       return {"kind": "analytics#profiles", "username": "msafi@msafi.com", "totalResults": 8, "startIndex": 1, "itemsPerPage": 1000, "items": [{"id": "11537011", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-1/profiles/11537011", "accountId": "5715214", "webPropertyId": "UA-5715214-1", "internalWebPropertyId": "11036598", "name": "DET", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://dubaiemploymenttips.com", "type": "WEB", "created": "2008-09-23T17:10:32.000Z", "updated": "2013-04-04T13:14:30.375Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-1"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-1/profiles/11537011/goals"}},{"id": "13623581", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-2/profiles/13623581", "accountId": "5715214", "webPropertyId": "UA-5715214-2", "internalWebPropertyId": "12969258", "name": "msafi.com", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://msafi.com", "type": "WEB", "created": "2008-12-19T12:55:25.000Z", "updated": "2012-06-27T06:55:57.310Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-2"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-2/profiles/13623581/goals"}},{"id": "21776812", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-4/profiles/21776812", "accountId": "5715214", "webPropertyId": "UA-5715214-4", "internalWebPropertyId": "23444706", "name": "Z. BGFK", "currency": "USD", "timezone": "Asia/Dubai", "websiteUrl": "http://bestgamesforkids.net", "type": "WEB", "created": "2009-09-23T16:24:59.000Z", "updated": "2012-04-18T01:42:09.515Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-4"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-4/profiles/21776812/goals"}},{"id": "22020310", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-5/profiles/22020310", "accountId": "5715214", "webPropertyId": "UA-5715214-5", "internalWebPropertyId": "23666249", "name": "Z. WPMPs", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://wordpressmembershipplugins.net", "type": "WEB", "created": "2009-10-01T11:39:18.000Z", "updated": "2012-04-18T01:42:39.284Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-5"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-5/profiles/22020310/goals"}},{"id": "26084387", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-7/profiles/26084387", "accountId": "5715214", "webPropertyId": "UA-5715214-7", "internalWebPropertyId": "27382504", "name": "Z. WP4IM", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://wp4im.com", "type": "WEB", "created": "2010-02-06T08:44:17.000Z", "updated": "2012-04-18T01:37:58.942Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-7"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-7/profiles/26084387/goals"}},{"id": "37307543", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-8/profiles/37307543", "accountId": "5715214", "webPropertyId": "UA-5715214-8", "internalWebPropertyId": "37758662", "name": "WinkPress", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://winkpress.com", "type": "WEB", "created": "2010-09-29T15:44:46.605Z", "updated": "2013-04-07T15:26:55.107Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-8"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-8/profiles/37307543/goals"}},{"id": "55604500", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-11/profiles/55604500", "accountId": "5715214", "webPropertyId": "UA-5715214-11", "internalWebPropertyId": "54646899", "name": "ksafi.com", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://ksafi.com", "type": "WEB", "created": "2012-01-30T20:25:32.905Z", "updated": "2012-06-27T06:55:44.993Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-11"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-11/profiles/55604500/goals"}},{"id": "56394045", "kind": "analytics#profile", "selfLink": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-12/profiles/56394045", "accountId": "5715214", "webPropertyId": "UA-5715214-12", "internalWebPropertyId": "55386753", "name": "The Hollowverse", "currency": "USD", "timezone": "Asia/Riyadh", "websiteUrl": "http://hollowverse.com", "siteSearchQueryParameters": "search", "type": "WEB", "created": "2012-02-18T20:59:40.290Z", "updated": "2013-04-04T13:32:48.067Z", "eCommerceTracking": false, "parentLink": {"type": "analytics#webproperty", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-12"}, "childLink": {"type": "analytics#goals", "href": "https://www.googleapis.com/analytics/v3/management/accounts/5715214/webproperties/UA-5715214-12/profiles/56394045/goals"}}]}
     }
 
-    ogAccount.saveViews = function(views) {
-      ogAccount.savedViews = views
+    userAccount.saveViews = function(views) {
+      userAccount.savedViews = views
     }
 
-    ogAccount.shouldServeCache = function() {
+    userAccount.shouldServeCache = function() {
       var deferred = $q.defer()
         , that = this
 
@@ -117,7 +117,7 @@ angular.module('mocks', ['ngMock', 'metricsData'])
       return deferred.promise
     }
 
-    ogAccount.getReport = function(ids, startDate, endDate, metrics) {
+    userAccount.getReport = function(ids, startDate, endDate, metrics) {
       var deferred = $q.defer()
         , that = this
 
@@ -132,7 +132,15 @@ angular.module('mocks', ['ngMock', 'metricsData'])
       return deferred.promise
     }
 
-    return ogAccount
+    userAccount.status = function() {
+      return {
+        then: function(cb) {
+          cb('foobarz')
+        }
+      }
+    }
+
+    return userAccount
   }
 )
 

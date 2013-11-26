@@ -47,11 +47,31 @@ describe('ogAccount:', function() {
     })
   })
 
+  describe('getUser', function() {
+    it('should return entire user document if it exists', function(done) {
+      ogAccount.saveUser({id: 1, email: 'example@example.com'}, function() {
+        ogAccount.saveViews('example@example.com', [{name: 'xyz', id: '123'}], function() {
+          ogAccount.getUser('example@example.com', function(userDocument) {
+            expect(userDocument.user.id).to.be(1)
+            done()
+          })
+        })
+      })
+    })
+
+    it('should return null if user document does not exist', function(done) {
+      ogAccount.getUser('foobar@example.com', function (userDocument) {
+        expect(userDocument).to.be(null)
+        done()
+      })
+    })
+  })
+
   describe('saveViews', function () {
     it('should save provided value to the `gaViews` field of the user', function (done) {
       // User already exist from the previous test.
       ogAccount.saveViews('example@example.com', [{name: 'foobar', id: 1}], function() {
-        ogAccount.findAccount('example@example.com', function(account) {
+        ogAccount.getUser('example@example.com', function(account) {
           expect(account.gaViews[0]).to.have.property('name', 'foobar')
           done()
         })
@@ -89,41 +109,6 @@ describe('ogAccount:', function() {
           expect(gaViews).to.be(null)
           done()
         })
-      })
-    })
-  })
-
-  describe('findAccount', function() {
-    var user
-
-    before(function(done) {
-      user = {
-        id: 1, email: 'example@example.com'
-      }
-
-      ogAccount.saveUser(user, function() {
-        done()
-      })
-    })
-
-    after(function(done) {
-      ogAccount.deleteAccount('example@example.com', function() {
-        done()
-      })
-    })
-
-    it('should return an entire account of a given email', function(done) {
-      ogAccount.findAccount('example@example.com', function(account) {
-        var user = account.user
-        expect(user).to.have.property('email', 'example@example.com')
-        done()
-      })
-    })
-
-    it('should return null when an account is not found', function(done) {
-      ogAccount.findAccount('examplefoo@example.com', function(account) {
-        expect(account).to.be(null)
-        done()
       })
     })
   })

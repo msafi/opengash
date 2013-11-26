@@ -8,9 +8,9 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        sourceMap: 'build/client/js/opengash.min.js.map',
-        sourceMapRoot: 'http://opengash.com/js/',
-        sourceMappingURL: 'http://opengash.com/js/opengash.min.js.map',
+        sourceMap: 'build/client/opengash.min.js.map',
+        sourceMapRoot: 'http://opengash.com/',
+        sourceMappingURL: 'http://opengash.com/opengash.min.js.map',
         compress: {
           screw_ie8:true,sequences:true,properties:true,dead_code:true,drop_debugger:true,unsafe:true,conditionals:true,
           comparisons:true,evaluate:true,booleans:true,loops:true,unused:true,if_return:true,join_vars:true,
@@ -20,16 +20,11 @@ module.exports = function(grunt) {
           screw_ie8: true
         }
       },
-      ogprod: {
-        files: {
-          'build/client/js/opengash.min.js': [
-            'build/client/js/services.js',
-            'build/client/js/controllers.js',
-            'build/client/js/directives.js',
-            'build/client/js/metrics.js',
-            'build/client/js/app.js'
-          ]
-        }
+      files: {
+        'build/client/opengash.min.js': [
+          'build/client/**.{js}',
+          '!build/client/vendor/**'
+        ]
       }
     },
     copy: {
@@ -50,20 +45,15 @@ module.exports = function(grunt) {
           removeComments: true,
           collapseWhitespace: true
         },
-        files: {
-          'build/client/index.ejs': 'build/client/index.ejs',
-          'build/client/dashboard.html': 'build/client/dashboard.html',
-          'build/client/add-views.html': 'build/client/add-views.html',
-          'build/client/connect.html': 'build/client/connect.html'
-        }
+        src: ['build/client/**.{js}', '!build/client/vendor/**']
       }
     },
     cssmin: {
       minify: {
         expand: true,
-        cwd: 'build/client/css/',
+        cwd: 'build/client/',
         src: ['style.css'],
-        dest: 'build/client/css/'
+        dest: 'build/client/'
       }
     },
     karma: {
@@ -98,8 +88,8 @@ module.exports = function(grunt) {
         files: [
           {
             src: [
-              'build/client/**/*.{js,css,html,map}',
-              '!build/client/**/vendor/**'
+              'build/client/**.{js,css,html,map}',
+              '!build/client/vendor/**'
             ]
           }
         ]
@@ -107,8 +97,8 @@ module.exports = function(grunt) {
     },
     forcemin: {
       src: [
-        'build/client/**/*.{js,css,html,ejs,map}',
-        '!build/client/**/vendor/**',
+        'build/client/**.{js,css,html,ejs,map}',
+        '!build/client/vendor/**',
         'test/client/karma-config-build.js'
       ]
     }

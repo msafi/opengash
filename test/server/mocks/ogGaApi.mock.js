@@ -36,6 +36,8 @@ OgGaApi.prototype.call = function (_accessToken, apiUrl, callback) {
     case 'https://www.googleapis.com/oauth2/v1/userinfo':
       response = '{ "id": "1234123412341234", "email": "example@example.com", "verified_email": true, "hd": "msafi.com" }'
       break;
+    case 'https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties/~all/profiles':
+      response = '{ "id": "1234123412341234", "email": "example@example.com", "verified_email": true, "hd": "msafi.com" }'
   }
 
   callback(JSON.parse(response));

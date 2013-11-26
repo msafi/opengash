@@ -10,7 +10,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="id in tableStructure.views" class="{{id}}">
-          <td>{{tableContent[id]['today'].profileInfo.profileName}}</td>
+          <td>{{tableContent[id]['yesterday'].profileInfo.profileName}}</td>
           <td ng-repeat="period in tableStructure.periods">
             <a target='_blank' href="{{'https://www.google.com/analytics/web/?#report/' + metricsData[metric].urlFragment + '/' + 'a' + tableContent[id][period.toLowerCase()].profileInfo.accountId + 'w' + tableContent[id][period.toLowerCase()].profileInfo.internalWebPropertyId + 'p' + tableContent[id][period.toLowerCase()].profileInfo.profileId + '/' + '%3F_u.date00%3D' + periods.dates[period.toLowerCase()].start.split('-').join('') + '%26_u.date01%3D' + periods.dates[period.toLowerCase()].end.split('-').join('') + '%26_u.date10%3D' + periods.comparisonDates[period.toLowerCase()].start.split('-').join('') + '%26_u.date11%3D' + periods.comparisonDates[period.toLowerCase()].end.split('-').join('') + '/'}}"></a>
             <div class='results'>

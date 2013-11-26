@@ -18,7 +18,7 @@ describe('gaViews', function() {
     rh.req.cookies.csrf = 123
     rh.req.query.csrf = 124
 
-    expect(gaViews(rh.req, rh.res)).to.be.false
+    expect(gaViews(rh.req, rh.res)).to.be(false)
     done()
   })
 

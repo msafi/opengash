@@ -3,6 +3,68 @@ html {
   overflow-y: scroll;
 }
 
+.medium-photo {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.alert-loading {
+  width: 150px;
+}
+
+.alert-loading .progress {
+  margin-bottom: 0;
+}
+
+.alert-loading .progress .progress-bar {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 970px;
+    margin-bottom: 10px;
+  }
+}
+
+.center {
+  margin: 0 auto
+}
+
+.container {
+  padding-top: 60px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.alert-container {
+  position: absolute;
+  left: 50%;
+}
+
+.alert-content {
+  position: relative;
+  left: -50%;
+  margin-top: -20px;
+}
+
+.drop-shadow {
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.user-img {
+  max-height: 40px;
+  max-width: 40px;
+}
+
+li[ng-controller=accountLinkCtrl] a {
+  padding: 5px 15px !important;
+  display: block;
+}
+
 .og-table tbody tr td a:hover {
     border: 1px solid rgb(194, 193, 193);
 }

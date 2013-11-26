@@ -74,12 +74,12 @@ module.exports.csrf = function (req, res, next) {
  * @function ogUtil.verifyCsrf
  */
 module.exports.verifyCsrf = function (req, res) {
-  var sourcesOfCsrf = [qs.parse(req.query.state).csrf, req.query.csrf];
+  var sourcesOfCsrf = [qs.parse(req.query.state).csrf, req.query.csrf]
 
   if (sourcesOfCsrf.indexOf(req.cookies.csrf) == -1 || typeof req.cookies.csrf == 'undefined') {
-    res.send(401, 'Unable to authorize. Make sure you accept cookies.');
-    return false;
+    res.send(401, 'Unable to authorize. Make sure you accept cookies.')
+    return false
   }
 
-  return true;
-};
+  return true
+}

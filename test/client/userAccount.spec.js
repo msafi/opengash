@@ -46,17 +46,6 @@ describe('userAccount', function() {
     })
   })
 
-//  describe('getAllViews', function() {
-//    it('should return an array of all saved Google Analytics profiles directly from Google', function() {
-//      userAccount.getAllViews().then(function(results) {
-//        expect(results.length > 3).toBe(true)
-//      })
-//
-//      $httpBackend.expectGET(/https:\/\/www.googleapis.com\/analytics\/v3\/management\/accounts\/~all\/webproperties\/~all\/profiles.*/)
-//      $httpBackend.flush()
-//    })
-//  })
-
   describe('saveViews', function() {
     it('should POST a given array of views to `api/ga-views`', function() {
       var arrViews = ['array', 'of', 'views']
@@ -194,14 +183,10 @@ describe('userAccount', function() {
     it("should resolve to 'login' if any of the conditions above isn't met", function() {
       $cookies.loggedIn = undefined
       userAccount.status().then(function(status) {
-        expect(status).toBe('login')
+        expect(status).toBe('welcome')
       })
 
       $rootScope.$apply()
     })
-
-
-
-
   })
 })

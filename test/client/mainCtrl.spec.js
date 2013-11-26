@@ -1,58 +1,51 @@
-//describe('mainCtrl', function() {
-//  var $state
-//    , $cookies
-//    , userAccount
-//    , $controller
-//
-//  beforeEach(module('ogControllers', 'ogMocks'))
-//
-//  beforeEach(inject(function(_$controller_, mock_$cookies, mock_userAccount, mock_$state) {
-//    $controller = _$controller_
-//    $state = mock_$state
-//    $cookies = mock_$cookies
-//    userAccount = mock_userAccount
-//  }))
-//
-//  it('should redirect to `dashboard` when cookies are set and ogAccount.getSavedViews succeeds', function() {
-//    $cookies = { accessToken: true, loggedIn: true }
-//    userAccount.succeed = true
-//
-//    $controller('mainCtrl', { $state: $state, $cookies: $cookies, ogAccount: userAccount })
-//
-//    waitsFor(function() {
-//      return $state.name == 'dashboard'
-//    }, '$state to be dashboard', 1000)
-//
-//    runs(function() {
-//      expect($state.name).toBe('dashboard')
-//    })
+describe('mainCtrl', function() {
+  var $state
+  var userAccount
+  var $controller
+  var $location
+  var $rootScope
+  var $scope
+  var authUrl
+  var $httpBackend
+
+  beforeEach(function() {
+    module('opengash', 'mocks')
+
+    inject(function($injector) {
+      $controller = $injector.get('$controller')
+      $state = $injector.get('mock_$state')
+      userAccount = $injector.get('mock_userAccount')
+      $location = $injector.get('$location')
+      $rootScope = $injector.get('$rootScope')
+      authUrl = $injector.get('authUrl')
+      $httpBackend = $injector.get('mock_$httpBackend')
+    })
+
+    $scope = $rootScope.$new()
+
+    $controller('MainCtrl', {
+      $state: $state,
+      userAccount: userAccount ,
+      $location: $location,
+      $scope: $scope,
+      $rootScope: $rootScope,
+      authUrl: authUrl,
+    })
+  })
+
+  it("should set authUrl property to Google login URL", function() {
+    $scope.$apply()
+    $httpBackend.flush()
+
+    var parser = document.createElement('a')
+
+    parser.href = $scope.authUrl
+
+    expect(parser.hostname).toBe('accounts.google.com')
+  })
+
+//  it("should call $state.go with the same value that userAccount.status() returns", function() {
+//    $scope.$apply()
+//    expect($state.name).toBe('foobarz')
 //  })
-//
-//  it('should redirect to `addViews` when cookies are set but ogAccount.getSavedViews fails', function() {
-//    $cookies = { accessToken: true, loggedIn: true }
-//    userAccount.succeed = false
-//
-//    $controller('mainCtrl', { $state: $state, $cookies: $cookies, ogAccount: userAccount })
-//
-//    waitsFor(function() {
-//      return $state.name == 'addViews'
-//    }, '$state to be addViews', 1000)
-//
-//    runs(function() {
-//      expect($state.name).toBe('addViews')
-//    })
-//  })
-//
-//  it('should redirect to `login` when either loggedIn or accessToken are undefined', function() {
-//    $cookies = { accessToken: true, loggedIn: undefined }
-//    userAccount.succeed = true
-//    $controller('mainCtrl', { $state: $state, $cookies: $cookies, ogAccount: userAccount })
-//    expect($state.name).toBe('login')
-//
-//
-//    $cookies = { accessToken: undefined, loggedIn: true }
-//    userAccount.succeed = true
-//    $controller('mainCtrl', { $state: $state, $cookies: $cookies, ogAccount: userAccount })
-//    expect($state.name).toBe('login')
-//  })
-//})
+})

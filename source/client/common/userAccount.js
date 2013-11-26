@@ -3,8 +3,8 @@
 angular.module('userAccount', [])
 
 .factory('userAccount', [
-  '$http', '$cookies', 'googleAnalytics', '$q', 'dateFilter',
-  function ($http, $cookies, googleAnalytics, $q, dateFilter) {
+  '$http', '$cookies', 'googleAnalytics', '$q', 'dateFilter', '$rootScope',
+  function ($http, $cookies, googleAnalytics, $q, dateFilter, $rootScope) {
     var qs = {csrf: $cookies.csrf}
     var userAccount = {}
 
@@ -28,8 +28,8 @@ angular.module('userAccount', [])
 
     userAccount.shouldServeCache = function() {
       var shouldServeCache = $q.defer()
-        , currentTime = new Date().getTime()
-        , latestCall = localStorage['latestCall']
+      var currentTime = new Date().getTime()
+      var latestCall = localStorage['latestCall']
 
       currentTime = dateFilter(currentTime, 'yyyy-MM-dd')
 
@@ -45,23 +45,30 @@ angular.module('userAccount', [])
 
     userAccount.getReport = function(ids, startDate, endDate, metrics, shouldUseCache) {
       var report = $q.defer()
-        , key = '' + ids + startDate + endDate + metrics
-        , currentTime = new Date().getTime()
+      var key = '' + ids + startDate + endDate + metrics
+      var currentTime = new Date().getTime()
 
-      currentTime = dateFilter(currentTime, 'yyyy-MM-dd')
-
-      shouldUseCache = shouldUseCache || false
-
-      if (shouldUseCache && (currentTime !== endDate)) {
-        // todo: it should still call gaApi.getReport if localStorage doesn't have a good value
-        report.resolve(JSON.parse(localStorage[key]))
-      } else {
+      function doGetReport() {
         googleAnalytics.getReport(ids, startDate, endDate, metrics).then(function(results) {
           localStorage[key] = JSON.stringify(results)
           localStorage['latestCall'] = currentTime
 
           report.resolve(results)
         })
+      }
+
+      currentTime = dateFilter(currentTime, 'yyyy-MM-dd')
+
+      shouldUseCache = shouldUseCache || false
+
+      if (shouldUseCache && (currentTime !== endDate)) {
+        if (localStorage[key] !== undefined) {
+          report.resolve(JSON.parse(localStorage[key]))
+        } else {
+          doGetReport()
+        }
+      } else {
+        doGetReport()
       }
 
       return report.promise
@@ -76,20 +83,29 @@ angular.module('userAccount', [])
             status.resolve('dashboard')
           },
           function() {
-            status.resolve('addViews')
+            $rootScope.$emit('alert', {
+              message: "Check at least one website",
+              "show": true,
+              "type": "warning"
+            })
+            googleAnalytics.fetchViews().then(function() {
+              status.resolve('userProfile')
+            }, function() {
+              status.resolve('signupError')
+            })
           }
         )
       }
       else {
-        status.resolve('login')
+        status.resolve('welcome')
       }
 
       return status.promise
     }
 
-    userAccount.retrieve = function() {
+    userAccount.getUser = function() {
       var user = $q.defer()
-      $http({method: 'GET', url: 'api/user-data'})
+      $http({method: 'GET', url: 'api/user-data', params: qs})
         .success(function(userData) {
           if (userData)
             user.resolve(userData)

@@ -10,7 +10,7 @@ module.exports = function (app) {
   app.get('/api/ga-views', handlers.gaViews)
   app.post('/api/ga-views', handlers.gaSaveViews)
 
-//  app.get('/api/user-data', handlers.userData)
+  app.get('/api/user-data', handlers.userData)
 
   app.get('*', handlers.home)
 }

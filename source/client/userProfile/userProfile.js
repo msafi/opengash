@@ -2,36 +2,74 @@
 
 angular.module('userProfile', [])
 
-.controller('addViewsCtrl', [
-  '$scope', 'userAccount', '$state', 'googleAnalytics',
-  function($scope, userAccount, $state, googleAnalytics) {
-    googleAnalytics.fetchViews().then(function(views) {
-      $scope.allViews = views
-    })
-    $scope.selectedViews = []
+.controller('UserProfileCtrl', [
+  '$scope', 'userDocument', '$state', 'googleAnalyticsViews', 'userAccount',
+  function($scope, userDocument, $state, googleAnalyticsViews, userAccount) {
+    var selectedViews = []
 
-    $scope.updateSelection = function($event, view) {
-      // Checked view doesn't exist. Add it.
-      if ($event.target.checked && $scope.selectedViews.indexOf(view) === -1) {
-        $scope.selectedViews.push(view)
-      }
+    $scope.user = userDocument.user
+    $scope.user.views = userDocument.gaViews || []
 
-      // Unchecked view exists. Remove it.
-      if (!$event.target.checked && $scope.selectedViews.indexOf(view) !== -1) {
-        $scope.selectedViews.splice($scope.selectedViews.indexOf(view), 1)
-      }
+    if (!$scope.user.name) {
+      $scope.user.name = 'User account'
     }
 
-    $scope.saveSelectedViews = function() {
-      userAccount.saveViews($scope.selectedViews)
-      $state.go('dashboard')
+    $scope.user.views.ids = {}
+    $scope.user.views.forEach(function(view) {
+      $scope.user.views.ids[view.id] = true
+      selectedViews.push(view)
+    })
+
+    $scope.allViews = googleAnalyticsViews
+
+
+    $scope.updateSelection = function(view) {
+      var viewExists = false
+      selectedViews.forEach(function(selectedView, index) {
+        if (view.id === selectedView.id)
+          viewExists = index
+      })
+
+      if (viewExists === false) {
+        selectedViews.push(view)
+      } else {
+        selectedViews.splice(viewExists, 1)
+      }
+
+      userAccount.saveViews(selectedViews)
+    }
+
+    $scope.home = function() {
+      $state.go('home')
     }
   }
 ])
 
 .controller('accountLinkCtrl', [
-  '$scope',
-  function($scope) {
+  '$scope', 'userAccount', '$state', '$rootScope', '$cookies',
+  function($scope, userAccount, $state, $rootScope, $cookies) {
+    $scope.userPicture = 'images/gear.png'
 
-  }
-])
+    userAccount.getUser().then(function(response) {
+      var user = response.user
+
+      if (user.picture)
+        $scope.userPicture = user.picture
+    })
+
+    $scope.settings = function() {
+      $state.go('userProfile')
+    }
+
+    $scope.signOut = function() {
+      localStorage.clear()
+      delete $cookies.loggedIn
+
+      $rootScope.$emit('alert', {
+        show: true,
+        message: "You've been signed out.",
+        type: "info",
+      })
+      $state.go('home')
+    }
+}])

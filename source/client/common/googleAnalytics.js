@@ -12,7 +12,7 @@ angular.module('googleAnalytics', [])
       var qs = { access_token: $cookies.accessToken }
       var response = $q.defer()
 
-      $http({method: 'GET', url: apiUrl, params: qs })
+      $http({method: 'GET', url: apiUrl, params: qs, cache: true})
         .success(function (body) {
           response.resolve(body)
         })
@@ -27,11 +27,14 @@ angular.module('googleAnalytics', [])
       googleAnalytics.call(url).then(function(response) {
         var viewsArr = []
 
-        for (var i = 0; i < response.items.length; i++) {
-          viewsArr.push({name: response.items[i].name, id: response.items[i].id})
+        if (!response.items) {
+          views.reject(null)
+        } else {
+          for (var i = 0; i < response.items.length; i++) {
+            viewsArr.push({name: response.items[i].name, id: response.items[i].id})
+          }
+          views.resolve(viewsArr)
         }
-
-        views.resolve(viewsArr)
       })
 
       return views.promise
@@ -51,7 +54,7 @@ angular.module('googleAnalytics', [])
 
       function doGetReport() {
         $timeout(function() {
-          $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs})
+          $http({method: 'GET', url: 'https://www.googleapis.com/analytics/v3/data/ga', params: qs, cache: true})
             .success(function(body) {
               report.resolve(body)
             })
