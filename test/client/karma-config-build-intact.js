@@ -28,18 +28,9 @@ module.exports = function(config) {
     exclude: [
     ],
 
-    preprocessors: {
-      '../../build/client/js!(vendor)/*.js': 'coverage'
-    },
-
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
     reporters: ['coverage', 'dots'],
-
-    coverageReporter: {
-      type: 'lcov',
-      dir: 'coverage/'
-    },
 
 
     // web server port

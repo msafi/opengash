@@ -20,11 +20,13 @@ module.exports = function(grunt) {
           screw_ie8: true
         }
       },
-      files: {
-        'build/client/opengash.min.js': [
-          'build/client/**.{js}',
-          '!build/client/vendor/**'
-        ]
+      default: {
+        files: {
+          'build/client/opengash.min.js': [
+            'build/client/**/*.js',
+            '!build/client/vendor/**'
+          ]
+        }
       }
     },
     copy: {
@@ -45,7 +47,14 @@ module.exports = function(grunt) {
           removeComments: true,
           collapseWhitespace: true
         },
-        src: ['build/client/**.{js}', '!build/client/vendor/**']
+        files: {
+          'build/client/dashboard/dashboard.html': 'build/client/dashboard/dashboard.html',
+          'build/client/signupError/signupError.html': 'build/client/signupError/signupError.html',
+          'build/client/userProfile/userProfile.html': 'build/client/userProfile/userProfile.html',
+          'build/client/userProfile/accountLink.html': 'build/client/userProfile/accountLink.html',
+          'build/client/userProfile/loginLink.html': 'build/client/userProfile/loginLink.html',
+          'build/client/welcome/welcome.html': 'build/client/welcome/welcome.html',
+        }
       }
     },
     cssmin: {
@@ -88,7 +97,7 @@ module.exports = function(grunt) {
         files: [
           {
             src: [
-              'build/client/**.{js,css,html,map}',
+              'build/client/**/*.{js,css,html,map}',
               '!build/client/vendor/**'
             ]
           }
@@ -97,7 +106,7 @@ module.exports = function(grunt) {
     },
     forcemin: {
       src: [
-        'build/client/**.{js,css,html,ejs,map}',
+        'build/client/**/*.{js,css,html,ejs,map}',
         '!build/client/vendor/**',
         'test/client/karma-config-build.js'
       ]
