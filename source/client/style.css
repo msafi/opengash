@@ -3,6 +3,17 @@ html {
   overflow-y: scroll;
 }
 
+.movement > .text-danger {
+  border-bottom: 2px solid #b94a48;
+  display: block;
+  padding-bottom: 3px;
+}
+
+.movement > .text-success {
+  border-bottom: 2px solid #468847;
+  display: block;
+  padding-bottom: 3px;
+}
 .medium-photo {
   max-width: 100px;
   max-height: 100px;
