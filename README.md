@@ -16,9 +16,5 @@ The current number is the top most. The comparison number is below it. The diffe
 
 ---
 
-opengash is still a very immature project. I'm developing it mainly to learn software engineering and deployment.
-
----
-
 ## Try it
-You can try the live, barely working, service on [opengash.com](http://opengash.com).
+You can try the live service on [opengash.com](http://opengash.com).
