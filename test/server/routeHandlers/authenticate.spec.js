@@ -12,7 +12,7 @@ describe('authentication', function() {
 
   describe('failure', function() {
     it('should return false if verifyCsrf fails', function(done) {
-      expect(authenticate(rh.req, rh.res)).to.be(false)
+      expect(authenticate(rh.req, rh.res)).toBe(false)
       done()
     })
 
@@ -21,7 +21,7 @@ describe('authentication', function() {
       rh.req.cookies.csrf = '123'
       rh.req.query.error = true
 
-      expect(authenticate(rh.req, rh.res)).to.be(false)
+      expect(authenticate(rh.req, rh.res)).toBe(false)
       done()
     })
   })
@@ -35,14 +35,14 @@ describe('authentication', function() {
 
     it('should save user to database', function(done) {
       authenticate(rh.req,rh.res)
-      expect(rh.ogAccount.saveUserCalls).to.be.greaterThan(0)
+      expect(rh.ogAccount.saveUserCalls).toBeGreaterThan(0)
       done()
     })
 
     it('should set access token and log-in cookies and redirect to homepage', function(done) {
       authenticate(rh.req, rh.res)
-      expect(rh.res.cookieValues[0].name).to.be('loggedIn')
-      expect(rh.res.cookieValues[1].name).to.be('accessToken')
+      expect(rh.res.cookieValues[0].name).toBe('loggedIn')
+      expect(rh.res.cookieValues[1].name).toBe('accessToken')
       done()
     })
   })

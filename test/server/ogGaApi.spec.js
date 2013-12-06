@@ -11,7 +11,7 @@ describe('ogGaApi:', function () {
   // These tests send real requests to Google API, so there is latency.
   // So let's increase the default timeout threshold from 2 seconds
   // to 5 seconds. for these specific unit tests.
-  this.timeout(9000)
+  jasmine.getEnv().defaultTimeoutInterval = 9000
 
   it('should have a valid client ID, secret key, and redirect URL', function(done) {
     expect(ogGaApi.clientId && ogGaApi.clientSecret && ogGaApi.redirectUrl).to.be.ok()

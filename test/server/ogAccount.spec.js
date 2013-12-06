@@ -4,14 +4,14 @@ var base = require('./pathBase')
 
 describe('ogAccount:', function() {
   var ogAccount = require(base + './ogAccount')
-  this.timeout(9000)
+  jasmine.getEnv().defaultTimeoutInterval = 9000
 
 
-  after(function(done) {
-    ogAccount.deleteAccount('example@example.com', function() {
-      done()
-    })
-  })
+//  afterEach(function(done) {
+//    ogAccount.deleteAccount('example@example.com', function() {
+//      done()
+//    })
+//  })
 
   describe('saveUser', function() {
     it ('should use a unique email to insert a user in the database', function(done) {
@@ -81,7 +81,7 @@ describe('ogAccount:', function() {
 
   describe('deleteAccount', function() {
     var user, gaViews
-    before(function(done) {
+    beforeEach(function(done) {
       user = {
         id: 1,
         email: 'signed@user.eml'

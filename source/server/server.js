@@ -22,7 +22,8 @@ app.set('views', __dirname + '/../client')
 app.set('view engine', 'ejs')
 
 app.use(express.logger('dev'))
-app.use(express.bodyParser())
+app.use(express.json())
+app.use(express.urlencoded())
 app.use(express.methodOverride())
 app.use(express.cookieParser(config.cookieSignature))
 app.use(express.cookieSession({secret: config.cookieSignature}))
@@ -41,6 +42,6 @@ require('./router')(app)
 
 http.createServer(app).listen(app.get('port'), config.hostName, function () {
   console.log('Express server listening on port ' + app.get('port'))
-});
+})
 
 module.exports = app

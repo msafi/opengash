@@ -11,7 +11,7 @@ describe('authUrl', function() {
   it('should only return a JSON with a URL property in the body', function(done) {
     authUrl(rh.req, rh.res)
 
-    expect(rh.res.ogRenderValues[0].arg1).to.have.property('url')
+    expect(rh.res.ogRenderValues[0].arg1.url).toBeDefined()
     done()
   })
 })

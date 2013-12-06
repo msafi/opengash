@@ -18,7 +18,7 @@ describe('home', function() {
     home(rh.req, rh.res)
 
     var url = require('url')
-    expect(url.parse(rh.res.redirectValues[0].url).hostname).to.be('accounts.google.com')
+    expect(url.parse(rh.res.redirectValues[0].url).hostname).toBe('accounts.google.com')
     done()
   })
 
@@ -33,13 +33,13 @@ describe('home', function() {
 
     rh.res.ogRenderValues
 
-    expect(rh.res.ogRenderValues[0].arg1).to.be('index')
+    expect(rh.res.ogRenderValues[0].arg1).toBe('index')
 
     // accessToken exists but not loggedIn!
     rh.req.cookies.accessToken = 123
     home(rh.req, rh.res)
 
-    expect(rh.res.ogRenderValues[1].arg1).to.be('index')
+    expect(rh.res.ogRenderValues[1].arg1).toBe('index')
 
     done()
   })

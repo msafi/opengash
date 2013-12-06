@@ -45,7 +45,7 @@ describe('ogUtil:', function() {
   describe('csrf', function() {
     var fakeReq, fakeRes
 
-    before(function() {
+    beforeEach(function() {
       fakeReq = {
         cookies: {}
       }

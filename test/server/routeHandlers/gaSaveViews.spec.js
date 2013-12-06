@@ -17,7 +17,7 @@ describe('gaSaveViews', function() {
     rh.req.signedCookies.loggedIn = 'existingAccount@example.com'
 
     gaSaveViews(rh.req, rh.res)
-    expect(rh.res.jsonValues[0].body.results).to.be(1)
+    expect(rh.res.jsonValues[0].body.results).toBe(1)
     done()
   })
 
@@ -26,7 +26,7 @@ describe('gaSaveViews', function() {
     rh.req.signedCookies.loggedIn = 'missingAccount@example.com'
 
     gaSaveViews(rh.req, rh.res)
-    expect(rh.res.jsonValues[1].body.results).to.be(0)
+    expect(rh.res.jsonValues[1].body.results).toBe(0)
     done()
   })
 })

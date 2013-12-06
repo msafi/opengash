@@ -44,14 +44,13 @@
 <span ui-view></span><!-- instantiate AppCtrl -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js'></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js'></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.0/angular-ui-router.min.js'></script>
-<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular-cookies.min.js'></script>
+<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-cookies.min.js'></script>
 <script src='//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js'></script>
 
-<% if (env == 'production') { %>
-<script src="opengash.min.js"></script>
-<% } else { %>
+<% if (env == 'development') { %>
 <script src="common/authUrl.js"></script>
 <script src="common/periods.js"></script>
 <script src="common/metricsData.js"></script>
@@ -61,6 +60,8 @@
 <script src="userProfile/userProfile.js"></script>
 <script src="dashboard/dashboard.js"></script>
 <script src="app.js"></script>
+<% } else { %>
+<script src="opengash.min.js"></script>
 <% } %>
 </body>
 </html>

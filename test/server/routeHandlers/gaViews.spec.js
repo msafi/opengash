@@ -18,21 +18,21 @@ describe('gaViews', function() {
     rh.req.cookies.csrf = 123
     rh.req.query.csrf = 124
 
-    expect(gaViews(rh.req, rh.res)).to.be(false)
+    expect(gaViews(rh.req, rh.res)).toBe(false)
     done()
   })
 
   it('should return an empty body when views are not found', function(done) {
     rh.req.signedCookies.loggedIn = 'missingViews@example.com'
     gaViews(rh.req, rh.res)
-    expect(rh.ogAccount.getGaViewsResponse).to.be('')
+    expect(rh.ogAccount.getGaViewsResponse).toBe('')
     done()
   })
 
   it('should return a views array in body when views are found', function(done) {
     rh.req.signedCookies.loggedIn = 'existingViews@example.com'
     gaViews(rh.req, rh.res)
-    expect(rh.ogAccount.getGaViewsResponse[0]).to.have.property('name')
+    expect(rh.ogAccount.getGaViewsResponse[0].name).toBeDefined()
     done()
   })
 })

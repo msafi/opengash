@@ -21,7 +21,7 @@ describe('userData', function() {
     rh.req.cookies.csrf = 123
     rh.req.query.csrf = 124
 
-    expect(userData(rh.req, rh.res)).to.be(false)
+    expect(userData(rh.req, rh.res)).toBe(false)
     done()
   })
 
