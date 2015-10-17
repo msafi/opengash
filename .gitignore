@@ -1,7 +1,17 @@
 config.js
+deploy-output.txt
 Thumbs.db
 data
 .idea
+test/*/coverage
+*.js.html
+*/client/js/index.html
+build/*
+deploy-script.js
+karma-config-build.js
+
+docs/*
+!docs/static
 
 lib-cov
 *.seed

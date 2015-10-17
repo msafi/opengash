@@ -1,0 +1,243 @@
+/* todo: specify a deeper font-stack for cell */
+html {
+  overflow-y: scroll;
+}
+
+.movement > .text-danger {
+  border-bottom: 2px solid #b94a48;
+  display: block;
+  padding-bottom: 3px;
+}
+
+.movement > .text-success {
+  border-bottom: 2px solid #468847;
+  display: block;
+  padding-bottom: 3px;
+}
+.medium-photo {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.alert-loading {
+  width: 150px;
+}
+
+.alert-loading .progress {
+  margin-bottom: 0;
+}
+
+.alert-loading .progress .progress-bar {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 970px;
+    margin-bottom: 10px;
+  }
+}
+
+.center {
+  margin: 0 auto
+}
+
+.container {
+  padding-top: 60px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.alert-container {
+  position: absolute;
+  left: 50%;
+}
+
+.alert-content {
+  position: relative;
+  left: -50%;
+  margin-top: -20px;
+}
+
+.drop-shadow {
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.user-img {
+  max-height: 40px;
+  max-width: 40px;
+}
+
+li[ng-controller=accountLinkCtrl] a {
+  padding: 5px 15px !important;
+  display: block;
+}
+
+.og-table tbody tr td a:hover {
+    border: 1px solid rgb(194, 193, 193);
+}
+
+.og-table tbody tr td a {
+  display : block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+}
+
+.og-table td:not(:nth-child(-n+2)) {
+  padding-top: 5px;}
+
+.og-table p.movement {
+    margin: 0;
+  
+}
+.og-table > tbody > tr:nth-child(odd) > td:not(:first-child),
+.og-table > tbody > tr:nth-child(odd) > th:not(:first-child) {
+  background-color: #EEEEF0;
+}
+
+.og-table tbody tr:last-child td:not(:first-child) {
+  /*border-bottom: 1px solid #e5e5e5;*/
+}
+.og-table td .results p {
+  margin: 0;
+}
+
+.og-table td:not(:nth-child(-n+2)) .results p + p {
+  margin: 3px;
+}
+.og-table .comparison {
+  font-size: 0.9em;
+  opacity: 0.6;
+}
+.og-table tbody tr td:nth-child(2) {
+  /*border-left: 1px solid #e5e5e5;*/
+}
+.og-table tbody tr td:not(:first-child) {
+  /*border-right: 1px solid #E5E5E5;*/
+  position: relative;
+  overflow: hidden;
+}
+
+.og-table thead tr th:not(:first-child) {
+    width: 89px;
+    /*border-top: 1px solid #e5e5e5;*/
+    line-height: 25px;
+    /* font-weight: bold; */
+}
+
+body .og-table tbody tr td:not(:first-child) {
+    width: 89px;
+    max-width: 89px;
+}
+
+.og-table thead tr th:nth-child(2) {
+    /*border-left: 1px solid #e5e5e5;*/
+    /*border-top-left-radius: 15px;*/
+}
+
+.og-table thead tr th:last-child {
+    /*border-right: 1px solid #e5e5e5;*/
+    /*border-top-right-radius: 15px;*/
+}
+
+/*.og-table thead tr th:first-child {*/
+    /*font-size: 1.3em;*/
+    /*font-variant: small-caps;*/
+    /* text-align: right; */
+    /* margin-right: 10px; */
+    /*box-shadow: 3px 3px 2px 0px #CCC;*/
+    /*position: absolute;*/
+    /*right: 430px;*/
+    /*border: 1px solid #C0C0C0;*/
+    /*padding: 5px;*/
+    /*z-index: 3;*/
+    /*top: -15px;*/
+/*}*/
+
+.og-table thead tr th {
+    font-weight: bold;
+}
+
+.og-table tbody tr td:first-child {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 130px;
+  overflow: hidden;
+  padding-right: 10px;
+  box-sizing: border-box;
+  height: 60px;
+}
+
+table.og-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  font-family: Verdana;
+  font-size: 11px;
+  position: relative;
+  padding-left: 10px;
+}
+
+.dashboard-container {
+  display: inline-block;
+
+  text-align: center;
+  padding: 0;
+  position: relative;
+  margin: 50px auto;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.aTable {
+  /* width: 570px; */
+  margin: 30px 15px;
+  display:inline-block;
+}
+
+.aTable table td:first-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+.og-table td:not(:nth-child(-n+2)) .results {
+    z-index: 2;
+    position: relative;
+}
+
+.og-table tbody tr td:not(:nth-child(-n+2)) .movement {
+  /* background-color: rgb(252, 215, 244); */
+  /* position: absolute; */
+  /* bottom: 18px; */
+  /* right: -2px; */
+  /* -webkit-transform: rotate(90deg); */
+  /* transform: rotate(-90deg); */
+  /* padding: 2px; */
+  text-align: center;
+  opacity: 0.7;
+  margin: 1px 18px;
+  font-size: 0.9em;
+}
+
+.og-table tr td {
+  height: 31px;
+}
+
+.og-table td {
+    padding: 0;
+    
+    text-align: center;
+    vertical-align: middle;
+}
+
+.aTable table th {
+  text-align: center;
+}
