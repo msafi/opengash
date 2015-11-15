@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('userProfile', [])
+angular.module('opengash')
 
 .controller('UserProfileCtrl', [
   '$scope', 'userDocument', '$state', 'googleAnalyticsViews', 'userAccount',
@@ -45,31 +45,28 @@ angular.module('userProfile', [])
   }
 ])
 
-.controller('accountLinkCtrl', [
-  '$scope', 'userAccount', '$state', '$rootScope', '$cookies',
-  function($scope, userAccount, $state, $rootScope, $cookies) {
-    $scope.userPicture = 'images/gear.png'
+.controller('accountLinkCtrl', function($scope, userAccount, $state, $rootScope) {
+  $scope.userPicture = 'images/gear.png'
 
-    userAccount.getUser().then(function(response) {
-      var user = response.user
+  userAccount.getUser().then(function(response) {
+    var user = response.user
 
-      if (user.picture)
-        $scope.userPicture = user.picture
+    if (user.picture)
+      $scope.userPicture = user.picture
+  })
+
+  $scope.settings = function() {
+    $state.go('userProfile')
+  }
+
+  $scope.signOut = function() {
+    localStorage.clear()
+
+    $rootScope.$emit('alert', {
+      show: true,
+      message: "You've been signed out.",
+      type: "info",
     })
-
-    $scope.settings = function() {
-      $state.go('userProfile')
-    }
-
-    $scope.signOut = function() {
-      localStorage.clear()
-      delete $cookies.loggedIn
-
-      $rootScope.$emit('alert', {
-        show: true,
-        message: "You've been signed out.",
-        type: "info",
-      })
-      $state.go('home')
-    }
-}])
+    $state.go('home')
+  }
+})

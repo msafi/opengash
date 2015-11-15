@@ -1,5 +1,5 @@
 'use strict';
-angular.module('dashboard', [])
+angular.module('opengash')
 
 // todo: cache profile names, so that they don't flash like some crappy software
 // todo: inform the user when the latest update happened

@@ -1,4 +1,4 @@
-angular.module('periods', [])
+angular.module('opengash')
 
 .factory('periods', [
   'dateFilter',

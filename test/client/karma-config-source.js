@@ -21,7 +21,7 @@ module.exports = function(config) {
       '../../source/client/common/authUrl.js',
       '../../source/client/common/periods.js',
       '../../source/client/common/metricsData.js',
-      '../../source/client/common/googleAnalytics.js',
+      '../../source/client/common/ga.js',
       '../../source/client/common/userAccount.js',
       '../../source/client/common/commonServices.js',
       '../../source/client/userProfile/userProfile.js',

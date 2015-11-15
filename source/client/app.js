@@ -1,13 +1,6 @@
 'use strict'
 
-angular.module('opengash', [
-  // Dependency modules
-  'ngCookies',
-  'ui.router',
-  'userProfile',
-  'dashboard',
-  'commonServices',
-])
+angular.module('opengash', ['ui.router'])
 
 .config([
   '$stateProvider', '$locationProvider',
@@ -72,12 +65,13 @@ angular.module('opengash', [
   }
 ])
 
-.controller('MainCtrl', [
-  '$scope', '$rootScope', 'authUrl',
-  function($scope, $rootScope, authUrl) {
-    authUrl.then(function(authUrl) {
-      $scope.authUrl = authUrl
-    })
+.controller('MainCtrl', function($scope, $rootScope, authUrl) {
+    $scope.authUrl = function() {
+      authUrl().then(function(auth) {
+        //console.log(auth);
+        window.location = '/'
+      })
+    }
 
     var unbindables = []
 
@@ -113,4 +107,4 @@ angular.module('opengash', [
       })
     })
   }
-])
+)

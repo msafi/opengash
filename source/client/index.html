@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app='opengash'>
+<html>
 <head>
   <title>opengash: all your Google Analytics!</title>
 
@@ -11,6 +11,7 @@
   <link rel="icon"
         type="image/x-icon"
         href="images/favicon.ico">
+  <base href="/">
 </head>
 <body ng-controller="MainCtrl">
 
@@ -44,24 +45,30 @@
 <span ui-view></span><!-- instantiate AppCtrl -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js'></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.0/angular-ui-router.min.js'></script>
-<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-cookies.min.js'></script>
+<script src='//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js'></script>
 <script src='//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 
-<% if (env == 'development') { %>
+<script src="app.js"></script>
+<script src="common/lStorage.js"></script>
 <script src="common/authUrl.js"></script>
+<script src="common/utils.js"></script>
 <script src="common/periods.js"></script>
 <script src="common/metricsData.js"></script>
-<script src="common/googleAnalytics.js"></script>
+<script src="common/ga.js"></script>
 <script src="common/userAccount.js"></script>
-<script src="common/commonServices.js"></script>
 <script src="userProfile/userProfile.js"></script>
 <script src="dashboard/dashboard.js"></script>
-<script src="app.js"></script>
-<% } else { %>
-<script src="opengash.min.js"></script>
-<% } %>
+
+<script type="text/javascript">
+  window.handleClientLoad = function() {
+    angular.element(document).ready(function() {
+      angular.bootstrap(document, ['opengash'])
+    })
+  }
+</script>
+
+<script src="http://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </body>
 </html>

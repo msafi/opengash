@@ -1,4 +1,4 @@
-angular.module('metricsData', [])
+angular.module('opengash')
 
 /**
  * This has Google Analytics metrics configurations

@@ -1,46 +1,29 @@
 'use strict'
 
-angular.module('userAccount', [])
+angular.module('opengash')
 
-.factory('userAccount', [
-  '$http', '$cookies', 'googleAnalytics', '$q', 'dateFilter', '$rootScope',
-  function ($http, $cookies, googleAnalytics, $q, dateFilter, $rootScope) {
-    var qs = {csrf: $cookies.csrf}
+.factory('userAccount', function($http, lStorage, googleAnalytics, $q, dateFilter, $rootScope, utils) {
     var userAccount = {}
 
-    userAccount.getSavedViews = function () {
+    userAccount.getSavedViews = function() {
       var gaViews = $q.defer()
-      $http({method: 'GET', url: 'api/ga-views', params: qs})
-        .success(function (json) {
-          if (json)
-            gaViews.resolve(json)
-          else
-            gaViews.reject(null)
-        })
+
+      if (_.isEmpty(lStorage.getVal('gaViews'))) {
+        gaViews.reject(null)
+      } else {
+        gaViews.resolve(lStorage.getVal('gaViews'))
+
+      }
+
       return gaViews.promise
     }
 
-    userAccount.saveViews = function (arrViews) {
-      // todo: maybe return success & faliure.
-      // todo: Do server side checking of the data being submitted.
-      $http({method: 'POST', url: 'api/ga-views', params: qs, data: arrViews})
+    userAccount.saveViews = function(arrViews) {
+      lStorage.setVal('gaViews', arrViews)
     }
 
     userAccount.shouldServeCache = function() {
-      var shouldServeCache = $q.defer()
-      var currentTime = new Date().getTime()
-      var latestCall = localStorage['latestCall']
-
-      currentTime = dateFilter(currentTime, 'yyyy-MM-dd')
-
-      if (currentTime == latestCall) {
-        shouldServeCache.resolve(true)
-      } else {
-        localStorage.clear()
-        shouldServeCache.resolve(false)
-      }
-
-      return shouldServeCache.promise
+      return $q.resolve(false)
     }
 
     userAccount.getReport = function(ids, startDate, endDate, metrics, shouldUseCache) {
@@ -48,7 +31,7 @@ angular.module('userAccount', [])
       var key = '' + ids + startDate + endDate + metrics
       var currentTime = new Date().getTime()
 
-      function doGetReport() {
+      function doGetReport () {
         googleAnalytics.getReport(ids, startDate, endDate, metrics).then(function(results) {
           localStorage[key] = JSON.stringify(results)
           localStorage['latestCall'] = currentTime
@@ -74,10 +57,17 @@ angular.module('userAccount', [])
       return report.promise
     }
 
+    userAccount.isAuthenticated = function() {
+      var currentTime = utils.currentTime()
+      var credentialsExpirationTime = lStorage.getVal('credentialsExpirationTime')
+
+      return credentialsExpirationTime !== undefined &&
+             credentialsExpirationTime > currentTime
+    }
     userAccount.status = function() {
       var status = $q.defer()
 
-      if (typeof $cookies.loggedIn !== 'undefined' && typeof $cookies.accessToken !== 'undefined') {
+      if (userAccount.isAuthenticated()) {
         userAccount.getSavedViews().then(
           function() {
             status.resolve('dashboard')
@@ -104,17 +94,18 @@ angular.module('userAccount', [])
     }
 
     userAccount.getUser = function() {
-      var user = $q.defer()
-      $http({method: 'GET', url: 'api/user-data', params: qs})
-        .success(function(userData) {
-          if (userData)
-            user.resolve(userData)
-          else
-            user.reject(null)
-        })
-      return user.promise
+      return $http({
+        method: 'GET',
+        url: 'https://www.googleapis.com/oauth2/v1/userinfo',
+        params: {access_token: lStorage.getVal('accessToken')}
+      }).then(function(response) {
+        return {
+          user: response.data,
+          gaViews: lStorage.getVal('gaViews') || []
+        }
+      })
     }
 
     return userAccount
   }
-])
+)
