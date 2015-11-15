@@ -59,7 +59,7 @@ angular.module('opengash', ['ui.router'])
 
 .controller('MainCtrl', function($scope, $rootScope, authUrl) {
   $scope.authUrl = function() {
-    authUrl().then(function() {
+    authUrl({immediate: false}).then(function() {
       window.location = '/'
     })
   }
