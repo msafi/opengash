@@ -1,1 +1,0 @@
-// How is one supposed to unit test main modules config?! Help!

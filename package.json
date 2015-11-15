@@ -2,42 +2,10 @@
   "name": "opengash",
   "version": "0.0.0-9",
   "private": true,
-  "scripts": {
-    "start": "node ./build/server/server.js",
-    "test": "grunt test"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/msafi/opengash.git"
   },
   "subdomain": "opengash",
-  "domains": [
-    "opengash.com"
-  ],
-  "engines": {
-    "node": "0.10.x"
-  },
-  "dependencies": {
-    "express": "*",
-    "superagent": "*",
-    "ejs": "*",
-    "mongodb": "*",
-    "async": "*"
-  },
-  "devDependencies": {
-    "supertest": "*",
-    "grunt": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-htmlmin": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-karma": "*",
-    "grunt-simple-mocha": "*",
-    "grunt-contrib-clean": "*",
-    "rewire": "*",
-    "grunt-install-dependencies": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-rev": "*",
-    "grunt-forcemin": "*"
-  }
+  "domains": ["opengash.com"]
 }
