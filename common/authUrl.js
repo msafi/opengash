@@ -5,44 +5,34 @@ angular.module('opengash')
 .factory('authUrl', function($q, lStorage, utils) {
   var clientId = '577114317990-7a6835et9gedrs3a605osqsb2mpc9inn.apps.googleusercontent.com'
 
-    return function(options) {
-      var googleAuthentication = $q.defer()
+  return function(options) {
+    var googleAuthentication = $q.defer()
 
-      options = options || {}
-      options.immediate = options.immediate === undefined
+    options = options || {}
+    options.immediate = options.immediate === undefined
 
-      gapi.auth.authorize(
-        {
-          client_id: clientId,
-          response_type: 'token id_token',
-          cookie_policy: 'single_host_origin',
-          immediate: options.immediate,
-          scope: 'email https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/userinfo.profile',
-        },
+    gapi.auth.authorize(
+      {
+        client_id: clientId,
+        response_type: 'token id_token',
+        cookie_policy: 'single_host_origin',
+        immediate: options.immediate,
+        scope: 'email https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/userinfo.profile',
+      },
 
-        function(authResults) {
-          if (!_.isEmpty(authResults.error)) {
-            googleAuthentication.reject(authResults)
-          } else {
-            lStorage.setVal('credentialsExpirationTime', utils.currentTime() + 3600000)
-            lStorage.setVal('accessToken', authResults.access_token)
-            lStorage.setVal('idToken', authResults.id_token)
+      function(authResults) {
+        if (!_.isEmpty(authResults.error)) {
+          googleAuthentication.reject(authResults)
+        } else {
+          lStorage.setVal('credentialsExpirationTime', utils.currentTime() + 3600000)
+          lStorage.setVal('accessToken', authResults.access_token)
+          lStorage.setVal('idToken', authResults.id_token)
 
-            googleAuthentication.resolve(authResults)
-          }
+          googleAuthentication.resolve(authResults)
         }
-      )
+      }
+    )
 
-      return googleAuthentication.promise
-    }
-
-    //var deferred = $q.defer()
-    //
-    //// todo: cache this response
-    //$http({method: 'GET', url: 'api/authurl', cache: true}).then(function(body) {
-    //  deferred.resolve(body.data.url)
-    //})
-    //
-    //return deferred.promise
+    return googleAuthentication.promise
   }
-)
+})

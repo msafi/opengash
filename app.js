@@ -2,7 +2,7 @@
 
 angular.module('opengash', ['ui.router'])
 
-.config(function($stateProvider, $locationProvider) {
+.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
       url: "/",
@@ -46,22 +46,16 @@ angular.module('opengash', ['ui.router'])
       }
     })
 
-    $locationProvider.
-    html5Mode(true).
-    hashPrefix('!')
-  }
-)
+  $urlRouterProvider.when('', '/')
+})
 
-.controller('AppCtrl', [
-  '$state', '$location', 'userAccount',
-  function($state, $location, userAccount) {
-    if ($location.path() === '/') {
-      userAccount.status().then(function(status) {
-        $state.go(status)
-      })
-    }
+.controller('AppCtrl', function($state, $location, userAccount) {
+  if ($location.path() === '/') {
+    userAccount.status().then(function(status) {
+      $state.go(status)
+    })
   }
-])
+})
 
 .controller('MainCtrl', function($scope, $rootScope, authUrl) {
   $scope.authUrl = function() {

@@ -3,7 +3,6 @@ angular.module('opengash')
 .factory('periods', [
   'dateFilter',
   function(dateFilter) {
-
     var periods = {}
 
     var _getNiceDate = function(days) {
@@ -12,7 +11,6 @@ angular.module('opengash')
       return dateFilter(currentTime - (days * 86400000), 'yyyy-MM-dd')
     }
 
-
     periods.dates = {
       today: { start: _getNiceDate(0), end: _getNiceDate(0) },
       yesterday: {start: _getNiceDate(1), end: _getNiceDate(1) },
@@ -20,7 +18,6 @@ angular.module('opengash')
       month: {start: _getNiceDate(30), end: _getNiceDate(1) },
       year: {start: _getNiceDate(365), end: _getNiceDate(1) }
     };
-
 
     periods.comparisonDates = {
       yesterday: {start: _getNiceDate(8), end: _getNiceDate(8) }, // Compare yesterday to the same day the previous week.
