@@ -2,7 +2,7 @@
 
 angular.module('opengash')
 
-.factory('userAccount', function($http, lStorage, googleAnalytics, $q, dateFilter, $rootScope, utils) {
+.factory('userAccount', function($http, lStorage, googleAnalytics, $q, dateFilter, $rootScope, utils, authUrl) {
     var userAccount = {}
 
     userAccount.getSavedViews = function() {
@@ -87,7 +87,13 @@ angular.module('opengash')
         )
       }
       else {
-        status.resolve('welcome')
+        if (lStorage.getVal('credentialsExpirationTime') !== undefined) {
+          authUrl({immediate: true}).then(function() {
+            status.resolve('dashboard')
+          })
+        } else {
+          status.resolve('welcome')
+        }
       }
 
       return status.promise
