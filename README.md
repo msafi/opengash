@@ -6,4 +6,4 @@ That's what opengash is for.
 ---
 
 ## Try it
-You can try the live service on [opengash.com](http://opengash.com).
+You can try the live service on [opengash.com](http://www.opengash.com).

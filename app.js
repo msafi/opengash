@@ -46,7 +46,7 @@ angular.module('opengash', ['ui.router'])
       }
     })
 
-  $urlRouterProvider.when('', '/')
+  $urlRouterProvider.otherwise('/')
 })
 
 .controller('AppCtrl', function($state, $location, userAccount) {
