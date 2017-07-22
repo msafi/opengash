@@ -27,12 +27,6 @@ angular.module('opengash')
         type: 'integer',
         urlFragment: 'visitors-overview',
       },
-      'ga:avgTimeOnSite': {
-        name: 'Average time on site',
-        biggerIsBetter: true,
-        type: 'seconds',
-        urlFragment: 'visitors-engagement'
-      },
       'ga:visitBounceRate': {
         name: 'Bounce rate',
         biggerIsBetter: false,
